@@ -1,0 +1,19 @@
+{
+  "name": "@databridge/profile-hesa-tdp",
+  "version": "0.1.0",
+  "description": "HESA Data Futures (C25061) target profile for DataBridge",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@databridge/rule-core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}
