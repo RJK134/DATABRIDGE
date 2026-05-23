@@ -1,0 +1,28 @@
+{
+  "name": "@databridge/adapter-sits-oracle",
+  "version": "0.1.0",
+  "description": "Read adapter for Tribal SITS Oracle database (SITS:Vision and SITS:eSIS)",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@databridge/platform": "workspace:*",
+    "@databridge/adapter-spec": "workspace:*",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0",
+    "oracledb": "^6.4.0"
+  },
+  "peerDependencies": {
+    "oracledb": "^6.4.0"
+  },
+  "peerDependenciesMeta": {
+    "oracledb": { "optional": false }
+  }
+}
