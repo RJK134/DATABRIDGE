@@ -1,0 +1,78 @@
+import type { AuditRule } from "@databridge/rule-core";
+
+/**
+ * F03 — Code-list conformance
+ * UCISA Data Management Benchmark §3.3
+ */
+export const F03_codelist_conformance: AuditRule[] = [
+  {
+    id: "F03-01",
+    family: "F03",
+    type: "codelist",
+    name: "Student sex identifier not in HESA SEXID codelist",
+    description: "STU_SEX contains a value not in the current HESA SEXID code list",
+    severity: "ERROR",
+    ucisa_benchmark_ref: "UCISA-DM-3.3",
+    tags: ["codelist", "hesa-df", "sits"],
+    enabledByDefault: true,
+    fieldPath: "Student.sexId",
+    codelistId: "HESA.SEXID",
+    flagNulls: true
+  },
+  {
+    id: "F03-02",
+    family: "F03",
+    type: "codelist",
+    name: "Enrolment mode of study not in HESA MODE codelist",
+    description: "SRS_MODE contains a value not in the current HESA MODE code list",
+    severity: "ERROR",
+    ucisa_benchmark_ref: "UCISA-DM-3.3",
+    tags: ["codelist", "hesa-df", "sits"],
+    enabledByDefault: true,
+    fieldPath: "Enrolment.modeOfStudy",
+    codelistId: "HESA.MODE",
+    flagNulls: true
+  },
+  {
+    id: "F03-03",
+    family: "F03",
+    type: "codelist",
+    name: "Programme course aim not in HESA COURSEAIM codelist",
+    description: "POS_CAIM contains a value not in the current HESA COURSEAIM code list",
+    severity: "CRITICAL",
+    ucisa_benchmark_ref: "UCISA-DM-3.3",
+    tags: ["codelist", "hesa-df", "sits"],
+    enabledByDefault: true,
+    fieldPath: "Programme.courseAim",
+    codelistId: "HESA.COURSEAIM",
+    flagNulls: true
+  },
+  {
+    id: "F03-04",
+    family: "F03",
+    type: "codelist",
+    name: "Enrolment reason for ending not in HESA RSNEND codelist",
+    description: "SRS_REND contains a value not in the current HESA RSNEND code list",
+    severity: "WARN",
+    ucisa_benchmark_ref: "UCISA-DM-3.3",
+    tags: ["codelist", "hesa-df", "sits"],
+    enabledByDefault: true,
+    fieldPath: "Enrolment.reasonForEnding",
+    codelistId: "HESA.RSNEND",
+    flagNulls: false
+  },
+  {
+    id: "F03-05",
+    family: "F03",
+    type: "codelist",
+    name: "Award qualification aim not in HESA QUALENT3 codelist",
+    description: "SAW_QAIM contains a value not in the current HESA QUALENT3 code list",
+    severity: "ERROR",
+    ucisa_benchmark_ref: "UCISA-DM-3.3",
+    tags: ["codelist", "hesa-df", "sits"],
+    enabledByDefault: true,
+    fieldPath: "Award.qualificationAim",
+    codelistId: "HESA.QUALENT3",
+    flagNulls: true
+  }
+];
