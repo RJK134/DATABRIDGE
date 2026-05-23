@@ -1,48 +1,24 @@
-# Dependencies
 node_modules/
 .pnpm-store/
-
-# Build outputs
 dist/
 build/
 .next/
 *.tsbuildinfo
-
-# Environment
 .env
 .env.local
 .env.*.local
 !.env.example
-
-# Database
 *.db
 *.sqlite
-
-# Logs
 logs/
 *.log
-
-# OS
 .DS_Store
 Thumbs.db
-
-# IDE
 .vscode/
 .idea/
-
-# Test coverage
 coverage/
-.vitest/
-
-# Turbo
 .turbo/
-
-# Vercel
 .vercel/
-
-# Playwright
 test-results/
 playwright-report/
-
-# Generated
 *.generated.ts
