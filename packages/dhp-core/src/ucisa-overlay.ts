@@ -46,11 +46,12 @@ export function ucisaBenchmarkOverlay(metrics: DhpMetrics): BenchmarkOverlayResu
   }
 
   // Overall
-  const overallDelta = parseFloat((metrics.overallScore - (UCISA_2024_BENCHMARKS.OVERALL ?? 0.88)).toFixed(4));
+  const overallBenchmark = UCISA_2024_BENCHMARKS['OVERALL'] ?? 0.88;
+  const overallDelta = parseFloat((metrics.overallScore - overallBenchmark).toFixed(4));
   results.push({
     dimension: 'OVERALL',
     providerScore: metrics.overallScore,
-    sectorMedian: UCISA_2024_BENCHMARKS.OVERALL,
+    sectorMedian: overallBenchmark,
     delta: overallDelta,
     ragStatus: overallDelta >= 0.02 ? 'GREEN' : overallDelta >= -0.05 ? 'AMBER' : 'RED',
   });
