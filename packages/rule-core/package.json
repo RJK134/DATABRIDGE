@@ -22,6 +22,12 @@
     "@databridge/platform": "workspace:*",
     "zod": "^3.23.0"
   },
+  "peerDependencies": {
+    "pg": "^8.11.0"
+  },
+  "peerDependenciesMeta": {
+    "pg": { "optional": true }
+  },
   "devDependencies": {
     "typescript": "^5.4.5",
     "vitest": "^1.5.0",
