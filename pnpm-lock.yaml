@@ -239,6 +239,9 @@ importers:
 
   profiles/profile-hesa-tdp:
     dependencies:
+      '@databridge/platform':
+        specifier: workspace:*
+        version: link:../../packages/platform
       '@databridge/rule-core':
         specifier: workspace:*
         version: link:../../packages/rule-core
