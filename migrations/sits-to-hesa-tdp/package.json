@@ -1,0 +1,32 @@
+{
+  "name": "@databridge/migration-sits-to-hesa-tdp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Migration orchestrator: SITS source (api or file) -> @databridge/canonical -> HESA TDP target profile",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@databridge/platform": "workspace:*",
+    "@databridge/adapter-spec": "workspace:*",
+    "@databridge/canonical": "workspace:*",
+    "@databridge/adapter-sits-api": "workspace:*",
+    "@databridge/adapter-sits-file": "workspace:*",
+    "@databridge/profile-hesa-tdp": "workspace:*",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "@typescript-eslint/eslint-plugin": "^7.8.0"
+  }
+}
