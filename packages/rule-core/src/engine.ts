@@ -79,7 +79,13 @@ export class RuleEngine {
         error = err instanceof Error ? err.message : String(err);
       }
 
-      results.push({ ruleId: rule.id, durationMs: Date.now() - t0, findingsEmitted, error });
+      const runResult: RuleRunResult = {
+        ruleId: rule.id,
+        durationMs: Date.now() - t0,
+        findingsEmitted,
+      };
+      if (error !== undefined) runResult.error = error;
+      results.push(runResult);
     }
 
     return {
