@@ -1,7 +1,7 @@
 {
   "name": "@databridge/profile-sits",
   "version": "0.1.0",
-  "description": "DataBridge profile for Tribal SITS — entity map, field catalogue, and 69 audit rules",
+  "description": "DataBridge profile for Tribal SITS \u2014 entity map, field catalogue, and 69 audit rules",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -13,6 +13,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src --ext .ts",
     "test": "vitest run",
     "clean": "rm -rf dist"
   },
@@ -23,6 +24,9 @@
   },
   "devDependencies": {
     "typescript": "^5.4.5",
-    "vitest": "^1.5.0"
+    "vitest": "^1.5.0",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "@typescript-eslint/eslint-plugin": "^7.8.0"
   }
 }
