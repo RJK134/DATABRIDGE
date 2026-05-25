@@ -11,7 +11,8 @@ export const temporalConsistencyRules: Rule[] = [
     description: 'ENDDATE must be on or after COMDATE when both are present.',
     ucisa_benchmark_ref: null,
     evaluate({ record }: { record: Record<string, unknown> }) {
-      const { COMDATE, ENDDATE } = record;
+      const COMDATE = record['COMDATE'];
+      const ENDDATE = record['ENDDATE'];
       if (!COMDATE || !ENDDATE) return { pass: true };
       const com = new Date(String(COMDATE));
       const end = new Date(String(ENDDATE));

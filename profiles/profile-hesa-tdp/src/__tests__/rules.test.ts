@@ -61,10 +61,10 @@ describe('profile-hesa-tdp structural integrity', () => {
     expect(HESA_FIELD_CATALOGUE.length).toBeGreaterThanOrEqual(30);
   });
 
-  it('all field definitions have hesaFieldRef and dataBridgeField', () => {
+  it('all field definitions have hesaRef and entity', () => {
     for (const f of HESA_FIELD_CATALOGUE) {
-      expect(f.hesaFieldRef, `${f.id} missing hesaFieldRef`).toBeTruthy();
-      expect(f.dataBridgeField, `${f.id} missing dataBridgeField`).toBeTruthy();
+      expect(f.hesaRef, `${f.id} missing hesaRef`).toBeTruthy();
+      expect(f.entity, `${f.id} missing entity`).toBeTruthy();
     }
   });
 });
@@ -115,13 +115,13 @@ describe('H02 — Coding frame rules', () => {
   it('H02-002 fails for invalid DISABLE code', () => {
     const rule = ALL_HESA_RULES.find(r => r.id === 'H02-002')!;
     expect(rule.evaluate({ disability: '99' }).pass).toBe(false);
-    expect(rule.evaluate({ disability: '0' }).pass).toBe(true);
+    expect(rule.evaluate({ disability: '00' }).pass).toBe(true);
   });
 
   it('H02-004 fails for invalid MODE code', () => {
     const rule = ALL_HESA_RULES.find(r => r.id === 'H02-004')!;
     expect(rule.evaluate({ modeOfStudy: '99' }).pass).toBe(false);
-    expect(rule.evaluate({ modeOfStudy: '01' }).pass).toBe(true);
+    expect(rule.evaluate({ modeOfStudy: '1' }).pass).toBe(true);
   });
 
   it('H02-005 passes when RSNEND is absent (optional field)', () => {

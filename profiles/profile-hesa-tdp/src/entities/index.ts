@@ -106,3 +106,7 @@ export const MANDATORY_HESA_ENTITIES = HESA_ENTITIES
 export const HESA_MIGRATION_ORDER = [...HESA_ENTITIES]
   .sort((a, b) => a.migrationOrder - b.migrationOrder)
   .map(e => e.name);
+
+/** Back-compat aliases (legacy flat-file shape consumed by profile.ts). */
+export type HesaTdpEntity = HesaEntityName;
+export const HESA_TDP_ENTITIES = HESA_ENTITIES;

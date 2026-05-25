@@ -43,7 +43,7 @@ describe('Coding frame conformance rules', () => {
   const modeRule = HESA_TDP_RULES.find((r) => r.id === 'HESA-TDP-012')!;
 
   it('ETHNIC: passes a valid code', () => {
-    const valid = ETHNIC.values[0].code;
+    const valid = ETHNIC.values[0]!.code;
     expect(ethnicRule.evaluate({ value: valid })).toMatchObject({ pass: true });
   });
 

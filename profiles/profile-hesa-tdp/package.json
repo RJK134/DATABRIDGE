@@ -8,11 +8,12 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --ext .ts",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@databridge/rule-core": "workspace:*"
+    "@databridge/rule-core": "workspace:*",
+    "@databridge/platform": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.4.0",

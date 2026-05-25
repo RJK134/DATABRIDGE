@@ -12,7 +12,7 @@ function isValidHusid(husid: unknown): boolean {
   // Mod-11 check digit validation
   const digits = husid.split('').map(Number);
   const weights = [0, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0];
-  const sum = digits.slice(0, 12).reduce((acc, d, i) => acc + d * weights[i + 1], 0);
+  const sum = digits.slice(0, 12).reduce((acc, d, i) => acc + d * (weights[i + 1] ?? 0), 0);
   const remainder = sum % 11;
   const checkDigit = remainder === 0 ? 0 : 11 - remainder;
   if (checkDigit === 10) return false; // invalid — would need two digits

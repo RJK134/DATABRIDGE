@@ -286,3 +286,6 @@ export const HESA_TDP_FIELDS: FieldDefinition[] = [
     maxLength: 10,
   },
 ];
+
+/** Back-compat alias used by tests (and some external consumers). */
+export const HESA_FIELD_CATALOGUE = HESA_TDP_FIELDS;
