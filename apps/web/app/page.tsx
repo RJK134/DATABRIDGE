@@ -20,6 +20,12 @@ export default function HomePage() {
           </a>{" "}
           — HESA TDP and SITS.
         </li>
+        <li>
+          <a href="/audits" style={{ color: "#58a6ff" }}>
+            Audit runs
+          </a>{" "}
+          — recent audits and per-finding detail.
+        </li>
       </ul>
     </div>
   );
