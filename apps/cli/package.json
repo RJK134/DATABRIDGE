@@ -1,0 +1,30 @@
+{
+  "name": "@databridge/cli",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DataBridge command-line interface (offline audit runner)",
+  "main": "./dist/index.js",
+  "bin": {
+    "databridge": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/index.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@databridge/rule-core": "workspace:*",
+    "@databridge/platform": "workspace:*",
+    "@databridge/profile-sits": "workspace:*",
+    "@databridge/profile-hesa-tdp": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.0",
+    "tsx": "^4.10.0",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}
