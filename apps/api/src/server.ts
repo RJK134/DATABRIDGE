@@ -10,6 +10,7 @@ import sensible from "@fastify/sensible";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import { pinoRedactConfig } from "@databridge/platform";
+import { registerAuth, JoseJwtValidator, type TokenValidator } from "./middleware/auth.js";
 import { adapterRoutes } from "./routes/adapters.js";
 import { profileRoutes } from "./routes/profiles.js";
 import { canonicalRoutes } from "./routes/canonical.js";
@@ -39,6 +40,26 @@ export async function build(): Promise<FastifyInstance> {
   await app.register(sensible);
   await app.register(helmet, { contentSecurityPolicy: false });
   await app.register(cors, { origin: true });
+
+  // OIDC auth wiring — opt-in via OIDC_ISSUER + OIDC_AUDIENCE env vars.
+  // When absent, auth is disabled (suitable for local dev and the current
+  // pre-prod posture). When set, the api requires a bearer JWT on all routes
+  // except /, /healthz, /readyz.
+  const oidcIssuer = process.env["OIDC_ISSUER"];
+  const oidcAudience = process.env["OIDC_AUDIENCE"];
+  if (oidcIssuer && oidcAudience) {
+    const validator: TokenValidator = new JoseJwtValidator({
+      issuer: oidcIssuer,
+      audience: oidcAudience,
+      ...(process.env["OIDC_JWKS_URI"] !== undefined
+        ? { jwksUri: process.env["OIDC_JWKS_URI"] as string }
+        : {}),
+    });
+    await registerAuth(app, { validator });
+    app.log.info({ issuer: oidcIssuer }, "OIDC auth enabled");
+  } else {
+    app.log.warn("OIDC auth disabled (OIDC_ISSUER / OIDC_AUDIENCE not set)");
+  }
 
   // Liveness / readiness
   app.get("/healthz", async () => ({ ok: true, ts: new Date().toISOString() }));
