@@ -27,12 +27,12 @@ describe('SITS_ENTITY_QUERIES', () => {
   });
 
   it('Student query selects HUSID', () => {
-    expect(SITS_ENTITY_QUERIES.Student).toContain('HUSID');
+    expect(SITS_ENTITY_QUERIES['Student']).toContain('HUSID');
   });
 
   it('StudentCourseJoin query selects MODE and RSNEND', () => {
-    expect(SITS_ENTITY_QUERIES.StudentCourseJoin).toContain('MODE');
-    expect(SITS_ENTITY_QUERIES.StudentCourseJoin).toContain('RSNEND');
+    expect(SITS_ENTITY_QUERIES['StudentCourseJoin']).toContain('MODE');
+    expect(SITS_ENTITY_QUERIES['StudentCourseJoin']).toContain('RSNEND');
   });
 
   it('no query contains a DROP, UPDATE or DELETE statement', () => {
