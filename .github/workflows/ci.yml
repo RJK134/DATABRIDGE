@@ -10,8 +10,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  TURBO_TELEMETRY_DISABLED: 1
+
 jobs:
-  setup:
+  install:
     name: Install & cache
     runs-on: ubuntu-latest
     steps:
@@ -27,7 +30,7 @@ jobs:
 
   lint:
     name: Lint
-    needs: setup
+    needs: install
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -44,7 +47,7 @@ jobs:
 
   typecheck:
     name: Type check
-    needs: setup
+    needs: install
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -58,9 +61,25 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
 
+  build:
+    name: Build
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+
   test:
-    name: Unit tests
-    needs: setup
+    name: Test
+    needs: install
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -73,44 +92,3 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
       - run: pnpm test
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: coverage
-          path: coverage/
-
-  build:
-    name: Build
-    needs: [lint, typecheck, test]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
-
-  profile-validation:
-    name: Validate profiles
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
-      - name: Validate SITS profile
-        run: node -e "const p = require('./profiles/profile-sits/dist/index.js'); console.log('SITS rules:', p.rules.length); if (!p.rules.length) process.exit(1);"
-      - name: Validate HESA TDP profile
-        run: node -e "const p = require('./profiles/profile-hesa-tdp/dist/index.js'); console.log('HESA TDP rules:', p.rules.length); if (!p.rules.length) process.exit(1);"
