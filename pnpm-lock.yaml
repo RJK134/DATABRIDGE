@@ -89,6 +89,9 @@ importers:
       '@databridge/finding-waivers':
         specifier: workspace:*
         version: link:../../packages/finding-waivers
+      '@databridge/findings-narrative-llm':
+        specifier: workspace:*
+        version: link:../../packages/findings-narrative-llm
       '@databridge/identity-reconciler':
         specifier: workspace:*
         version: link:../../packages/identity-reconciler
@@ -1092,6 +1095,28 @@ importers:
       '@databridge/adapter-spec':
         specifier: workspace:*
         version: link:../adapter-spec
+    devDependencies:
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.5.0
+        version: 1.6.1(@types/node@20.19.41)
+
+  packages/findings-narrative-llm:
+    dependencies:
+      '@databridge/provenance-core':
+        specifier: workspace:*
+        version: link:../provenance-core
+      '@databridge/rule-compiler-llm':
+        specifier: workspace:*
+        version: link:../rule-compiler-llm
+      '@databridge/rule-core':
+        specifier: workspace:*
+        version: link:../rule-core
+      zod:
+        specifier: ^3.23.0
+        version: 3.25.76
     devDependencies:
       typescript:
         specifier: ^5.4.5
