@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ProvenanceFieldsZ } from './provenance.js';
 
 /**
  * Module — a unit of teaching that students can take. Equivalent to
@@ -19,7 +20,7 @@ export const ModuleZ = z.object({
   /** Module owner department or school. */
   ownerDepartment: z.string().optional(),
   attributes: z.record(z.unknown()).optional(),
-});
+}).merge(ProvenanceFieldsZ);
 
 export type Module = z.infer<typeof ModuleZ>;
 
@@ -41,6 +42,6 @@ export const ModuleInstanceZ = z.object({
   /** Final grade or mark. */
   grade: z.string().optional(),
   attributes: z.record(z.unknown()).optional(),
-});
+}).merge(ProvenanceFieldsZ);
 
 export type ModuleInstance = z.infer<typeof ModuleInstanceZ>;

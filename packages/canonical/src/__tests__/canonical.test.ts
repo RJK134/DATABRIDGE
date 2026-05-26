@@ -15,8 +15,29 @@ import {
 } from '../index.js';
 
 describe('canonical registry', () => {
-  it('exports 14 canonical entity names', () => {
-    expect(CANONICAL_ENTITY_NAMES.length).toBe(14);
+  it('exports the Phase F entity set plus Phase G additions', () => {
+    // Phase F set is the original 14; Phase G adds 23. Keep the test
+    // structural rather than count-anchored so future entity additions
+    // do not require a numeric flip.
+    expect(CANONICAL_ENTITY_NAMES.length).toBeGreaterThanOrEqual(14);
+    for (const phaseF of [
+      'Student',
+      'Engagement',
+      'StudentCourseSession',
+      'Module',
+      'ModuleInstance',
+      'Leaver',
+      'EntryProfile',
+      'Instance',
+      'StudyLocation',
+      'SES',
+      'Disability',
+      'QualificationAwarded',
+      'SupervisorAllocation',
+      'TermtimeAccommodation',
+    ]) {
+      expect(CANONICAL_ENTITY_NAMES).toContain(phaseF);
+    }
   });
 
   it('every entity name has a matching schema', () => {

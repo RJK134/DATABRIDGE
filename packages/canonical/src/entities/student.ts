@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ProvenanceFieldsZ } from './provenance.js';
 
 /**
  * Student — the canonical, source-agnostic representation of a student
@@ -9,6 +10,10 @@ import { z } from 'zod';
  * Adapters MAP from their native shape (SITS STU, Banner SPRIDEN, Workday
  * Student, etc.) INTO this canonical shape; profile packs map FROM this
  * shape into their target shape.
+ *
+ * Phase G: carries provenance (altIds / sourceKeys / effectiveDating) so
+ * the same human appearing in Banner (as a PIDM) and SITS (as a mst_code)
+ * resolves to one canonical record without collapsing identity.
  */
 export const StudentZ = z.object({
   /** Stable canonical id (UUID assigned by DATABRIDGE on first ingest). */
@@ -42,6 +47,6 @@ export const StudentZ = z.object({
   ownStuId: z.string().optional(),
   /** Free-form notes / tenant extension fields. */
   attributes: z.record(z.unknown()).optional(),
-});
+}).merge(ProvenanceFieldsZ);
 
 export type Student = z.infer<typeof StudentZ>;

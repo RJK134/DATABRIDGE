@@ -1,8 +1,13 @@
 import { z } from 'zod';
+import { ProvenanceFieldsZ } from './provenance.js';
 
 /**
  * StudentCourseSession — a single academic-year instance of a student's
  * engagement on a course. HESA Data Futures core entity.
+ *
+ * Phase G: carries provenance fields so source-side effective-dating
+ * (Banner SGBSTDN.TERM_CODE_EFF, SITS sce_stac + sce_ayrc) can be
+ * preserved uniformly via `effectiveDating`.
  */
 export const StudentCourseSessionZ = z.object({
   id: z.string().uuid(),
@@ -29,6 +34,6 @@ export const StudentCourseSessionZ = z.object({
   /** Net fee after waivers/discounts. */
   netFee: z.number().optional(),
   attributes: z.record(z.unknown()).optional(),
-});
+}).merge(ProvenanceFieldsZ);
 
 export type StudentCourseSession = z.infer<typeof StudentCourseSessionZ>;

@@ -4,7 +4,16 @@
  *
  * Adapters map FROM source shapes INTO these entities; profile packs map
  * FROM these entities INTO target shapes.
+ *
+ * Phase G extends the original HESA-Data-Futures-shaped set with the
+ * provenance primitives and broader HERM entity coverage described in
+ * SITS_BANNER_CROSSWALK.md §3.
  */
+
+// Provenance primitives — must export before entities that consume them.
+export * from './provenance.js';
+
+// Original Phase F entity set.
 export * from './student.js';
 export * from './engagement.js';
 export * from './student-course-session.js';
@@ -19,6 +28,14 @@ export * from './qualification-awarded.js';
 export * from './supervisor-allocation.js';
 export * from './termtime-accommodation.js';
 
+// Phase G additions.
+export * from './contact.js';
+export * from './programme.js';
+export * from './enrolment.js';
+export * from './admissions.js';
+export * from './student-account.js';
+export * from './academic-record.js';
+
 import { StudentZ } from './student.js';
 import { EngagementZ } from './engagement.js';
 import { StudentCourseSessionZ } from './student-course-session.js';
@@ -32,9 +49,35 @@ import { DisabilityZ } from './disability.js';
 import { QualificationAwardedZ } from './qualification-awarded.js';
 import { SupervisorAllocationZ } from './supervisor-allocation.js';
 import { TermtimeAccommodationZ } from './termtime-accommodation.js';
+import { AddressZ, EmailAddressZ, PhoneZ } from './contact.js';
+import { ProgrammeZ, ProgrammeEnrolmentZ, AcademicYearEnrolmentZ } from './programme.js';
+import { ModuleEnrolmentZ, ModuleResultZ, AssessmentResultZ } from './enrolment.js';
+import {
+  ApplicationZ,
+  ApplicationDecisionZ,
+  VisaRecordZ,
+  CasVisaZ,
+  SevisVisaZ,
+} from './admissions.js';
+import {
+  StudentAccountZ,
+  ChargeZ,
+  PaymentZ,
+  SponsorZ,
+} from './student-account.js';
+import {
+  HoldZ,
+  AdvisorZ,
+  TransferCreditZ,
+  RecognisedPriorLearningZ,
+  TermGPAZ,
+  TestScoreZ,
+  StatutoryReturnZ,
+} from './academic-record.js';
 
 /** Names of all canonical entities. */
 export const CANONICAL_ENTITY_NAMES = [
+  // Phase F set
   'Student',
   'Engagement',
   'StudentCourseSession',
@@ -49,6 +92,30 @@ export const CANONICAL_ENTITY_NAMES = [
   'QualificationAwarded',
   'SupervisorAllocation',
   'TermtimeAccommodation',
+  // Phase G additions
+  'Address',
+  'EmailAddress',
+  'Phone',
+  'Programme',
+  'ProgrammeEnrolment',
+  'AcademicYearEnrolment',
+  'ModuleEnrolment',
+  'ModuleResult',
+  'AssessmentResult',
+  'Application',
+  'ApplicationDecision',
+  'VisaRecord',
+  'StudentAccount',
+  'Charge',
+  'Payment',
+  'Sponsor',
+  'Hold',
+  'Advisor',
+  'TransferCredit',
+  'RecognisedPriorLearning',
+  'TermGPA',
+  'TestScore',
+  'StatutoryReturn',
 ] as const;
 
 export type CanonicalEntityName = (typeof CANONICAL_ENTITY_NAMES)[number];
@@ -69,4 +136,31 @@ export const CANONICAL_SCHEMAS = {
   QualificationAwarded: QualificationAwardedZ,
   SupervisorAllocation: SupervisorAllocationZ,
   TermtimeAccommodation: TermtimeAccommodationZ,
+  // Phase G
+  Address: AddressZ,
+  EmailAddress: EmailAddressZ,
+  Phone: PhoneZ,
+  Programme: ProgrammeZ,
+  ProgrammeEnrolment: ProgrammeEnrolmentZ,
+  AcademicYearEnrolment: AcademicYearEnrolmentZ,
+  ModuleEnrolment: ModuleEnrolmentZ,
+  ModuleResult: ModuleResultZ,
+  AssessmentResult: AssessmentResultZ,
+  Application: ApplicationZ,
+  ApplicationDecision: ApplicationDecisionZ,
+  VisaRecord: VisaRecordZ,
+  StudentAccount: StudentAccountZ,
+  Charge: ChargeZ,
+  Payment: PaymentZ,
+  Sponsor: SponsorZ,
+  Hold: HoldZ,
+  Advisor: AdvisorZ,
+  TransferCredit: TransferCreditZ,
+  RecognisedPriorLearning: RecognisedPriorLearningZ,
+  TermGPA: TermGPAZ,
+  TestScore: TestScoreZ,
+  StatutoryReturn: StatutoryReturnZ,
 } as const;
+
+// Re-exported for convenience.
+export { CasVisaZ, SevisVisaZ };
