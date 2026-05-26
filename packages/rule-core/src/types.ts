@@ -12,11 +12,18 @@ import type { LlmAdapter } from "@databridge/platform";
 export type RuleSeverity = "CRITICAL" | "ERROR" | "WARN" | "INFO";
 
 /**
- * Rule families (F01–F13) as defined in docs/AUDIT_RULES.md
+ * Rule families.
+ *  - F01–F13: canonical-side audit families (docs/AUDIT_RULES.md)
+ *  - SITS-INTEGRITY: source-native rules running against raw SITS:Vision
+ *    tables (audit-pack-sits-native, SITS_DATA_STRUCTURES §19).
+ *  - BANNER-INTEGRITY: source-native rules running against raw Banner
+ *    tables (audit-pack-banner-native, BANNER_DATA_STRUCTURES §17).
  */
 export type RuleFamily =
   | "F01" | "F02" | "F03" | "F04" | "F05" | "F06"
-  | "F07" | "F08" | "F09" | "F10" | "F11" | "F12" | "F13";
+  | "F07" | "F08" | "F09" | "F10" | "F11" | "F12" | "F13"
+  | "SITS-INTEGRITY"
+  | "BANNER-INTEGRITY";
 
 /**
  * Base rule definition — all rule types extend this.

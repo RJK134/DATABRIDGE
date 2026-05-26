@@ -1,0 +1,37 @@
+{
+  "name": "@databridge/codeset-seeds",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Canonical codeset seed bundles for SITS, Banner, and HESA — ground-truth for the Phase I codeset-mapping engine",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./seeds/*": "./seeds/*"
+  },
+  "files": [
+    "dist",
+    "seeds"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@databridge/adapter-spec": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "@typescript-eslint/eslint-plugin": "^7.8.0"
+  }
+}
