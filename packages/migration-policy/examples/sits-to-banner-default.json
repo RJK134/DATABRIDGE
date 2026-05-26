@@ -1,0 +1,22 @@
+{
+  "id": "sits-to-banner-default@1.0.0",
+  "description": "Default SITS→Banner migration policy. Hash-based CRN generation, primary curriculum only on Banner side, discard component marks.",
+  "sourceSystem": "sits",
+  "targetSystem": "banner",
+  "crnGenerator": { "strategy": "hash", "bucketSize": 99999 },
+  "scjAttempt": { "strategy": "source-preserved" },
+  "multiCurriculum": { "strategy": "primary-only" },
+  "componentMark": { "strategy": "discard-components" },
+  "creditHour": { "catsPerCreditHour": 3.75, "rounding": "nearest" },
+  "gradeScheme": { "mapId": "banner-stvgrde-to-numeric@1.0.0", "onMissing": "warn" },
+  "termToAcademicYear": {
+    "strategy": "regex",
+    "pattern": "^(\\d{4})(\\d{2})$",
+    "yearGroup": 1,
+    "termGroup": 2,
+    "ayrFormat": "YYYY/Y"
+  },
+  "feeStatus": { "mapId": "banner-stvresd-to-hesa-feestatus@1.0.0", "defaultToUnknown": true },
+  "classificationGap": { "strategy": "default-band", "band": "21" },
+  "intercalation": { "strategy": "status-transition", "pauseStatuses": ["IT", "I"] }
+}

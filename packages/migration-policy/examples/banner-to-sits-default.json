@@ -1,0 +1,16 @@
+{
+  "id": "banner-to-sits-default@1.0.0",
+  "description": "Default Banner→SITS migration policy. Conservative settings: monotonic CRN, preserve all curricula, preserve component marks, queue classification gaps for Registry review.",
+  "sourceSystem": "banner",
+  "targetSystem": "sits",
+  "crnGenerator": { "strategy": "monotonic", "start": 10000, "width": 5 },
+  "scjAttempt": { "strategy": "monotonic", "startAt": 1 },
+  "multiCurriculum": { "strategy": "preserve-all" },
+  "componentMark": { "strategy": "preserve-in-canonical", "projectOnWrite": true },
+  "creditHour": { "catsPerCreditHour": 3.75, "rounding": "nearest" },
+  "gradeScheme": { "mapId": "banner-stvgrde-to-numeric@1.0.0", "onMissing": "warn" },
+  "termToAcademicYear": { "strategy": "stvterm-driven" },
+  "feeStatus": { "mapId": "banner-stvresd-to-hesa-feestatus@1.0.0", "defaultToUnknown": true },
+  "classificationGap": { "strategy": "queue-for-registry" },
+  "intercalation": { "strategy": "status-transition", "pauseStatuses": ["IT", "I"] }
+}
