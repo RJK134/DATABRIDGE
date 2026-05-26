@@ -83,9 +83,24 @@ importers:
       '@databridge/identity-reconciler':
         specifier: workspace:*
         version: link:../../packages/identity-reconciler
+      '@databridge/migration-policy':
+        specifier: workspace:*
+        version: link:../../packages/migration-policy
+      '@databridge/migration-runner':
+        specifier: workspace:*
+        version: link:../../packages/migration-runner
+      '@databridge/operational-input-queue':
+        specifier: workspace:*
+        version: link:../../packages/operational-input-queue
+      '@databridge/parallel-run-verifier':
+        specifier: workspace:*
+        version: link:../../packages/parallel-run-verifier
       '@databridge/platform':
         specifier: workspace:*
         version: link:../../packages/platform
+      '@databridge/pre-flight-check':
+        specifier: workspace:*
+        version: link:../../packages/pre-flight-check
       '@databridge/profile-hesa-tdp':
         specifier: workspace:*
         version: link:../../profiles/profile-hesa-tdp
@@ -98,6 +113,9 @@ importers:
       '@databridge/rule-core':
         specifier: workspace:*
         version: link:../../packages/rule-core
+      '@databridge/target-adapters':
+        specifier: workspace:*
+        version: link:../../packages/target-adapters
       '@fastify/cors':
         specifier: ^10.0.0
         version: 10.1.0
@@ -727,6 +745,102 @@ importers:
         specifier: ^1.6.0
         version: 1.6.1(@types/node@20.19.41)
 
+  packages/migration-policy:
+    dependencies:
+      zod:
+        specifier: ^3.23.0
+        version: 3.25.76
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.8.0
+        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.8.0
+        version: 7.18.0(eslint@8.57.1)(typescript@5.9.3)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.41)
+
+  packages/migration-runner:
+    dependencies:
+      '@databridge/adapter-spec':
+        specifier: workspace:*
+        version: link:../adapter-spec
+      '@databridge/codeset-mapper':
+        specifier: workspace:*
+        version: link:../codeset-mapper
+      '@databridge/migration-policy':
+        specifier: workspace:*
+        version: link:../migration-policy
+      '@databridge/platform':
+        specifier: workspace:*
+        version: link:../platform
+      '@databridge/target-adapters':
+        specifier: workspace:*
+        version: link:../target-adapters
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.8.0
+        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.8.0
+        version: 7.18.0(eslint@8.57.1)(typescript@5.9.3)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.41)
+
+  packages/operational-input-queue:
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.8.0
+        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.8.0
+        version: 7.18.0(eslint@8.57.1)(typescript@5.9.3)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.41)
+
+  packages/parallel-run-verifier:
+    dependencies:
+      '@databridge/adapter-spec':
+        specifier: workspace:*
+        version: link:../adapter-spec
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.8.0
+        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.8.0
+        version: 7.18.0(eslint@8.57.1)(typescript@5.9.3)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.41)
+
   packages/platform:
     dependencies:
       zod:
@@ -747,6 +861,31 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.5.0
+        version: 1.6.1(@types/node@20.19.41)
+
+  packages/pre-flight-check:
+    dependencies:
+      '@databridge/adapter-spec':
+        specifier: workspace:*
+        version: link:../adapter-spec
+      '@databridge/target-adapters':
+        specifier: workspace:*
+        version: link:../target-adapters
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.8.0
+        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.8.0
+        version: 7.18.0(eslint@8.57.1)(typescript@5.9.3)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
         version: 1.6.1(@types/node@20.19.41)
 
   packages/provenance-core:
@@ -825,6 +964,28 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.5.0
+        version: 1.6.1(@types/node@20.19.41)
+
+  packages/target-adapters:
+    dependencies:
+      '@databridge/adapter-spec':
+        specifier: workspace:*
+        version: link:../adapter-spec
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.8.0
+        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.8.0
+        version: 7.18.0(eslint@8.57.1)(typescript@5.9.3)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
         version: 1.6.1(@types/node@20.19.41)
 
   profiles/profile-hesa-tdp:

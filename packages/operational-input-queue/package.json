@@ -1,0 +1,31 @@
+{
+  "name": "@databridge/operational-input-queue",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Phase J6 — operational-input queue. In-memory worklist of fields with no source equivalent (e.g. scj_hiqp), to be filled by Registry staff before commit.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "@typescript-eslint/eslint-plugin": "^7.8.0"
+  }
+}
