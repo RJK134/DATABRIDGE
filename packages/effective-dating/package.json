@@ -1,0 +1,35 @@
+{
+  "name": "@databridge/effective-dating",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Phase I3 — effective-dating resolvers. One resolver per documented pattern (activity-dated, term-keyed, from/to-dated, change-indicator, status-driven, SITS active+current, snapshot). Adapters declare which pattern applies per resource; the integration engine consumes the resolvers uniformly.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@databridge/canonical": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "@typescript-eslint/eslint-plugin": "^7.8.0"
+  }
+}
