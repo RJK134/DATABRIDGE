@@ -23,11 +23,27 @@ import { canonicalRoutes } from "./routes/canonical.js";
 import { auditRoutes } from "./routes/audits.js";
 import { setAuditStore } from "./audit-store.js";
 import { createAuditStore } from "./audit-store-factory.js";
+import { createAuditQueue, type AuditQueue } from "./audit-queue.js";
+import { runAuditJob, type AuditRunnerLogger } from "./audit-runner.js";
 
 const PORT = Number(process.env["API_PORT"] ?? 3001);
 const HOST = process.env["API_HOST"] ?? "0.0.0.0";
 
-export async function build(): Promise<FastifyInstance> {
+export interface BuildOptions {
+  /**
+   * Override the audit queue. When omitted createAuditQueue() reads env.
+   * Test fixtures use this to inject InProcessAuditQueue with a known
+   * concurrency or to plug a fake.
+   */
+  auditQueue?: AuditQueue;
+  /**
+   * When true, POST /audits/run waits for the queued job to finish before
+   * responding 200. Default false (returns 202). Tests flip this on.
+   */
+  awaitAuditCompletion?: boolean;
+}
+
+export async function build(options: BuildOptions = {}): Promise<FastifyInstance> {
   const isProd = process.env["NODE_ENV"] === "production";
   const loggerConfig: Record<string, unknown> = {
     level: process.env["LOG_LEVEL"] ?? "info",
@@ -107,10 +123,42 @@ export async function build(): Promise<FastifyInstance> {
   const store = await createAuditStore({ logger: app.log });
   setAuditStore(store);
 
+  // Audit queue — InProcessAuditQueue by default, PgBossAuditQueue when
+  // AUDIT_QUEUE=pgboss + DATABASE_URL set. The worker side runs the actual
+  // audits via runAuditJob. We pass a thin logger adapter so the runner's
+  // logging matches the rest of the app.
+  const runnerLogger: AuditRunnerLogger = {
+    info: (msg, meta) => app.log.info(meta ?? {}, msg),
+    warn: (msg, meta) => app.log.warn(meta ?? {}, msg),
+    error: (msg, meta) => app.log.error(meta ?? {}, msg),
+    debug: (msg, meta) => app.log.debug(meta ?? {}, msg),
+    child: (bindings) => {
+      const child = app.log.child(bindings);
+      return {
+        info: (m, meta) => child.info(meta ?? {}, m),
+        warn: (m, meta) => child.warn(meta ?? {}, m),
+        error: (m, meta) => child.error(meta ?? {}, m),
+        debug: (m, meta) => child.debug(meta ?? {}, m),
+      };
+    },
+  };
+  const queue =
+    options.auditQueue ?? createAuditQueue({ logger: runnerLogger });
+  await queue.startWorker(async (job) => {
+    await runAuditJob(job, runnerLogger);
+  });
+  // Shut the queue down with the server so tests don't leak handlers.
+  app.addHook("onClose", async () => {
+    await queue.shutdown();
+  });
+
   await app.register(adapterRoutes);
   await app.register(profileRoutes);
   await app.register(canonicalRoutes);
-  await app.register(auditRoutes);
+  await app.register(auditRoutes, {
+    queue,
+    awaitCompletion: options.awaitAuditCompletion ?? false,
+  });
 
   return app;
 }

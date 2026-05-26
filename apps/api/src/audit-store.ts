@@ -13,7 +13,12 @@
 
 import type { AuditReport } from "@databridge/rule-core";
 
-export type AuditStatus = "queued" | "running" | "succeeded" | "failed";
+export type AuditStatus =
+  | "queued"
+  | "running"
+  | "succeeded"
+  | "failed"
+  | "cancelled";
 
 export interface AuditRecord {
   auditId: string;

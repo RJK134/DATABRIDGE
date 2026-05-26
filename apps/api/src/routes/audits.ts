@@ -20,25 +20,13 @@
 
 import type { FastifyInstance, FastifyRequest } from "fastify";
 import { z } from "zod";
-import {
-  AuditEngine,
-  PgSqlExecutor,
-  type AuditRule,
-  type FnAuditRule,
-  type RuleEvalContext,
-  type SqlExecutor,
-  type FieldStats,
-  type AuditReport,
-} from "@databridge/rule-core";
-import type {
-  SourceAdapter,
-  AdapterContext,
-} from "@databridge/adapter-spec";
 
-import { findProfile } from "../profile-registry.js";
-import { findAdapter } from "../adapter-registry.js";
 import { auditStore, type AuditRecord } from "../audit-store.js";
 import { requireRole } from "../middleware/auth.js";
+import type { AuditQueue } from "../audit-queue.js";
+import { cancelAudit } from "../audit-runner.js";
+import { findProfile } from "../profile-registry.js";
+import { findAdapter } from "../adapter-registry.js";
 
 /* ---------------------------- request schema ------------------------------ */
 
@@ -67,83 +55,6 @@ const RunAuditBodyZ = z.object({
 
 type RunAuditBody = z.infer<typeof RunAuditBodyZ>;
 
-/* ---------------------------- executor factory ---------------------------- */
-
-/**
- * Fallback SqlExecutor used when DATABASE_URL is not set. Every method
- * returns empty / zero so SQL-family rules become no-ops without crashing.
- */
-class NoopSqlExecutor implements SqlExecutor {
-  async query(): Promise<Record<string, unknown>[]> {
-    return [];
-  }
-  async queryCodelistViolations(): Promise<Record<string, unknown>[]> {
-    return [];
-  }
-  async queryFieldStats(): Promise<FieldStats> {
-    return { nullPct: 0, cardinality: 0, topValues: [] };
-  }
-}
-
-function makeExecutor(): SqlExecutor {
-  const url = process.env["DATABASE_URL"];
-  if (url) return new PgSqlExecutor({ connectionString: url });
-  return new NoopSqlExecutor();
-}
-
-/**
- * Best-effort AdapterContext for an audit run. Adapters that need real
- * secrets/logger should be wired via a more capable runtime later; for now
- * we use the apps/api logger and read straight from process.env via a
- * minimal SecretAccessor so credentials supplied via env still work.
- */
-function makeAdapterContext(
-  tenantId: string,
-  connectionId: string,
-  signal: AbortSignal,
-  log: {
-    info: (msg: string, meta?: Record<string, unknown>) => void;
-    warn: (msg: string, meta?: Record<string, unknown>) => void;
-    error: (msg: string, meta?: Record<string, unknown>) => void;
-    debug: (msg: string, meta?: Record<string, unknown>) => void;
-  },
-): AdapterContext {
-  return {
-    tenantId,
-    connectionId,
-    secrets: {
-      async get(key: string) {
-        const v = process.env[key];
-        if (v === undefined) throw new Error(`secret '${key}' not found in env`);
-        return v;
-      },
-    },
-    logger: log,
-    signal,
-  };
-}
-
-function instantiateAdapter(
-  id: string,
-  config: Record<string, unknown> | undefined,
-): SourceAdapter | { error: string } {
-  const entry = findAdapter(id);
-  if (!entry) return { error: `adapter '${id}' not registered` };
-  try {
-    return new entry.Adapter(config ?? {});
-  } catch (err) {
-    return { error: (err as Error).message };
-  }
-}
-
-/* ------------------------- profile → rules extraction --------------------- */
-
-function getRulesFromProfile(profile: unknown): (AuditRule | FnAuditRule)[] {
-  const p = profile as { rules?: unknown };
-  if (!Array.isArray(p.rules)) return [];
-  return p.rules as (AuditRule | FnAuditRule)[];
-}
-
 /* ----------------------------- RBAC helpers ------------------------------- */
 
 /**
@@ -169,9 +80,47 @@ function resolveTenantFromQuery(req: FastifyRequest): string | undefined {
   return undefined;
 }
 
+/**
+ * Poll the audit store for a record to reach a terminal state
+ * (succeeded/failed/cancelled). Used by sync-mode in tests so the existing
+ * audits.test.ts suite doesn't need to be rewritten to handle 202+poll.
+ *
+ * Returns the final record, or undefined on timeout.
+ */
+async function waitForTerminalState(
+  auditId: string,
+  timeoutMs: number,
+): Promise<AuditRecord | undefined> {
+  const start = Date.now();
+  const TERMINAL = new Set(["succeeded", "failed", "cancelled"]);
+  while (Date.now() - start < timeoutMs) {
+    const rec = await auditStore.get(auditId);
+    if (rec && TERMINAL.has(rec.status)) return rec;
+    // Tight loop initially, then back off slightly. setImmediate keeps the
+    // event loop responsive between polls.
+    await new Promise<void>((resolve) => setImmediate(resolve));
+  }
+  return undefined;
+}
+
 /* ------------------------------- routes ----------------------------------- */
 
-export async function auditRoutes(app: FastifyInstance): Promise<void> {
+export interface AuditRoutesOptions {
+  /** Queue used to dispatch audit jobs. Required: created at server bootstrap. */
+  queue: AuditQueue;
+  /**
+   * Synchronous mode flag — when true POST /audits/run awaits the queue's
+   * job to complete and returns 200 + full report. Default false (202).
+   * Off by default; the test suite flips it on to keep the existing
+   * sync-style integration tests working without rewriting them.
+   */
+  awaitCompletion?: boolean;
+}
+
+export async function auditRoutes(
+  app: FastifyInstance,
+  routeOpts: AuditRoutesOptions,
+): Promise<void> {
   // POST /audits/run — requires write authority. data:steward and
   // migration:operator are both legitimate — stewards run quality audits,
   // operators run pre-migration audits.
@@ -184,125 +133,142 @@ export async function auditRoutes(app: FastifyInstance): Promise<void> {
     anyOf: ["audit:viewer", "data:viewer", "data:steward"],
   });
 
-  app.post<{ Body: RunAuditBody }>("/audits/run", { preHandler: requireRunner }, async (req, reply) => {
-    const parsed = RunAuditBodyZ.safeParse(req.body);
-    if (!parsed.success) {
-      return reply
-        .code(400)
-        .send({ error: "invalid_body", details: parsed.error.flatten() });
-    }
-    const body = parsed.data;
+  app.post<{ Body: RunAuditBody }>(
+    "/audits/run",
+    { preHandler: requireRunner },
+    async (req, reply) => {
+      const parsed = RunAuditBodyZ.safeParse(req.body);
+      if (!parsed.success) {
+        return reply
+          .code(400)
+          .send({ error: "invalid_body", details: parsed.error.flatten() });
+      }
+      const body = parsed.data;
 
-    const profileEntry = findProfile(body.profileId);
-    if (!profileEntry) {
-      return reply
-        .code(404)
-        .send({ error: "profile_not_found", id: body.profileId });
-    }
-    const rules = getRulesFromProfile(profileEntry.profile);
-
-    // Pre-register the audit so GET /audits/:id is visible from the moment
-    // the POST returns. We mark it as 'running' until runAudit() resolves.
-    const provisionalId =
-      body.auditId ??
-      // Avoid pulling in another uuid lib — Node 20+ has crypto.randomUUID.
-      (await import("node:crypto")).randomUUID();
-    const record: AuditRecord = await auditStore.create({
-      auditId: provisionalId,
-      tenantId: body.tenantId,
-      profileId: body.profileId,
-      status: "running",
-    });
-
-    const engineOpts = {
-      ...(body.maxFindingsPerRule !== undefined
-        ? { maxFindingsPerRule: body.maxFindingsPerRule }
-        : {}),
-      ...(body.maxFindingsTotal !== undefined
-        ? { maxFindingsTotal: body.maxFindingsTotal }
-        : {}),
-      ...(body.pageSize !== undefined ? { pageSize: body.pageSize } : {}),
-    };
-    const engine = new AuditEngine(makeExecutor(), engineOpts);
-
-    // Fastify's req.raw is a Node IncomingMessage; an AbortSignal hangs off
-    // the underlying socket in Node 18+ but the typings don't carry it. We
-    // mint a fresh controller per audit so the rule engine has a non-null
-    // signal and we can wire cancellation in later.
-    const abort = new AbortController();
-    req.raw.on("close", () => abort.abort());
-    const ctx: RuleEvalContext = {
-      tenantId: body.tenantId,
-      connectionId: `api:${body.profileId}`,
-      codeLists: new Map(),
-      signal: abort.signal,
-    };
-
-    // If the caller wired an adapter, instantiate it here. We treat
-    // adapter-construction failure as a 400 — the caller asked for a
-    // specific adapter and we can't honour it.
-    let source: SourceAdapter | undefined;
-    let adapterCtx: AdapterContext | undefined;
-    if (body.adapterId) {
-      const made = instantiateAdapter(body.adapterId, body.adapterConfig);
-      if ("error" in made) {
-        await auditStore.update(record.auditId, {
-          status: "failed",
-          error: made.error,
-        });
+      // 404-up-front when the profile doesn't exist so clients don't get a
+      // 202 + later-failed audit for typos.
+      const profileEntry = findProfile(body.profileId);
+      if (!profileEntry) {
+        return reply
+          .code(404)
+          .send({ error: "profile_not_found", id: body.profileId });
+      }
+      // Fail fast on unknown adapter id rather than spending a queue slot.
+      // Adapter construction (which can read config) is still deferred to
+      // the job; we only check that the id is registered.
+      if (body.adapterId !== undefined && !findAdapter(body.adapterId)) {
         return reply.code(400).send({
           error: "adapter_init_failed",
-          auditId: record.auditId,
-          message: made.error,
+          message: `adapter '${body.adapterId}' not registered`,
         });
       }
-      source = made;
-      const childLogger = app.log.child({
-        adapterId: body.adapterId,
-        auditId: record.auditId,
-      });
-      adapterCtx = makeAdapterContext(
-        body.tenantId,
-        `audit:${record.auditId}`,
-        abort.signal,
-        {
-          info: (msg, meta) => childLogger.info(meta ?? {}, msg),
-          warn: (msg, meta) => childLogger.warn(meta ?? {}, msg),
-          error: (msg, meta) => childLogger.error(meta ?? {}, msg),
-          debug: (msg, meta) => childLogger.debug(meta ?? {}, msg),
-        },
-      );
-    }
 
-    let report: AuditReport;
-    try {
-      report = await engine.runAudit({
+      const auditId =
+        body.auditId ??
+        // Avoid pulling in another uuid lib — Node 20+ has crypto.randomUUID.
+        (await import("node:crypto")).randomUUID();
+
+      const record: AuditRecord = await auditStore.create({
+        auditId,
+        tenantId: body.tenantId,
+        profileId: body.profileId,
+        status: "queued",
+      });
+
+      const jobInput = {
         auditId: record.auditId,
         tenantId: body.tenantId,
-        rules,
-        resourceMap: body.resourceMap ?? {},
+        profileId: body.profileId,
+        ...(body.adapterId !== undefined ? { adapterId: body.adapterId } : {}),
+        ...(body.adapterConfig !== undefined
+          ? { adapterConfig: body.adapterConfig }
+          : {}),
+        ...(body.resourceMap !== undefined
+          ? { resourceMap: body.resourceMap }
+          : {}),
         ...(body.primaryKeyMap !== undefined
           ? { primaryKeyMap: body.primaryKeyMap }
           : {}),
-        ...(source !== undefined ? { source } : {}),
-        ...(adapterCtx !== undefined ? { adapterCtx } : {}),
-        ctx,
-      });
-    } catch (err) {
-      const message = (err as Error).message ?? String(err);
-      await auditStore.update(record.auditId, { status: "failed", error: message });
-      app.log.error({ err, auditId: record.auditId }, "audit run failed");
-      return reply
-        .code(500)
-        .send({ error: "audit_run_failed", auditId: record.auditId, message });
-    }
+        ...(body.pageSize !== undefined ? { pageSize: body.pageSize } : {}),
+        ...(body.maxFindingsPerRule !== undefined
+          ? { maxFindingsPerRule: body.maxFindingsPerRule }
+          : {}),
+        ...(body.maxFindingsTotal !== undefined
+          ? { maxFindingsTotal: body.maxFindingsTotal }
+          : {}),
+      };
 
-    const updated = await auditStore.update(record.auditId, {
-      status: "succeeded",
-      report,
-    });
-    return reply.code(200).send(updated);
-  });
+      try {
+        await routeOpts.queue.enqueue(jobInput);
+      } catch (err) {
+        const message = (err as Error).message ?? String(err);
+        await auditStore.update(record.auditId, {
+          status: "failed",
+          error: `enqueue failed: ${message}`,
+        });
+        return reply.code(500).send({
+          error: "enqueue_failed",
+          auditId: record.auditId,
+          message,
+        });
+      }
+
+      // Sync-mode for tests: wait until the record reaches a terminal state.
+      if (routeOpts.awaitCompletion) {
+        const final = await waitForTerminalState(record.auditId, 30_000);
+        if (!final) {
+          return reply.code(504).send({
+            error: "audit_run_timeout",
+            auditId: record.auditId,
+          });
+        }
+        return reply.code(200).send(final);
+      }
+
+      return reply
+        .code(202)
+        .header("location", `/audits/${record.auditId}`)
+        .send({
+          auditId: record.auditId,
+          status: "queued",
+          tenantId: record.tenantId,
+          profileId: record.profileId,
+        });
+    },
+  );
+
+  // POST /audits/:id/cancel — thin wrapper around the runner registry.
+  // Used by F4. RBAC mirrors the run endpoint (only stewards/operators).
+  app.post<{ Params: { id: string } }>(
+    "/audits/:id/cancel",
+    {
+      preHandler: async (req, reply) => {
+        // Look up the audit to resolve its tenant, then run requireRole.
+        const rec = await auditStore.get(req.params.id);
+        if (!rec) {
+          return reply
+            .code(404)
+            .send({ error: "audit_not_found", id: req.params.id });
+        }
+        const handler = requireRole({
+          resolveTenantId: () => rec.tenantId,
+          anyOf: ["data:steward", "migration:operator"],
+        });
+        await handler(req, reply);
+      },
+    },
+    async (req, reply) => {
+      const aborted = cancelAudit(req.params.id, "cancelled via /audits/:id/cancel");
+      if (!aborted) {
+        // The audit is not in-flight — either it never started, already
+        // finished, or was already cancelled. We return 200 either way so
+        // the call is idempotent; the body indicates whether anything was
+        // actually aborted.
+        return reply.code(200).send({ auditId: req.params.id, aborted: false });
+      }
+      return reply.code(202).send({ auditId: req.params.id, aborted: true });
+    },
+  );
 
   app.get<{ Querystring: { tenantId?: string } }>(
     "/audits",

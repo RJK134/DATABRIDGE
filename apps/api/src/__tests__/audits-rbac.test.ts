@@ -36,7 +36,8 @@ describe("apps/api /audits RBAC (static-token auth)", () => {
     savedTokens = process.env["DATABRIDGE_API_TOKENS"];
     process.env["DATABRIDGE_API_TOKENS"] = TOKEN_ENV;
     _resetAuthActiveForTests();
-    app = await build();
+    // Sync-mode matches the existing 200-style assertions in this suite.
+    app = await build({ awaitAuditCompletion: true });
   });
   afterAll(async () => {
     await app.close();

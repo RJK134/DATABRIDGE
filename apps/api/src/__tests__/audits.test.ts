@@ -18,7 +18,9 @@ describe("apps/api /audits", () => {
     // Belt-and-braces: ensure auth is disabled for this suite even if a
     // prior test in the same worker flipped the module-level flag on.
     _resetAuthActiveForTests();
-    app = await build();
+    // awaitAuditCompletion=true keeps these tests using the old
+    // sync-style 200 response shape — the F2 default is 202 + poll.
+    app = await build({ awaitAuditCompletion: true });
   });
   afterAll(async () => {
     await app.close();
