@@ -23,6 +23,10 @@ import { canonicalRoutes } from "./routes/canonical.js";
 import { auditRoutes } from "./routes/audits.js";
 import { rulePackRoutes } from "./routes/rule-packs.js";
 import { codesetRoutes } from "./routes/codesets.js";
+import { identityRoutes } from "./routes/identity.js";
+import { codesetMappingRoutes } from "./routes/codeset-mapping.js";
+import { effectiveDatingRoutes } from "./routes/effective-dating.js";
+import { reconciliationRoutes } from "./routes/reconciliation.js";
 import { setAuditStore } from "./audit-store.js";
 import { createAuditStore } from "./audit-store-factory.js";
 import { createAuditQueue, type AuditQueue } from "./audit-queue.js";
@@ -122,6 +126,12 @@ export async function build(options: BuildOptions = {}): Promise<FastifyInstance
       "/codesets",
       "/codesets/bundles",
       "/codesets/:id",
+      "/identity/reconcile",
+      "/codeset-maps",
+      "/codeset-maps/:id",
+      "/codeset-maps/translate",
+      "/effective-dating/resolve",
+      "/reconciliation/report",
     ],
   }));
 
@@ -168,6 +178,10 @@ export async function build(options: BuildOptions = {}): Promise<FastifyInstance
   });
   await app.register(rulePackRoutes);
   await app.register(codesetRoutes);
+  await app.register(identityRoutes);
+  await app.register(codesetMappingRoutes);
+  await app.register(effectiveDatingRoutes);
+  await app.register(reconciliationRoutes);
 
   return app;
 }

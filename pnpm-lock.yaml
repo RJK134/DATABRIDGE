@@ -68,12 +68,21 @@ importers:
       '@databridge/canonical':
         specifier: workspace:*
         version: link:../../packages/canonical
+      '@databridge/codeset-mapper':
+        specifier: workspace:*
+        version: link:../../packages/codeset-mapper
       '@databridge/codeset-seeds':
         specifier: workspace:*
         version: link:../../packages/codeset-seeds
       '@databridge/dhp-core':
         specifier: workspace:*
         version: link:../../packages/dhp-core
+      '@databridge/effective-dating':
+        specifier: workspace:*
+        version: link:../../packages/effective-dating
+      '@databridge/identity-reconciler':
+        specifier: workspace:*
+        version: link:../../packages/identity-reconciler
       '@databridge/platform':
         specifier: workspace:*
         version: link:../../packages/platform
@@ -83,6 +92,9 @@ importers:
       '@databridge/profile-sits':
         specifier: workspace:*
         version: link:../../profiles/profile-sits
+      '@databridge/reconciliation-report':
+        specifier: workspace:*
+        version: link:../../packages/reconciliation-report
       '@databridge/rule-core':
         specifier: workspace:*
         version: link:../../packages/rule-core
@@ -555,6 +567,28 @@ importers:
         specifier: ^1.6.0
         version: 1.6.1(@types/node@20.19.41)
 
+  packages/codeset-mapper:
+    dependencies:
+      '@databridge/codeset-seeds':
+        specifier: workspace:*
+        version: link:../codeset-seeds
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.8.0
+        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.8.0
+        version: 7.18.0(eslint@8.57.1)(typescript@5.9.3)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.41)
+
   packages/codeset-seeds:
     dependencies:
       '@databridge/adapter-spec':
@@ -649,6 +683,50 @@ importers:
         specifier: ^1.6.0
         version: 1.6.1(@types/node@20.19.41)
 
+  packages/effective-dating:
+    dependencies:
+      '@databridge/canonical':
+        specifier: workspace:*
+        version: link:../canonical
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.8.0
+        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.8.0
+        version: 7.18.0(eslint@8.57.1)(typescript@5.9.3)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.41)
+
+  packages/identity-reconciler:
+    dependencies:
+      '@databridge/canonical':
+        specifier: workspace:*
+        version: link:../canonical
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.8.0
+        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.8.0
+        version: 7.18.0(eslint@8.57.1)(typescript@5.9.3)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.41)
+
   packages/platform:
     dependencies:
       zod:
@@ -691,6 +769,28 @@ importers:
         version: 8.57.1
       typescript:
         specifier: ^5.4.0
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.41)
+
+  packages/reconciliation-report:
+    dependencies:
+      '@databridge/identity-reconciler':
+        specifier: workspace:*
+        version: link:../identity-reconciler
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.8.0
+        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.8.0
+        version: 7.18.0(eslint@8.57.1)(typescript@5.9.3)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.4.5
         version: 5.9.3
       vitest:
         specifier: ^1.6.0

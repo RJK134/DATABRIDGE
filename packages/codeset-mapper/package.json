@@ -1,0 +1,37 @@
+{
+  "name": "@databridge/codeset-mapper",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Phase I2 — pluggable, versioned, tenant-configurable codeset mapping engine. Seeds: HECoS↔CIP↔JACS, STVRESD→HESA FEESTATUS, STVSTST→HESA RSNEND, STVGRDE→numeric, ETHN_CODE→HESA ETHNIC, NATN_CODE→ISO 3166",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./maps/*": "./maps/*"
+  },
+  "files": [
+    "dist",
+    "maps"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@databridge/codeset-seeds": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "@typescript-eslint/eslint-plugin": "^7.8.0"
+  }
+}

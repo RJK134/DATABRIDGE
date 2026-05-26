@@ -1,0 +1,20 @@
+{
+  "id": "hesa-hecos-to-jacs3@1.0.0",
+  "name": "HESA HECoS → JACS 3.0 (legacy)",
+  "sourceCodelist": "HECOS",
+  "targetCodelist": "JACS3",
+  "version": "1.0.0",
+  "description": "HECoS (post-2019) to JACS 3.0 (pre-2019) reverse-lookup. Used when migrating pre-Data-Futures historical records.",
+  "entries": [
+    { "sourceCode": "100100", "targetCode": "G400", "notes": "computer science" },
+    { "sourceCode": "100358", "targetCode": "G600", "notes": "software engineering" },
+    { "sourceCode": "100343", "targetCode": "G100", "notes": "mathematics" },
+    { "sourceCode": "100390", "targetCode": "C100", "notes": "biology" },
+    { "sourceCode": "100417", "targetCode": "F100", "notes": "chemistry" },
+    { "sourceCode": "100425", "targetCode": "F300", "notes": "physics" },
+    { "sourceCode": "100078", "targetCode": "B900", "notes": "health management" },
+    { "sourceCode": "100476", "targetCode": "B700", "notes": "nursing" },
+    { "sourceCode": "100079", "targetCode": "N200", "notes": "business management" },
+    { "sourceCode": "100107", "targetCode": "X300", "notes": "education" }
+  ]
+}
