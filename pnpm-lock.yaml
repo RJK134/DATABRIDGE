@@ -59,9 +59,18 @@ importers:
       '@databridge/adapter-workday-raas':
         specifier: workspace:*
         version: link:../../packages/adapter-workday-raas
+      '@databridge/audit-pack-banner-native':
+        specifier: workspace:*
+        version: link:../../packages/audit-pack-banner-native
+      '@databridge/audit-pack-sits-native':
+        specifier: workspace:*
+        version: link:../../packages/audit-pack-sits-native
       '@databridge/canonical':
         specifier: workspace:*
         version: link:../../packages/canonical
+      '@databridge/codeset-seeds':
+        specifier: workspace:*
+        version: link:../../packages/codeset-seeds
       '@databridge/dhp-core':
         specifier: workspace:*
         version: link:../../packages/dhp-core
@@ -477,6 +486,50 @@ importers:
         specifier: ^1.6.0
         version: 1.6.1(@types/node@20.19.41)
 
+  packages/audit-pack-banner-native:
+    dependencies:
+      '@databridge/rule-core':
+        specifier: workspace:*
+        version: link:../rule-core
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.8.0
+        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.8.0
+        version: 7.18.0(eslint@8.57.1)(typescript@5.9.3)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.41)
+
+  packages/audit-pack-sits-native:
+    dependencies:
+      '@databridge/rule-core':
+        specifier: workspace:*
+        version: link:../rule-core
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.8.0
+        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.8.0
+        version: 7.18.0(eslint@8.57.1)(typescript@5.9.3)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.41)
+
   packages/canonical:
     dependencies:
       '@databridge/platform':
@@ -502,6 +555,28 @@ importers:
         specifier: ^1.6.0
         version: 1.6.1(@types/node@20.19.41)
 
+  packages/codeset-seeds:
+    dependencies:
+      '@databridge/adapter-spec':
+        specifier: workspace:*
+        version: link:../adapter-spec
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.8.0
+        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.8.0
+        version: 7.18.0(eslint@8.57.1)(typescript@5.9.3)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.41)
+
   packages/dhp-core:
     dependencies:
       '@databridge/platform':
@@ -513,6 +588,50 @@ importers:
       zod:
         specifier: ^3.23.0
         version: 3.25.76
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.8.0
+        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.8.0
+        version: 7.18.0(eslint@8.57.1)(typescript@5.9.3)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.41)
+
+  packages/dictionary-banner:
+    dependencies:
+      '@databridge/adapter-spec':
+        specifier: workspace:*
+        version: link:../adapter-spec
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.8.0
+        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.8.0
+        version: 7.18.0(eslint@8.57.1)(typescript@5.9.3)
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.41)
+
+  packages/dictionary-sits:
+    dependencies:
+      '@databridge/adapter-spec':
+        specifier: workspace:*
+        version: link:../adapter-spec
     devDependencies:
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.8.0

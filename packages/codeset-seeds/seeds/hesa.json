@@ -1,0 +1,108 @@
+{
+  "version": "0.1.0",
+  "source": "hesa",
+  "description": "HESA Data Futures shared codesets — used as targets for Phase I codeset-mapping. These are the canonical values both SITS and Banner ultimately map to for statutory returns.",
+  "codeLists": [
+    {
+      "id": "HESA.SEXID",
+      "name": "Sex identifier (HESA SEXID)",
+      "description": "HESA Coding Manual — SEXID.",
+      "source": "hesa-data-futures",
+      "entries": [
+        { "code": "1",  "description": "Female", "isActive": true },
+        { "code": "2",  "description": "Male", "isActive": true },
+        { "code": "3",  "description": "Other", "isActive": true },
+        { "code": "4",  "description": "Information refused", "isActive": true }
+      ]
+    },
+    {
+      "id": "HESA.FEESTATUS",
+      "name": "Fee status (HESA FEESTATUS)",
+      "description": "Statutory fee-status classification.",
+      "source": "hesa-data-futures",
+      "entries": [
+        { "code": "1",  "description": "Home", "isActive": true },
+        { "code": "2",  "description": "Overseas (non-EU)", "isActive": true },
+        { "code": "3",  "description": "EU", "isActive": true },
+        { "code": "4",  "description": "Channel Islands and Isle of Man", "isActive": true },
+        { "code": "5",  "description": "Not applicable / not known", "isActive": true }
+      ]
+    },
+    {
+      "id": "HESA.RSNEND",
+      "name": "Reason for end of instance",
+      "description": "HESA RSNEND — termination reason for an enrolment.",
+      "source": "hesa-data-futures",
+      "entries": [
+        { "code": "01", "description": "Academic failure / left in bad standing", "isActive": true },
+        { "code": "02", "description": "Health reasons", "isActive": true },
+        { "code": "03", "description": "Financial reasons", "isActive": true },
+        { "code": "04", "description": "Other personal reasons", "isActive": true },
+        { "code": "05", "description": "Written off after lapse of time", "isActive": true },
+        { "code": "06", "description": "Exclusion", "isActive": true },
+        { "code": "07", "description": "Transferred to another provider", "isActive": true },
+        { "code": "08", "description": "Death", "isActive": true },
+        { "code": "98", "description": "Other", "isActive": true },
+        { "code": "99", "description": "Reason not known", "isActive": true }
+      ]
+    },
+    {
+      "id": "HESA.MODE",
+      "name": "Mode of study (HESA MODE)",
+      "description": "MODE — full-time / part-time / sandwich variants.",
+      "source": "hesa-data-futures",
+      "entries": [
+        { "code": "01", "description": "Full-time", "isActive": true },
+        { "code": "31", "description": "Part-time", "isActive": true },
+        { "code": "63", "description": "Sandwich (thick)", "isActive": true },
+        { "code": "64", "description": "Sandwich (thin)", "isActive": true },
+        { "code": "98", "description": "Dormant", "isActive": true }
+      ]
+    },
+    {
+      "id": "HESA.QUALCAT",
+      "name": "Qualification category (HESA QUALCAT)",
+      "description": "Subset — most common qualification categories.",
+      "source": "hesa-data-futures",
+      "entries": [
+        { "code": "H0000", "description": "Doctorate (research)", "isActive": true },
+        { "code": "H0001", "description": "Doctorate (taught)", "isActive": true },
+        { "code": "M0000", "description": "Masters", "isActive": true },
+        { "code": "H1100", "description": "Bachelors degree with honours", "isActive": true },
+        { "code": "H1200", "description": "Bachelors degree (ordinary)", "isActive": true },
+        { "code": "C0000", "description": "Certificate of higher education", "isActive": true }
+      ]
+    },
+    {
+      "id": "HESA.NATN",
+      "name": "Nationality (HESA NATN / ISO 3166-1 alpha-2)",
+      "description": "Statutory nationality codeset.",
+      "source": "hesa-data-futures",
+      "entries": [
+        { "code": "GB", "description": "United Kingdom", "isActive": true },
+        { "code": "IE", "description": "Ireland", "isActive": true },
+        { "code": "FR", "description": "France", "isActive": true },
+        { "code": "DE", "description": "Germany", "isActive": true },
+        { "code": "US", "description": "United States", "isActive": true },
+        { "code": "CN", "description": "China", "isActive": true },
+        { "code": "IN", "description": "India", "isActive": true },
+        { "code": "ZZ", "description": "Unknown / not specified", "isActive": true }
+      ]
+    },
+    {
+      "id": "HESA.CLASSIFICATION",
+      "name": "Degree classification (HESA CLASS)",
+      "description": "UK degree classification scheme.",
+      "source": "hesa-data-futures",
+      "entries": [
+        { "code": "1",  "description": "First class honours", "isActive": true },
+        { "code": "21", "description": "Upper second class honours (2:1)", "isActive": true },
+        { "code": "22", "description": "Lower second class honours (2:2)", "isActive": true },
+        { "code": "3",  "description": "Third class honours", "isActive": true },
+        { "code": "4",  "description": "Pass (no honours)", "isActive": true },
+        { "code": "5",  "description": "Fail / no award", "isActive": true },
+        { "code": "97", "description": "Not classified", "isActive": true }
+      ]
+    }
+  ]
+}

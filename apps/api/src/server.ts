@@ -21,6 +21,8 @@ import { adapterRoutes } from "./routes/adapters.js";
 import { profileRoutes } from "./routes/profiles.js";
 import { canonicalRoutes } from "./routes/canonical.js";
 import { auditRoutes } from "./routes/audits.js";
+import { rulePackRoutes } from "./routes/rule-packs.js";
+import { codesetRoutes } from "./routes/codesets.js";
 import { setAuditStore } from "./audit-store.js";
 import { createAuditStore } from "./audit-store-factory.js";
 import { createAuditQueue, type AuditQueue } from "./audit-queue.js";
@@ -115,6 +117,11 @@ export async function build(options: BuildOptions = {}): Promise<FastifyInstance
       "/audits",
       "/audits/run",
       "/audits/:id",
+      "/rule-packs",
+      "/rule-packs/:id",
+      "/codesets",
+      "/codesets/bundles",
+      "/codesets/:id",
     ],
   }));
 
@@ -159,6 +166,8 @@ export async function build(options: BuildOptions = {}): Promise<FastifyInstance
     queue,
     awaitCompletion: options.awaitAuditCompletion ?? false,
   });
+  await app.register(rulePackRoutes);
+  await app.register(codesetRoutes);
 
   return app;
 }

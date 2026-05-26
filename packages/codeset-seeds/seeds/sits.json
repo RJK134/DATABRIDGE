@@ -1,0 +1,119 @@
+{
+  "version": "0.1.0",
+  "source": "sits",
+  "description": "Canonical seed codesets derived from SITS_DATA_STRUCTURES §17 (HESA reporting fields) + §3.5 (lookup infrastructure). Seeds the Phase I codeset-mapping engine and lets the SITS native audit pack run codelist-conformance with no hand-curation.",
+  "codeLists": [
+    {
+      "id": "SITS.NAT",
+      "name": "Nationality (HESA NATN / ISO 3166)",
+      "description": "Tribal SITS nationality codeset — mapped to HESA NATN field.",
+      "source": "sits",
+      "entries": [
+        { "code": "GB", "description": "United Kingdom", "shortDescription": "UK", "isActive": true, "sortOrder": 1 },
+        { "code": "FR", "description": "France", "isActive": true, "sortOrder": 2 },
+        { "code": "DE", "description": "Germany", "isActive": true, "sortOrder": 3 },
+        { "code": "US", "description": "United States", "isActive": true, "sortOrder": 4 },
+        { "code": "IE", "description": "Ireland", "isActive": true, "sortOrder": 5 },
+        { "code": "CN", "description": "China", "isActive": true, "sortOrder": 6 },
+        { "code": "IN", "description": "India", "isActive": true, "sortOrder": 7 },
+        { "code": "ZZ", "description": "Unknown / not specified", "isActive": true, "sortOrder": 999 }
+      ]
+    },
+    {
+      "id": "SITS.ETHN",
+      "name": "Ethnicity (HESA ETHNIC)",
+      "description": "Tribal SITS ethnicity codeset — maps to HESA ETHNIC.",
+      "source": "sits",
+      "entries": [
+        { "code": "10", "description": "White - British", "isActive": true },
+        { "code": "11", "description": "White - Irish", "isActive": true },
+        { "code": "19", "description": "Other White", "isActive": true },
+        { "code": "21", "description": "Black or Black British - Caribbean", "isActive": true },
+        { "code": "22", "description": "Black or Black British - African", "isActive": true },
+        { "code": "31", "description": "Asian or Asian British - Indian", "isActive": true },
+        { "code": "32", "description": "Asian or Asian British - Pakistani", "isActive": true },
+        { "code": "33", "description": "Asian or Asian British - Bangladeshi", "isActive": true },
+        { "code": "34", "description": "Chinese", "isActive": true },
+        { "code": "41", "description": "Mixed - White and Black Caribbean", "isActive": true },
+        { "code": "80", "description": "Other ethnic background", "isActive": true },
+        { "code": "90", "description": "Not known", "isActive": true },
+        { "code": "98", "description": "Information refused", "isActive": true }
+      ]
+    },
+    {
+      "id": "SITS.STAC.SCJ",
+      "name": "SCJ status codes (course attachment)",
+      "description": "scj_stac values — drives Phase I status-driven currentness resolver.",
+      "source": "sits",
+      "entries": [
+        { "code": "C", "description": "Current / enrolled", "isActive": true, "attributes": { "currentness": "active" } },
+        { "code": "P", "description": "Prospective", "isActive": true, "attributes": { "currentness": "prospective" } },
+        { "code": "S", "description": "Suspended", "isActive": true, "attributes": { "currentness": "suspended" } },
+        { "code": "T", "description": "Transferred out", "isActive": true, "attributes": { "currentness": "terminal" } },
+        { "code": "W", "description": "Withdrawn", "isActive": true, "attributes": { "currentness": "terminal" } },
+        { "code": "CC", "description": "Course completed", "isActive": true, "attributes": { "currentness": "terminal" } },
+        { "code": "D", "description": "Deceased", "isActive": true, "attributes": { "currentness": "terminal" } }
+      ]
+    },
+    {
+      "id": "SITS.STAC.SCE",
+      "name": "SCE status codes (year of enrolment)",
+      "description": "sce_stac values per enrolment year.",
+      "source": "sits",
+      "entries": [
+        { "code": "R", "description": "Registered for the year", "isActive": true, "attributes": { "currentness": "active" } },
+        { "code": "C", "description": "Confirmed", "isActive": true, "attributes": { "currentness": "active" } },
+        { "code": "I", "description": "Intercalating", "isActive": true, "attributes": { "currentness": "suspended" } },
+        { "code": "P", "description": "Pending registration", "isActive": true, "attributes": { "currentness": "prospective" } },
+        { "code": "W", "description": "Withdrawn from year", "isActive": true, "attributes": { "currentness": "terminal" } }
+      ]
+    },
+    {
+      "id": "SITS.SMR.ACTC",
+      "name": "SMR result action codes",
+      "description": "smr_actc — outcome action on a module result row.",
+      "source": "sits",
+      "entries": [
+        { "code": "P", "description": "Pass", "isActive": true, "attributes": { "outcome": "pass" } },
+        { "code": "F", "description": "Fail", "isActive": true, "attributes": { "outcome": "fail" } },
+        { "code": "C", "description": "Compensated pass", "isActive": true, "attributes": { "outcome": "pass" } },
+        { "code": "R", "description": "Refer", "isActive": true, "attributes": { "outcome": "refer" } },
+        { "code": "X", "description": "Excluded / non-submission", "isActive": true, "attributes": { "outcome": "fail" } }
+      ]
+    },
+    {
+      "id": "SITS.FEEST",
+      "name": "Fee status (HESA FEESTATUS)",
+      "description": "SITS fee-status codes mapped to HESA FEESTATUS.",
+      "source": "sits",
+      "entries": [
+        { "code": "H", "description": "Home / UK fee status", "isActive": true, "attributes": { "hesa.feestatus": "1" } },
+        { "code": "I", "description": "International / overseas fee status", "isActive": true, "attributes": { "hesa.feestatus": "2" } },
+        { "code": "E", "description": "EU fee status (pre-2021)", "isActive": true, "attributes": { "hesa.feestatus": "3" } },
+        { "code": "C", "description": "Channel Islands / Isle of Man", "isActive": true, "attributes": { "hesa.feestatus": "5" } }
+      ]
+    },
+    {
+      "id": "SITS.MST.STAT",
+      "name": "MST status (person master)",
+      "description": "mst_stat — overall person state.",
+      "source": "sits",
+      "entries": [
+        { "code": "A", "description": "Active", "isActive": true, "attributes": { "currentness": "active" } },
+        { "code": "I", "description": "Inactive", "isActive": true, "attributes": { "currentness": "suspended" } },
+        { "code": "D", "description": "Deceased", "isActive": true, "attributes": { "currentness": "terminal" } },
+        { "code": "M", "description": "Merged into another MST", "isActive": true, "attributes": { "currentness": "merged" } }
+      ]
+    },
+    {
+      "id": "SITS.CRS.HESA",
+      "name": "Course HESA reportable flag",
+      "description": "crs_hesa — whether a course feeds HESA returns.",
+      "source": "sits",
+      "entries": [
+        { "code": "Y", "description": "HESA reportable", "isActive": true },
+        { "code": "N", "description": "Not HESA reportable", "isActive": true }
+      ]
+    }
+  ]
+}
