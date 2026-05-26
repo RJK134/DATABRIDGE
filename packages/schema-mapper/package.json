@@ -25,6 +25,12 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {},
+  "peerDependencies": {
+    "pg": "^8.11.0"
+  },
+  "peerDependenciesMeta": {
+    "pg": { "optional": true }
+  },
   "devDependencies": {
     "typescript": "^5.4.5",
     "vitest": "^1.6.0",

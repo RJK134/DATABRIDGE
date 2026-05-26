@@ -28,6 +28,17 @@ export {
   type FsLearningStoreOptions,
   type FsLearningStoreFile,
 } from "./learning-fs.js";
+export {
+  PostgresLearningStore,
+  type AsyncLearningStore,
+  type PostgresLearningStoreOptions,
+  type PgClientLike as PgLearningClientLike,
+  type PgClientCtor as PgLearningClientCtor,
+} from "./learning-pg.js";
+export {
+  CachedPostgresLearningStore,
+  type CachedPostgresLearningStoreOptions,
+} from "./learning-pg-cached.js";
 
 import type { SuggestionResult } from "./types.js";
 import { isFieldSuggestion } from "./types.js";

@@ -14,6 +14,12 @@ export {
 } from "./http.js";
 export { CONNECT_RESOURCE_PATH, CONNECT_RESOURCE_PK } from "./resource-map.js";
 export {
+  CiaCubeClient,
+  CiaFallbackController,
+  type CiaCubeClientOptions,
+  type CiaFallbackControllerOptions,
+} from "./cia-fallback.js";
+export {
   TECHONE_FIN1_NATIVE_RULES,
   TECHONE_FIN1_NATIVE_AUDIT_PACK,
   type TechOneFin1RuleId,

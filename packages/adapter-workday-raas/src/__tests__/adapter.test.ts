@@ -2,11 +2,21 @@ import { describe, it, expect, vi } from "vitest";
 import { WorkdayRaasAdapter, SUPPORTED_RESOURCES } from "../adapter.js";
 import { WorkdayRaasConfigSchema } from "../config.js";
 
+/**
+ * Context with a secrets accessor that throws — drives the adapter
+ * into the hermetic stub path. The SecretsAdapter contract is
+ * `get(): Promise<string>` and throws when the key is not in the
+ * vault, so this matches reality.
+ */
 function makeCtx() {
   return {
     tenantId: "test-tenant",
     connectionId: "test-conn",
-    secrets: { get: vi.fn(async () => "dummy") },
+    secrets: {
+      get: vi.fn(async (): Promise<string> => {
+        throw new Error("secret not found");
+      }),
+    },
     logger: {
       info: vi.fn(),
       warn: vi.fn(),
