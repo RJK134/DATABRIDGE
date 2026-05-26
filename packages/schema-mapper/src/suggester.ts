@@ -30,6 +30,12 @@ import type {
   SuggestionResult,
   SuggestRequest,
 } from "./types.js";
+import {
+  MemoryLearningStore,
+  learnedConfidence,
+  type LearningStore,
+  type RecordCorrectionInput,
+} from "./learning.js";
 
 interface CandidateScore {
   canonical: string;
@@ -40,15 +46,38 @@ interface CandidateScore {
 
 export interface SchemaSuggesterOptions {
   corpus?: CorpusBundle;
+  /**
+   * Optional learning store. When provided, accepted corrections
+   * override deterministic heuristics for the same `(system, column)`
+   * pair. When omitted, an internal MemoryLearningStore is created so
+   * `recordCorrection()` still works (but state is lost on process exit).
+   */
+  learningStore?: LearningStore;
 }
 
 export class SchemaSuggester {
   private readonly corpus: CorpusBundle;
   private readonly index: ReturnType<typeof buildFlatIndex>;
+  private readonly learningStore: LearningStore;
 
   constructor(options: SchemaSuggesterOptions = {}) {
     this.corpus = options.corpus ?? loadBundledCorpus();
     this.index = buildFlatIndex(this.corpus);
+    this.learningStore = options.learningStore ?? new MemoryLearningStore();
+  }
+
+  /** Access the underlying learning store (read-only inspection or persistence). */
+  getLearningStore(): LearningStore {
+    return this.learningStore;
+  }
+
+  /**
+   * Record a corrected/accepted mapping. The suggester will surface
+   * this as the top candidate next time the same `(system, column)`
+   * appears.
+   */
+  recordCorrection(input: RecordCorrectionInput): void {
+    this.learningStore.record(input);
   }
 
   /** The currently loaded corpus version. */
@@ -78,6 +107,21 @@ export class SchemaSuggester {
     const normCol = normaliseToken(column);
     const colTokens = tokens(column);
     const candidates: CandidateScore[] = [];
+
+    // 0. Learned-prior lookup — if the engineer has previously accepted
+    //    a mapping for this exact (system, column), surface it with the
+    //    learned-confidence score so it overrides any deterministic
+    //    heuristic. Deterministic candidates still flow through as
+    //    alternatives for context.
+    const learned = this.learningStore.lookup(system, column);
+    if (learned && scope.has(learned.entity)) {
+      candidates.push({
+        canonical: learned.canonical,
+        entity: learned.entity,
+        score: learnedConfidence(learned.acceptCount),
+        rationale: `learned from ${learned.acceptCount} prior acceptance${learned.acceptCount === 1 ? "" : "s"} (most recent ${learned.lastAcceptedAt.slice(0, 10)})`,
+      });
+    }
 
     for (const entry of this.index) {
       if (entry.system !== system) continue;

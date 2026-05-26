@@ -14,6 +14,13 @@ export {
   type FlatIndexEntry,
 } from "./corpus-loader.js";
 export { SchemaSuggester, tokens, jaccard } from "./suggester.js";
+export {
+  MemoryLearningStore,
+  learnedConfidence,
+  type LearningStore,
+  type LearnedMapping,
+  type RecordCorrectionInput,
+} from "./learning.js";
 
 import type { SuggestionResult } from "./types.js";
 import { isFieldSuggestion } from "./types.js";

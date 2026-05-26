@@ -23,7 +23,9 @@ export type RuleFamily =
   | "F01" | "F02" | "F03" | "F04" | "F05" | "F06"
   | "F07" | "F08" | "F09" | "F10" | "F11" | "F12" | "F13"
   | "SITS-INTEGRITY"
-  | "BANNER-INTEGRITY";
+  | "BANNER-INTEGRITY"
+  | "WORKDAY-INTEGRITY"
+  | "TECHONE-FIN1-INTEGRITY";
 
 /**
  * Base rule definition — all rule types extend this.

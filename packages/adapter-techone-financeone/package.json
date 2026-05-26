@@ -1,10 +1,17 @@
 {
-  "name": "@databridge/adapter-workday-raas",
+  "name": "@databridge/adapter-techone-financeone",
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "description": "DataBridge source adapter for Technology One Finance One (Connect REST API) + §19 audit rule pack",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -20,7 +27,7 @@
     "zod": "^3.23.0"
   },
   "devDependencies": {
-    "typescript": "^5.4.0",
+    "typescript": "^5.4.5",
     "vitest": "^1.6.0",
     "eslint": "^8.57.0",
     "@typescript-eslint/parser": "^7.8.0",
