@@ -41,7 +41,7 @@ interface AuditRecord {
   auditId: string;
   tenantId: string;
   profileId: string;
-  status: "queued" | "running" | "succeeded" | "failed";
+  status: "queued" | "running" | "succeeded" | "failed" | "cancelled";
   createdAt: string;
   updatedAt: string;
   report?: AuditReport;
@@ -86,9 +86,11 @@ function severityColour(s: AuditFinding["severity"]): string {
 export default async function AuditDetailPage({
   params,
 }: {
-  params: { id: string };
+  // Next 15: dynamic-route params are async.
+  params: Promise<{ id: string }>;
 }) {
-  const audit = await fetchAudit(params.id);
+  const { id } = await params;
+  const audit = await fetchAudit(id);
   if (!audit) notFound();
 
   const report = audit.report;
@@ -130,7 +132,8 @@ export default async function AuditDetailPage({
                 color:
                   audit.status === "succeeded"
                     ? "#3fb950"
-                    : audit.status === "failed"
+                    : audit.status === "failed" ||
+                        audit.status === "cancelled"
                       ? "#f85149"
                       : "#d29922",
                 fontWeight: 600,

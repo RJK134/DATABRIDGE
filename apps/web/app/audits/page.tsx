@@ -10,7 +10,7 @@ interface AuditRecord {
   auditId: string;
   tenantId: string;
   profileId: string;
-  status: "queued" | "running" | "succeeded" | "failed";
+  status: "queued" | "running" | "succeeded" | "failed" | "cancelled";
   createdAt: string;
   updatedAt: string;
   report?: {
@@ -39,6 +39,8 @@ function statusColour(status: AuditRecord["status"]): string {
     case "succeeded":
       return "#3fb950";
     case "failed":
+      return "#f85149";
+    case "cancelled":
       return "#f85149";
     case "running":
       return "#d29922";
