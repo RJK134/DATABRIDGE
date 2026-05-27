@@ -1,0 +1,42 @@
+{
+  "name": "@databridge/rule-compiler-llm",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Natural-language → Rule compiler. The LLM ONLY emits JSON-schema-constrained rule definitions; a deterministic compiler validates and executes. Never accepts free SQL from the LLM.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@databridge/provenance-core": "workspace:*",
+    "@databridge/rule-core": "workspace:*",
+    "@databridge/canonical": "workspace:*",
+    "zod": "^3.23.0"
+  },
+  "peerDependencies": {
+    "@anthropic-ai/sdk": "^0.27.0",
+    "@azure/openai": "^2.0.0",
+    "openai": "^4.50.0"
+  },
+  "peerDependenciesMeta": {
+    "@anthropic-ai/sdk": { "optional": true },
+    "@azure/openai": { "optional": true },
+    "openai": { "optional": true }
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
+  }
+}

@@ -33,6 +33,11 @@ import {
 } from "@databridge/parallel-run-verifier";
 
 import { runFixtureAudit, type FixtureAuditReport } from "./audit.js";
+import {
+  runLlmWalkthrough,
+  SCRIPTED_PROMPTS,
+  type ScriptedPromptResult,
+} from "./llm-walkthrough.js";
 
 interface CliOptions {
   fixturesDir: string;
@@ -115,7 +120,15 @@ interface DemoReport {
     bannerSitsDhp: number;
     drift: number;
   };
-  urls: { api: string; web: string };
+  /** Phase B — LLM walkthrough output. */
+  llm: {
+    prompts: ScriptedPromptResult[];
+    narrative?: {
+      headline: string;
+      actionsCount: number;
+    };
+  };
+  urls: { api: string; web: string; queryBar: string };
 }
 
 async function loadFixture(file: string): Promise<DemoFixture> {
@@ -242,11 +255,26 @@ async function main(argv: readonly string[]): Promise<void> {
       bannerSitsDhp: parallel.overallDhp,
       drift: parallel.diffs.length,
     },
+    llm: { prompts: [] },
     urls: {
-      api: "http://localhost:3000",
-      web: "http://localhost:5173",
+      api: "http://localhost:3001",
+      web: "http://localhost:3000",
+      queryBar: "http://localhost:3000/query",
     },
   };
+
+  // Phase B LLM walkthrough — runs 5 scripted NL prompts against the
+  // bundled fixtures through the deterministic mock provider.
+  const fixturesByName: Record<string, ReadonlyArray<Record<string, unknown>>> = {};
+  for (const f of fixtures) fixturesByName[f.name] = f.rows;
+  const walkthrough = await runLlmWalkthrough({ fixturesByName });
+  report.llm.prompts = walkthrough.prompts;
+  if (walkthrough.narrative !== undefined) {
+    report.llm.narrative = {
+      headline: walkthrough.narrative.headline,
+      actionsCount: walkthrough.narrative.actionsCount,
+    };
+  }
 
   if (opts.json) {
     process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
@@ -281,11 +309,28 @@ function printHumanReport(report: DemoReport, opts: CliOptions): void {
   lines.push("Parallel-run verifier (Banner vs SITS canonical projections):");
   lines.push(`  DHP: ${report.parallelRun.bannerSitsDhp.toFixed(3)}, drift rows: ${report.parallelRun.drift}`);
   lines.push("");
+  lines.push("LLM walkthrough (NL → rule → findings, deterministic-mock provider):");
+  for (const p of report.llm.prompts) {
+    lines.push(
+      `  ${p.id} [${p.fixture}] "${p.nl}" → rule=${p.ruleId} severity=${p.severity}, ${p.findings}/${p.rowsScanned} flagged (latency ${p.latencyMs}ms, prompt-sha256=${p.promptHashPrefix}…)`,
+    );
+  }
+  if (report.llm.narrative) {
+    lines.push("");
+    lines.push("LLM narrative summary (templated, slot-validated):");
+    lines.push(`  headline: ${report.llm.narrative.headline}`);
+    lines.push(`  recommended actions: ${report.llm.narrative.actionsCount}`);
+  }
+  lines.push("");
   lines.push("Open in the browser:");
-  lines.push(`  API:    ${report.urls.api}`);
-  lines.push(`  Web UI: ${report.urls.web}`);
+  lines.push(`  API:        ${report.urls.api}`);
+  lines.push(`  Web UI:     ${report.urls.web}`);
+  lines.push(`  Query bar:  ${report.urls.queryBar}`);
   process.stdout.write(`${lines.join("\n")}\n`);
 }
+
+/** Public — used by the apps/web query bar wiring and tests. */
+export { SCRIPTED_PROMPTS };
 
 function isMainModule(): boolean {
   if (!process.argv[1]) return false;

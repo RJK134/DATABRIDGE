@@ -29,7 +29,10 @@
     "@databridge/parallel-run-verifier": "workspace:*",
     "@databridge/identity-reconciler": "workspace:*",
     "@databridge/codeset-mapper": "workspace:*",
-    "@databridge/rule-core": "workspace:*"
+    "@databridge/rule-core": "workspace:*",
+    "@databridge/rule-compiler-llm": "workspace:*",
+    "@databridge/findings-narrative-llm": "workspace:*",
+    "@databridge/provenance-core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.12.0",

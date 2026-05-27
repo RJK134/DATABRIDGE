@@ -38,7 +38,9 @@ export interface CodingFrame {
  * Supported primitive types for a FieldDefinition.
  * String-typed (with a known-set hint) rather than a strict union to allow
  * profile packs to declare profile-specific aliases such as "coded" or
- * "decimal" without needing to fork the canonical type.
+ * "decimal" without needing to fork the canonical type. The final
+ * `string & Record<string, never>` arm widens to any string without collapsing
+ * the listed literals (same role as the former `string & {}` pattern).
  */
 export type FieldType =
   | "string"
@@ -51,7 +53,7 @@ export type FieldType =
   | "enum"
   | "coded"
   | "json"
-  | (string & {});
+  | (string & Record<string, never>);
 
 /**
  * Definition of a single field on a Profile entity.

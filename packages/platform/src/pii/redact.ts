@@ -8,9 +8,9 @@
  *   phone, nhs_number, passport_* fields, ni_number
  */
 
-const EMAIL_RE = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
-const PHONE_RE = /(?:\+44|0)[\s\-]?\d[\s\-]?(?:\d[\s\-]?){8,9}/g;
-const NHS_RE = /\b\d{3}[\s\-]?\d{3}[\s\-]?\d{4}\b/g;
+const EMAIL_RE = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+const PHONE_RE = /(?:\+44|0)[\s-]?\d[\s-]?(?:\d[\s-]?){8,9}/g;
+const NHS_RE = /\b\d{3}[\s-]?\d{3}[\s-]?\d{4}\b/g;
 const POSTCODE_RE = /\b[A-Z]{1,2}\d[\d A-Z]?\s?\d[A-Z]{2}\b/gi;
 const NI_RE = /\b[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}\d{6}[A-D ]{1}\b/gi;
 const PASSPORT_RE = /\b[A-Z]{1,3}\d{7}\b/g;

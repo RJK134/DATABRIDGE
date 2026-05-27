@@ -1,0 +1,32 @@
+{
+  "name": "@databridge/findings-narrative-llm",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "LLM-generated narrative summary for an audit-findings pack. Strictly templated — LLM fills slots with hard length and regex limits; the deterministic renderer composes the final text.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@databridge/rule-core": "workspace:*",
+    "@databridge/rule-compiler-llm": "workspace:*",
+    "@databridge/provenance-core": "workspace:*",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
+  }
+}

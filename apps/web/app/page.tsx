@@ -26,6 +26,12 @@ export default function HomePage() {
           </a>{" "}
           — recent audits and per-finding detail.
         </li>
+        <li>
+          <a href="/query" style={{ color: "#58a6ff" }}>
+            Query bar
+          </a>{" "}
+          — natural-language → rule → findings (Phase B demo).
+        </li>
       </ul>
     </div>
   );

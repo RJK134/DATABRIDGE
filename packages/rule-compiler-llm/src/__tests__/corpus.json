@@ -1,0 +1,767 @@
+{
+  "version": "0.1.0",
+  "description": "50 NL → LlmRule pairs covering canonical Student/Engagement/Module entities plus the source-shaped variants (Banner, SITS, Workday, TechOne, Salesforce, Dynamics). Used by the regression suite with DeterministicMockProvider — never sent to a real provider.",
+  "entries": [
+    {
+      "id": "corpus-01",
+      "nl": "students with no last name",
+      "expected": {
+        "id": "students-missing-lastname",
+        "entity": "Student",
+        "name": "Students missing lastName",
+        "description": "Students whose lastName is null or empty.",
+        "severity": "ERROR",
+        "tags": ["identity"],
+        "messageTemplate": "Student {{sourceId}} is missing lastName",
+        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "Student", "field": "lastName" }, "operands": [] }
+      }
+    },
+    {
+      "id": "corpus-02",
+      "nl": "students with no husid",
+      "expected": {
+        "id": "students-missing-husid",
+        "entity": "Student",
+        "name": "Students missing HUSID",
+        "description": "Students whose HESA Unique Student Identifier is null.",
+        "severity": "WARN",
+        "tags": ["identity", "hesa"],
+        "messageTemplate": "Student {{sourceId}} is missing HUSID",
+        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "Student", "field": "husid" }, "operands": [] }
+      }
+    },
+    {
+      "id": "corpus-03",
+      "nl": "students with email shared at uni.example",
+      "expected": {
+        "id": "students-shared-email",
+        "entity": "Student",
+        "name": "Students with shared placeholder email",
+        "description": "Students whose email is the shared placeholder.",
+        "severity": "WARN",
+        "tags": ["identity"],
+        "messageTemplate": "Student {{sourceId}} has placeholder email {{email}}",
+        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Student", "field": "email" }, "operands": [{ "kind": "literal", "value": "shared@uni.example" }] }
+      }
+    },
+    {
+      "id": "corpus-04",
+      "nl": "2024/25 engagements with no programme",
+      "expected": {
+        "id": "engagements-missing-programme",
+        "entity": "Engagement",
+        "name": "Engagements missing programmeCode in 2024/25",
+        "description": "Engagement rows for the 2024/25 collection year with no programmeCode.",
+        "severity": "ERROR",
+        "tags": ["hesa", "programme"],
+        "messageTemplate": "Engagement {{id}} for 2024/25 has no programmeCode",
+        "where": {
+          "kind": "and",
+          "clauses": [
+            { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Engagement", "field": "collectionYear" }, "operands": [{ "kind": "literal", "value": "2024/25" }] },
+            { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "Engagement", "field": "programmeCode" }, "operands": [] }
+          ]
+        }
+      }
+    },
+    {
+      "id": "corpus-05",
+      "nl": "engagements where end date is before start date",
+      "expected": {
+        "id": "engagements-date-gap",
+        "entity": "Engagement",
+        "name": "Engagement end date before start date",
+        "description": "Engagement rows whose endDate precedes startDate.",
+        "severity": "ERROR",
+        "tags": ["effective-dating"],
+        "messageTemplate": "Engagement {{id}} ends ({{endDate}}) before it starts ({{startDate}})",
+        "where": {
+          "kind": "and",
+          "clauses": [
+            { "kind": "predicate", "op": "isNotNull", "field": { "kind": "field", "entity": "Engagement", "field": "endDate" }, "operands": [] },
+            { "kind": "predicate", "op": "isNotNull", "field": { "kind": "field", "entity": "Engagement", "field": "startDate" }, "operands": [] },
+            { "kind": "predicate", "op": "lt", "field": { "kind": "field", "entity": "Engagement", "field": "endDate" }, "operands": [{ "kind": "field", "entity": "Engagement", "field": "startDate" }] }
+          ]
+        }
+      }
+    },
+    {
+      "id": "corpus-06",
+      "nl": "engagements with mode of study DL (distance learning)",
+      "expected": {
+        "id": "engagements-distance",
+        "entity": "Engagement",
+        "name": "Distance-learning engagements",
+        "description": "Engagement rows with modeOfStudy = DL.",
+        "severity": "INFO",
+        "tags": ["mode"],
+        "messageTemplate": "Engagement {{id}} is distance-learning",
+        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Engagement", "field": "modeOfStudy" }, "operands": [{ "kind": "literal", "value": "DL" }] }
+      }
+    },
+    {
+      "id": "corpus-07",
+      "nl": "modules with zero or null credits",
+      "expected": {
+        "id": "modules-no-credits",
+        "entity": "Module",
+        "name": "Modules with zero or null credits",
+        "description": "Modules whose credits field is zero or null.",
+        "severity": "WARN",
+        "tags": ["modules"],
+        "messageTemplate": "Module {{code}} has zero or null credits",
+        "where": {
+          "kind": "or",
+          "clauses": [
+            { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "Module", "field": "credits" }, "operands": [] },
+            { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Module", "field": "credits" }, "operands": [{ "kind": "literal", "value": 0 }] }
+          ]
+        }
+      }
+    },
+    {
+      "id": "corpus-08",
+      "nl": "contacts with the placeholder shared email",
+      "expected": {
+        "id": "contacts-shared-email",
+        "entity": "Contact",
+        "name": "Contacts with shared placeholder email",
+        "description": "Salesforce Contacts whose Email is the shared placeholder.",
+        "severity": "ERROR",
+        "tags": ["crm", "identity"],
+        "messageTemplate": "Contact {{Id}} has shared placeholder email",
+        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Contact", "field": "Email" }, "operands": [{ "kind": "literal", "value": "shared.contact@uni.example" }] }
+      }
+    },
+    {
+      "id": "corpus-09",
+      "nl": "contacts with FERPA withheld but not opted out of email",
+      "expected": {
+        "id": "contacts-ferpa-mismatch",
+        "entity": "Contact",
+        "name": "FERPA withheld but not opted out",
+        "description": "Salesforce Contacts whose hed__FERPA__c is Withheld but HasOptedOutOfEmail is false.",
+        "severity": "ERROR",
+        "tags": ["crm", "privacy"],
+        "messageTemplate": "Contact {{Id}} has FERPA Withheld but is not opted out",
+        "where": {
+          "kind": "and",
+          "clauses": [
+            { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Contact", "field": "hed__FERPA__c" }, "operands": [{ "kind": "literal", "value": "Withheld" }] },
+            { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Contact", "field": "HasOptedOutOfEmail" }, "operands": [{ "kind": "literal", "value": false }] }
+          ]
+        }
+      }
+    },
+    {
+      "id": "corpus-10",
+      "nl": "dataverse contacts with the placeholder shared emailaddress1",
+      "expected": {
+        "id": "dataverse-shared-email",
+        "entity": "DataverseContact",
+        "name": "Dataverse contacts with shared placeholder email",
+        "description": "Dataverse contact rows whose emailaddress1 is the shared placeholder.",
+        "severity": "ERROR",
+        "tags": ["crm", "identity"],
+        "messageTemplate": "Contact {{contactid}} has shared placeholder emailaddress1",
+        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "DataverseContact", "field": "emailaddress1" }, "operands": [{ "kind": "literal", "value": "shared.contact@uni.example" }] }
+      }
+    },
+    {
+      "id": "corpus-11",
+      "nl": "dataverse contacts with donotbulkemail true",
+      "expected": {
+        "id": "dataverse-bulk-optout",
+        "entity": "DataverseContact",
+        "name": "Dataverse contacts opted out of bulk email",
+        "description": "Dataverse contact rows with donotbulkemail = true.",
+        "severity": "INFO",
+        "tags": ["crm", "privacy"],
+        "messageTemplate": "Contact {{contactid}} is opted out of bulk email",
+        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "DataverseContact", "field": "donotbulkemail" }, "operands": [{ "kind": "literal", "value": true }] }
+      }
+    },
+    {
+      "id": "corpus-12",
+      "nl": "banner students missing last name",
+      "expected": {
+        "id": "banner-missing-lastname",
+        "entity": "BannerStudent",
+        "name": "Banner students missing SPRIDEN_LAST_NAME",
+        "description": "Banner students whose SPRIDEN_LAST_NAME is null.",
+        "severity": "ERROR",
+        "tags": ["banner", "identity"],
+        "messageTemplate": "Banner student {{SPRIDEN_PIDM}} is missing SPRIDEN_LAST_NAME",
+        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "BannerStudent", "field": "SPRIDEN_LAST_NAME" }, "operands": [] }
+      }
+    },
+    {
+      "id": "corpus-13",
+      "nl": "banner students whose major code is XX_LEGACY",
+      "expected": {
+        "id": "banner-major-legacy",
+        "entity": "BannerStudent",
+        "name": "Banner students on legacy XX_LEGACY major",
+        "description": "Banner students whose SGBSTDN_MAJR_CODE_1 is XX_LEGACY.",
+        "severity": "WARN",
+        "tags": ["banner", "codeset-drift"],
+        "messageTemplate": "Banner student {{SPRIDEN_PIDM}} has legacy major XX_LEGACY",
+        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "BannerStudent", "field": "SGBSTDN_MAJR_CODE_1" }, "operands": [{ "kind": "literal", "value": "XX_LEGACY" }] }
+      }
+    },
+    {
+      "id": "corpus-14",
+      "nl": "sits students whose husid is null",
+      "expected": {
+        "id": "sits-missing-husid",
+        "entity": "SitsStudent",
+        "name": "SITS students missing STU_HUSID",
+        "description": "SITS students whose STU_HUSID is null.",
+        "severity": "WARN",
+        "tags": ["sits", "identity"],
+        "messageTemplate": "SITS student {{STU_CODE}} is missing STU_HUSID",
+        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "SitsStudent", "field": "STU_HUSID" }, "operands": [] }
+      }
+    },
+    {
+      "id": "corpus-15",
+      "nl": "sits students for 2024/25 with the ZZ campus code",
+      "expected": {
+        "id": "sits-zz-campus",
+        "entity": "SitsStudent",
+        "name": "SITS students with ZZ campus in 2024/25",
+        "description": "SITS rows whose SCE_AYR is 2024/25 and SCE_POS contains the codeset-drift ZZ campus.",
+        "severity": "WARN",
+        "tags": ["sits", "codeset-drift"],
+        "messageTemplate": "SITS student {{STU_CODE}} is on ZZ campus for 2024/25",
+        "where": {
+          "kind": "and",
+          "clauses": [
+            { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "SitsStudent", "field": "SCE_AYR" }, "operands": [{ "kind": "literal", "value": "2024/25" }] },
+            { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "SitsStudent", "field": "SCE_POS" }, "operands": [{ "kind": "literal", "value": "ZZ" }] }
+          ]
+        }
+      }
+    },
+    {
+      "id": "corpus-16",
+      "nl": "workday students that are inactive",
+      "expected": {
+        "id": "workday-inactive",
+        "entity": "WorkdayStudent",
+        "name": "Inactive Workday students",
+        "description": "Workday students whose Active_Status is Inactive.",
+        "severity": "INFO",
+        "tags": ["workday"],
+        "messageTemplate": "Workday student {{Student_ID}} is inactive",
+        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "WorkdayStudent", "field": "Active_Status" }, "operands": [{ "kind": "literal", "value": "Inactive" }] }
+      }
+    },
+    {
+      "id": "corpus-17",
+      "nl": "techone invoices over 50000",
+      "expected": {
+        "id": "techone-large-invoices",
+        "entity": "TechOneInvoice",
+        "name": "TechOne invoices over £50,000",
+        "description": "TechOne invoices whose Amount exceeds 50000.",
+        "severity": "INFO",
+        "tags": ["finance"],
+        "messageTemplate": "TechOne invoice {{InvoiceId}} exceeds £50,000",
+        "where": { "kind": "predicate", "op": "gt", "field": { "kind": "field", "entity": "TechOneInvoice", "field": "Amount" }, "operands": [{ "kind": "literal", "value": 50000 }] }
+      }
+    },
+    {
+      "id": "corpus-18",
+      "nl": "techone invoices that are not paid or approved",
+      "expected": {
+        "id": "techone-unpaid",
+        "entity": "TechOneInvoice",
+        "name": "TechOne invoices not paid or approved",
+        "description": "TechOne invoices whose Status is not Paid or Approved.",
+        "severity": "WARN",
+        "tags": ["finance"],
+        "messageTemplate": "TechOne invoice {{InvoiceId}} has status {{Status}}",
+        "where": { "kind": "predicate", "op": "notIn", "field": { "kind": "field", "entity": "TechOneInvoice", "field": "Status" }, "operands": [{ "kind": "literal", "value": "Paid" }, { "kind": "literal", "value": "Approved" }] }
+      }
+    },
+    {
+      "id": "corpus-19",
+      "nl": "students whose date of birth is after 2010",
+      "expected": {
+        "id": "students-impossible-dob",
+        "entity": "Student",
+        "name": "Students with implausible dateOfBirth",
+        "description": "Students whose dateOfBirth is after 2010-01-01.",
+        "severity": "WARN",
+        "tags": ["data-quality"],
+        "messageTemplate": "Student {{sourceId}} has implausible DOB {{dateOfBirth}}",
+        "where": { "kind": "predicate", "op": "gt", "field": { "kind": "field", "entity": "Student", "field": "dateOfBirth" }, "operands": [{ "kind": "literal", "value": "2010-01-01" }] }
+      }
+    },
+    {
+      "id": "corpus-20",
+      "nl": "students whose fee status is missing",
+      "expected": {
+        "id": "students-missing-feestatus",
+        "entity": "Student",
+        "name": "Students missing feeStatus",
+        "description": "Students with no feeStatus code.",
+        "severity": "WARN",
+        "tags": ["hesa"],
+        "messageTemplate": "Student {{sourceId}} is missing feeStatus",
+        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "Student", "field": "feeStatus" }, "operands": [] }
+      }
+    },
+    {
+      "id": "corpus-21",
+      "nl": "students with ethnicity 98 not declared",
+      "expected": {
+        "id": "students-ethnicity-undeclared",
+        "entity": "Student",
+        "name": "Students with not-declared ethnicity",
+        "description": "Students whose ethnicity = 98 (Not declared).",
+        "severity": "INFO",
+        "tags": ["hesa"],
+        "messageTemplate": "Student {{sourceId}} did not declare ethnicity",
+        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Student", "field": "ethnicity" }, "operands": [{ "kind": "literal", "value": "98" }] }
+      }
+    },
+    {
+      "id": "corpus-22",
+      "nl": "modules below level 4",
+      "expected": {
+        "id": "modules-below-l4",
+        "entity": "Module",
+        "name": "Modules below level 4",
+        "description": "Modules whose level is below L4.",
+        "severity": "INFO",
+        "tags": ["modules"],
+        "messageTemplate": "Module {{code}} is below level 4",
+        "where": { "kind": "predicate", "op": "lt", "field": { "kind": "field", "entity": "Module", "field": "level" }, "operands": [{ "kind": "literal", "value": "L4" }] }
+      }
+    },
+    {
+      "id": "corpus-23",
+      "nl": "engagements between 2024-09-01 and 2025-08-31",
+      "expected": {
+        "id": "engagements-in-2024-25",
+        "entity": "Engagement",
+        "name": "Engagements active in 2024/25",
+        "description": "Engagements whose startDate falls between 2024-09-01 and 2025-08-31.",
+        "severity": "INFO",
+        "tags": ["engagement"],
+        "messageTemplate": "Engagement {{id}} active in 2024/25",
+        "where": { "kind": "predicate", "op": "between", "field": { "kind": "field", "entity": "Engagement", "field": "startDate" }, "operands": [{ "kind": "literal", "value": "2024-09-01" }, { "kind": "literal", "value": "2025-08-31" }] }
+      }
+    },
+    {
+      "id": "corpus-24",
+      "nl": "engagements whose campus code is not in the active list",
+      "expected": {
+        "id": "engagements-bad-campus",
+        "entity": "Engagement",
+        "name": "Engagements with non-active campus",
+        "description": "Engagements whose campusCode is not in MAIN, NORTH, WEST, BUSINESS, DISTANCE, OVS.",
+        "severity": "WARN",
+        "tags": ["campus", "codeset-drift"],
+        "messageTemplate": "Engagement {{id}} has unknown campus {{campusCode}}",
+        "where": { "kind": "predicate", "op": "notIn", "field": { "kind": "field", "entity": "Engagement", "field": "campusCode" }, "operands": [{ "kind": "literal", "value": "MAIN" }, { "kind": "literal", "value": "NORTH" }, { "kind": "literal", "value": "WEST" }, { "kind": "literal", "value": "BUSINESS" }, { "kind": "literal", "value": "DISTANCE" }, { "kind": "literal", "value": "OVS" }] }
+      }
+    },
+    {
+      "id": "corpus-25",
+      "nl": "salesforce contacts whose email does not contain an at sign",
+      "expected": {
+        "id": "contacts-malformed-email",
+        "entity": "Contact",
+        "name": "Contacts with malformed email",
+        "description": "Salesforce Contacts whose Email does not contain an @ sign.",
+        "severity": "ERROR",
+        "tags": ["crm", "data-quality"],
+        "messageTemplate": "Contact {{Id}} has malformed email {{Email}}",
+        "where": {
+          "kind": "and",
+          "clauses": [
+            { "kind": "predicate", "op": "isNotNull", "field": { "kind": "field", "entity": "Contact", "field": "Email" }, "operands": [] },
+            { "kind": "not", "clause": { "kind": "predicate", "op": "matches", "field": { "kind": "field", "entity": "Contact", "field": "Email" }, "operands": [{ "kind": "literal", "value": "@" }] } }
+          ]
+        }
+      }
+    },
+    {
+      "id": "corpus-26",
+      "nl": "students whose husid does not match the 13-digit pattern",
+      "expected": {
+        "id": "students-husid-format",
+        "entity": "Student",
+        "name": "Students with malformed HUSID",
+        "description": "Students whose husid is set but does not match the 13-digit HESA pattern.",
+        "severity": "ERROR",
+        "tags": ["hesa", "identity"],
+        "messageTemplate": "Student {{sourceId}} has malformed HUSID {{husid}}",
+        "where": {
+          "kind": "and",
+          "clauses": [
+            { "kind": "predicate", "op": "isNotNull", "field": { "kind": "field", "entity": "Student", "field": "husid" }, "operands": [] },
+            { "kind": "not", "clause": { "kind": "predicate", "op": "matches", "field": { "kind": "field", "entity": "Student", "field": "husid" }, "operands": [{ "kind": "literal", "value": "^[0-9]{13}$" }] } }
+          ]
+        }
+      }
+    },
+    {
+      "id": "corpus-27",
+      "nl": "engagements with end date in 2026 or later",
+      "expected": {
+        "id": "engagements-future-end",
+        "entity": "Engagement",
+        "name": "Engagements with end date 2026+",
+        "description": "Engagements whose endDate is on or after 2026-01-01.",
+        "severity": "INFO",
+        "tags": ["engagement"],
+        "messageTemplate": "Engagement {{id}} ends in 2026 or later ({{endDate}})",
+        "where": { "kind": "predicate", "op": "gte", "field": { "kind": "field", "entity": "Engagement", "field": "endDate" }, "operands": [{ "kind": "literal", "value": "2026-01-01" }] }
+      }
+    },
+    {
+      "id": "corpus-28",
+      "nl": "modules whose credits are between 10 and 30",
+      "expected": {
+        "id": "modules-standard-credits",
+        "entity": "Module",
+        "name": "Modules with standard credit weighting",
+        "description": "Modules whose credits sit between 10 and 30 inclusive.",
+        "severity": "INFO",
+        "tags": ["modules"],
+        "messageTemplate": "Module {{code}} carries {{credits}} credits",
+        "where": { "kind": "predicate", "op": "between", "field": { "kind": "field", "entity": "Module", "field": "credits" }, "operands": [{ "kind": "literal", "value": 10 }, { "kind": "literal", "value": 30 }] }
+      }
+    },
+    {
+      "id": "corpus-29",
+      "nl": "banner students whose major code is null",
+      "expected": {
+        "id": "banner-no-major",
+        "entity": "BannerStudent",
+        "name": "Banner students with no major",
+        "description": "Banner students whose SGBSTDN_MAJR_CODE_1 is null.",
+        "severity": "WARN",
+        "tags": ["banner", "programme"],
+        "messageTemplate": "Banner student {{SPRIDEN_PIDM}} has no SGBSTDN_MAJR_CODE_1",
+        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "BannerStudent", "field": "SGBSTDN_MAJR_CODE_1" }, "operands": [] }
+      }
+    },
+    {
+      "id": "corpus-30",
+      "nl": "sits students for 2024/25",
+      "expected": {
+        "id": "sits-current-year",
+        "entity": "SitsStudent",
+        "name": "SITS students for 2024/25",
+        "description": "SITS rows whose SCE_AYR equals 2024/25.",
+        "severity": "INFO",
+        "tags": ["sits"],
+        "messageTemplate": "SITS student {{STU_CODE}} active in 2024/25",
+        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "SitsStudent", "field": "SCE_AYR" }, "operands": [{ "kind": "literal", "value": "2024/25" }] }
+      }
+    },
+    {
+      "id": "corpus-31",
+      "nl": "engagements with mode FT or PT only",
+      "expected": {
+        "id": "engagements-conventional-mode",
+        "entity": "Engagement",
+        "name": "Engagements with conventional FT/PT mode",
+        "description": "Engagements whose modeOfStudy is FT or PT.",
+        "severity": "INFO",
+        "tags": ["mode"],
+        "messageTemplate": "Engagement {{id}} is FT or PT",
+        "where": { "kind": "predicate", "op": "in", "field": { "kind": "field", "entity": "Engagement", "field": "modeOfStudy" }, "operands": [{ "kind": "literal", "value": "FT" }, { "kind": "literal", "value": "PT" }] }
+      }
+    },
+    {
+      "id": "corpus-32",
+      "nl": "students whose sexId is not M F or X",
+      "expected": {
+        "id": "students-sex-codeset",
+        "entity": "Student",
+        "name": "Students with non-conforming sexId",
+        "description": "Students whose sexId is not one of M, F, X.",
+        "severity": "WARN",
+        "tags": ["hesa", "codeset-drift"],
+        "messageTemplate": "Student {{sourceId}} has unknown sexId {{sexId}}",
+        "where": {
+          "kind": "and",
+          "clauses": [
+            { "kind": "predicate", "op": "isNotNull", "field": { "kind": "field", "entity": "Student", "field": "sexId" }, "operands": [] },
+            { "kind": "predicate", "op": "notIn", "field": { "kind": "field", "entity": "Student", "field": "sexId" }, "operands": [{ "kind": "literal", "value": "M" }, { "kind": "literal", "value": "F" }, { "kind": "literal", "value": "X" }] }
+          ]
+        }
+      }
+    },
+    {
+      "id": "corpus-33",
+      "nl": "dataverse contacts that are flagged as students but have no student id",
+      "expected": {
+        "id": "dataverse-orphan-student-flag",
+        "entity": "DataverseContact",
+        "name": "Dataverse contacts flagged as students but missing msdyn_studentid",
+        "description": "Dataverse contacts where msdyn_studentid is null.",
+        "severity": "WARN",
+        "tags": ["crm", "identity"],
+        "messageTemplate": "Contact {{contactid}} has no msdyn_studentid",
+        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "DataverseContact", "field": "msdyn_studentid" }, "operands": [] }
+      }
+    },
+    {
+      "id": "corpus-34",
+      "nl": "techone invoices with status Voided",
+      "expected": {
+        "id": "techone-voided",
+        "entity": "TechOneInvoice",
+        "name": "Voided TechOne invoices",
+        "description": "TechOne invoices whose Status is Voided.",
+        "severity": "INFO",
+        "tags": ["finance"],
+        "messageTemplate": "TechOne invoice {{InvoiceId}} is Voided",
+        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "TechOneInvoice", "field": "Status" }, "operands": [{ "kind": "literal", "value": "Voided" }] }
+      }
+    },
+    {
+      "id": "corpus-35",
+      "nl": "students whose first name starts with Z",
+      "expected": {
+        "id": "students-zname",
+        "entity": "Student",
+        "name": "Students with Z-initial first names",
+        "description": "Students whose firstName starts with Z.",
+        "severity": "INFO",
+        "tags": ["identity"],
+        "messageTemplate": "Student {{sourceId}} has Z-initial first name {{firstName}}",
+        "where": { "kind": "predicate", "op": "matches", "field": { "kind": "field", "entity": "Student", "field": "firstName" }, "operands": [{ "kind": "literal", "value": "^Z" }] }
+      }
+    },
+    {
+      "id": "corpus-36",
+      "nl": "engagements active in autumn 2024 (term 202410)",
+      "expected": {
+        "id": "engagements-term-202410",
+        "entity": "Engagement",
+        "name": "Engagements active in term 202410",
+        "description": "Engagements with termCode = 202410.",
+        "severity": "INFO",
+        "tags": ["engagement"],
+        "messageTemplate": "Engagement {{id}} active in term 202410",
+        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Engagement", "field": "termCode" }, "operands": [{ "kind": "literal", "value": "202410" }] }
+      }
+    },
+    {
+      "id": "corpus-37",
+      "nl": "salesforce contacts that have not opted out of email",
+      "expected": {
+        "id": "contacts-not-optedout",
+        "entity": "Contact",
+        "name": "Contacts not opted out",
+        "description": "Salesforce Contacts where HasOptedOutOfEmail is false.",
+        "severity": "INFO",
+        "tags": ["crm"],
+        "messageTemplate": "Contact {{Id}} is still in marketing",
+        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Contact", "field": "HasOptedOutOfEmail" }, "operands": [{ "kind": "literal", "value": false }] }
+      }
+    },
+    {
+      "id": "corpus-38",
+      "nl": "dataverse contacts whose donotemail equals donotbulkemail",
+      "expected": {
+        "id": "dataverse-flag-parity",
+        "entity": "DataverseContact",
+        "name": "Dataverse contacts with email-flag parity",
+        "description": "Dataverse contacts where donotemail matches donotbulkemail.",
+        "severity": "INFO",
+        "tags": ["crm", "privacy"],
+        "messageTemplate": "Contact {{contactid}} has matching email flags",
+        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "DataverseContact", "field": "donotemail" }, "operands": [{ "kind": "field", "entity": "DataverseContact", "field": "donotbulkemail" }] }
+      }
+    },
+    {
+      "id": "corpus-39",
+      "nl": "students whose lastName is empty (not null but empty string)",
+      "expected": {
+        "id": "students-empty-lastname",
+        "entity": "Student",
+        "name": "Students with empty lastName",
+        "description": "Students whose lastName is the empty string (treated equivalent to null).",
+        "severity": "ERROR",
+        "tags": ["identity"],
+        "messageTemplate": "Student {{sourceId}} has empty lastName",
+        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "Student", "field": "lastName" }, "operands": [] }
+      }
+    },
+    {
+      "id": "corpus-40",
+      "nl": "banner students whose major is not in the active list",
+      "expected": {
+        "id": "banner-bad-major",
+        "entity": "BannerStudent",
+        "name": "Banner students with non-active major",
+        "description": "Banner students whose SGBSTDN_MAJR_CODE_1 is not in the active major list.",
+        "severity": "WARN",
+        "tags": ["banner", "codeset-drift"],
+        "messageTemplate": "Banner student {{SPRIDEN_PIDM}} has non-active major {{SGBSTDN_MAJR_CODE_1}}",
+        "where": { "kind": "predicate", "op": "notIn", "field": { "kind": "field", "entity": "BannerStudent", "field": "SGBSTDN_MAJR_CODE_1" }, "operands": [{ "kind": "literal", "value": "CS" }, { "kind": "literal", "value": "EE" }, { "kind": "literal", "value": "BUS" }, { "kind": "literal", "value": "HIST" }, { "kind": "literal", "value": "MATH" }] }
+      }
+    },
+    {
+      "id": "corpus-41",
+      "nl": "sits students whose surname is null",
+      "expected": {
+        "id": "sits-missing-surname",
+        "entity": "SitsStudent",
+        "name": "SITS students missing STU_SURN",
+        "description": "SITS students whose STU_SURN is null.",
+        "severity": "ERROR",
+        "tags": ["sits", "identity"],
+        "messageTemplate": "SITS student {{STU_CODE}} is missing surname",
+        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "SitsStudent", "field": "STU_SURN" }, "operands": [] }
+      }
+    },
+    {
+      "id": "corpus-42",
+      "nl": "workday students with student id starting with W2024",
+      "expected": {
+        "id": "workday-2024-cohort",
+        "entity": "WorkdayStudent",
+        "name": "Workday 2024 cohort",
+        "description": "Workday students whose Student_ID begins with W2024.",
+        "severity": "INFO",
+        "tags": ["workday"],
+        "messageTemplate": "Workday student {{Student_ID}} is in the 2024 cohort",
+        "where": { "kind": "predicate", "op": "matches", "field": { "kind": "field", "entity": "WorkdayStudent", "field": "Student_ID" }, "operands": [{ "kind": "literal", "value": "^W2024" }] }
+      }
+    },
+    {
+      "id": "corpus-43",
+      "nl": "modules whose code matches MOD followed by three digits",
+      "expected": {
+        "id": "modules-canonical-code",
+        "entity": "Module",
+        "name": "Modules with canonical MODxxx code pattern",
+        "description": "Modules whose code matches MOD followed by three digits.",
+        "severity": "INFO",
+        "tags": ["modules"],
+        "messageTemplate": "Module {{code}} matches MODxxx",
+        "where": { "kind": "predicate", "op": "matches", "field": { "kind": "field", "entity": "Module", "field": "code" }, "operands": [{ "kind": "literal", "value": "^MOD\\d{3}$" }] }
+      }
+    },
+    {
+      "id": "corpus-44",
+      "nl": "engagements with collection year missing",
+      "expected": {
+        "id": "engagements-missing-cy",
+        "entity": "Engagement",
+        "name": "Engagements missing collectionYear",
+        "description": "Engagements with no collectionYear set.",
+        "severity": "ERROR",
+        "tags": ["hesa"],
+        "messageTemplate": "Engagement {{id}} is missing collectionYear",
+        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "Engagement", "field": "collectionYear" }, "operands": [] }
+      }
+    },
+    {
+      "id": "corpus-45",
+      "nl": "students whose feeStatus is 03 (overseas)",
+      "expected": {
+        "id": "students-overseas",
+        "entity": "Student",
+        "name": "Overseas students",
+        "description": "Students whose feeStatus = 03.",
+        "severity": "INFO",
+        "tags": ["hesa"],
+        "messageTemplate": "Student {{sourceId}} is overseas",
+        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Student", "field": "feeStatus" }, "operands": [{ "kind": "literal", "value": "03" }] }
+      }
+    },
+    {
+      "id": "corpus-46",
+      "nl": "techone invoices with status Pending or Rejected",
+      "expected": {
+        "id": "techone-pending-or-rejected",
+        "entity": "TechOneInvoice",
+        "name": "TechOne invoices pending or rejected",
+        "description": "TechOne invoices in Pending or Rejected status.",
+        "severity": "INFO",
+        "tags": ["finance"],
+        "messageTemplate": "TechOne invoice {{InvoiceId}} is pending or rejected",
+        "where": { "kind": "predicate", "op": "in", "field": { "kind": "field", "entity": "TechOneInvoice", "field": "Status" }, "operands": [{ "kind": "literal", "value": "Pending" }, { "kind": "literal", "value": "Rejected" }] }
+      }
+    },
+    {
+      "id": "corpus-47",
+      "nl": "dataverse contacts whose donotbulkemail is false",
+      "expected": {
+        "id": "dataverse-bulk-allowed",
+        "entity": "DataverseContact",
+        "name": "Dataverse contacts who allow bulk email",
+        "description": "Dataverse contacts where donotbulkemail is false.",
+        "severity": "INFO",
+        "tags": ["crm"],
+        "messageTemplate": "Contact {{contactid}} allows bulk email",
+        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "DataverseContact", "field": "donotbulkemail" }, "operands": [{ "kind": "literal", "value": false }] }
+      }
+    },
+    {
+      "id": "corpus-48",
+      "nl": "engagements whose programmeCode is null and modeOfStudy is FT",
+      "expected": {
+        "id": "engagements-orphan-ft",
+        "entity": "Engagement",
+        "name": "FT engagements missing programmeCode",
+        "description": "Engagements where modeOfStudy = FT and programmeCode is null.",
+        "severity": "ERROR",
+        "tags": ["hesa", "programme"],
+        "messageTemplate": "Engagement {{id}} is FT with no programmeCode",
+        "where": {
+          "kind": "and",
+          "clauses": [
+            { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "Engagement", "field": "programmeCode" }, "operands": [] },
+            { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Engagement", "field": "modeOfStudy" }, "operands": [{ "kind": "literal", "value": "FT" }] }
+          ]
+        }
+      }
+    },
+    {
+      "id": "corpus-49",
+      "nl": "salesforce contacts that have any FERPA value set",
+      "expected": {
+        "id": "contacts-with-ferpa",
+        "entity": "Contact",
+        "name": "Contacts with a FERPA value",
+        "description": "Salesforce Contacts whose hed__FERPA__c is non-null.",
+        "severity": "INFO",
+        "tags": ["crm"],
+        "messageTemplate": "Contact {{Id}} has a FERPA value set",
+        "where": { "kind": "predicate", "op": "isNotNull", "field": { "kind": "field", "entity": "Contact", "field": "hed__FERPA__c" }, "operands": [] }
+      }
+    },
+    {
+      "id": "corpus-50",
+      "nl": "students who are not flagged as overseas, home or eu",
+      "expected": {
+        "id": "students-unknown-feestatus",
+        "entity": "Student",
+        "name": "Students with unknown feeStatus",
+        "description": "Students whose feeStatus is not 01, 02, or 03.",
+        "severity": "WARN",
+        "tags": ["hesa"],
+        "messageTemplate": "Student {{sourceId}} has unknown feeStatus {{feeStatus}}",
+        "where": {
+          "kind": "and",
+          "clauses": [
+            { "kind": "predicate", "op": "isNotNull", "field": { "kind": "field", "entity": "Student", "field": "feeStatus" }, "operands": [] },
+            { "kind": "predicate", "op": "notIn", "field": { "kind": "field", "entity": "Student", "field": "feeStatus" }, "operands": [{ "kind": "literal", "value": "01" }, { "kind": "literal", "value": "02" }, { "kind": "literal", "value": "03" }] }
+          ]
+        }
+      }
+    }
+  ]
+}
