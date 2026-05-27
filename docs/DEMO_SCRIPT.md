@@ -1,23 +1,26 @@
-# DataBridge — 45-Minute Demo Script (Phase A, v1.3)
+# DataBridge — 55-Minute Demo Script (Phase A + Phase B, v1.4)
 
 This script walks a presenter through the Phase A demo build end-to-end:
 data-quality audits against four realistic UK HE fixtures, CRM
 integration-prep against Salesforce and Dynamics, and the bidirectional
-Banner↔SITS parallel-run migration.
+Banner↔SITS parallel-run migration. Phase B inserts a 10-minute LLM
+walkthrough between the audit and migration sections.
 
 **Audience:** prospective HE IT directors, data architects, and
 registrar-office stakeholders. Pitch is "we show you the failure modes
-in your data before you migrate, then we migrate it traceably."
+in your data before you migrate, then we migrate it traceably — and we
+let you ask the questions in plain English."
 
-**Total budget:** 45 minutes.
+**Total budget:** 55 minutes.
 
 | Block | Time  | Topic                                                              |
 | ----- | ----- | ------------------------------------------------------------------ |
 | 1     | 5 min | Setup + stack bring-up                                             |
 | 2     | 10 min | Audit walkthrough across all four fixtures                        |
+| 2B    | 10 min | LLM data review (NL → rule → findings + narrative)                |
 | 3     | 10 min | CRM integration-prep (SITS → Salesforce, SITS → Dynamics)         |
 | 4     | 15 min | Bidirectional Banner↔SITS migration + parallel-run verification   |
-| 5     | 5 min | Q&A buffer / "what would Phase B add"                              |
+| 5     | 5 min | Q&A buffer / "what would Phase C / D add"                          |
 
 ---
 
@@ -110,6 +113,130 @@ Walk through each fixture (~2 minutes each):
 
 **Talking point:** "Every one of those failure modes is taken from a
 real UK HE incident catalogue. The rules detected them in <1 second."
+
+---
+
+## Block 2B — LLM data review (10 minutes, Phase B / v1.4)
+
+This block answers the most common follow-up question after the audit
+walkthrough: "OK, but what if I want to ask a question that's NOT in the
+rule pack?" The answer is the natural-language query bar.
+
+Open the web app:
+
+```
+open http://localhost:3000/query
+```
+
+Pitch (≤ 60 seconds): "Everything in the audit pack was hand-curated by
+our team. The query bar lets your registrar / data team ask the same
+shape of question in English. We're absolutely strict about safety —
+the LLM never emits SQL, never sees raw row data, and every call leaves
+a hash-pair audit trail. Watch."
+
+### The five demo prompts
+
+Type each prompt verbatim, then click **Run**. The expected behaviour
+is documented per prompt — these are the scripted prompts the
+DeterministicMockProvider knows how to answer, so the demo works
+without paid LLM access.
+
+1. **Salesforce — shared placeholder email** *(fixture: salesforce-edu-westmidlands)*
+   ```
+   contacts with the placeholder shared email
+   ```
+   Expected: rule `contacts-shared-email`, severity `ERROR`, 2 of 5 sample
+   contacts flagged (the two test rows with the shared placeholder
+   address). Point at the **prompt sha256** and **response sha256** in the
+   provenance pane: "That's what we hand to auditors. The raw prompt is
+   never stored."
+
+2. **Salesforce — FERPA withheld but not opted out** *(same fixture)*
+   ```
+   contacts with FERPA withheld but not opted out of email
+   ```
+   Expected: rule `contacts-ferpa-mismatch`, severity `ERROR`, 2 of 5
+   sample contacts flagged. Highlight that this is a compound predicate
+   (`and` of two `eq` clauses) — the grammar supports `and / or / not`
+   nesting but never free SQL.
+
+3. **Banner — legacy XX_LEGACY major code** *(fixture: banner-r2t-2024)*
+   ```
+   banner students whose major code is XX_LEGACY
+   ```
+   Expected: rule `banner-major-legacy`, severity `WARN`, 2 of 5 sample
+   students flagged (the codeset-drift rows from Phase A). Point at the
+   `fieldsRead` row: "We validated every field reference against the
+   dictionary. If the LLM hallucinated `SGBSTDN_NONEXISTENT_FIELD` the
+   compiler returns 422 — the rule is never executed."
+
+4. **SITS — missing HUSID** *(fixture: sits-southcoast-2024)*
+   ```
+   sits students whose husid is null
+   ```
+   Expected: rule `sits-missing-husid`, severity `WARN`, 1 of 5 sample
+   students flagged. Use this to talk about HESA submission readiness:
+   "HUSID gaps block your HESA return. We've watched institutions ship
+   their first sync at midnight and learn about HUSID gaps at 2 a.m.
+   Now you learn at the audit step."
+
+5. **Dynamics — opt-out parity** *(fixture: dynamics365-edu-northpennines)*
+   ```
+   dataverse contacts with donotbulkemail true
+   ```
+   Expected: rule `dataverse-bulk-optout`, severity `INFO`, 3 of 5 sample
+   contacts flagged. Close the walkthrough on this one because it's an
+   `INFO` finding — not every rule is a fire alarm.
+
+### From the command line
+
+The orchestrator can run the same five prompts in one shot — useful
+for screenshots and CI:
+
+```bash
+pnpm --filter @databridge/demo run demo -- --json \
+  | jq '.llm.prompts'
+```
+
+Each entry includes the rule id, fixture, finding count, provider,
+latency, and the truncated sha256 hashes of the prompt and the
+response. The full provenance record is persisted via
+`provenance-core.InMemoryLlmCallSink` on the api gateway.
+
+### Provider configuration
+
+| Provider                | Env var(s)                                                          | Cost ceiling default |
+| ----------------------- | ------------------------------------------------------------------- | -------------------- |
+| DeterministicMock       | *(none — default)*                                                  | $0.50                |
+| OpenAI                  | `OPENAI_API_KEY`, `OPENAI_MODEL` (default `gpt-4o-mini`)            | $0.50                |
+| Anthropic               | `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL` (default `claude-3-5-haiku`) | $0.50                |
+| Azure OpenAI            | `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_DEPLOYMENT` | $0.50          |
+| Force mock              | `DATABRIDGE_LLM_FORCE_MOCK=1`                                       | $0.50                |
+
+If no real provider is configured, the deterministic mock is selected
+automatically. The cost ceiling is per-call and configurable via the
+`costCeilingUsd` field on the request body.
+
+### Narrative summary
+
+After the five prompts, drop into a terminal:
+
+```bash
+curl -s -X POST http://localhost:3001/v1/findings/inline/narrate \
+  -H 'content-type: application/json' \
+  -d '{
+        "provider": "mock",
+        "findings": [
+          {"id":"f1","ruleId":"contacts-ferpa-mismatch","severity":"ERROR","entityType":"Contact","subjectId":"001a"}
+        ]
+      }' | jq
+```
+
+Point at the response shape: four slot-validated strings, a markdown
+rendering, and a provenance record. Talking point: "The LLM only fills
+four slots — headline, severity breakdown, root cause, recommended
+actions. Hard length caps and a regex on the allowed character set. No
+markdown injection, no SQL keywords, no HTML — we tested it."
 
 ---
 
