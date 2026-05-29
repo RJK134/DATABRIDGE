@@ -14,12 +14,7 @@
 import { z } from "zod";
 
 /** Allowed scalar literal types. */
-export const ScalarLiteralZ = z.union([
-  z.string().max(200),
-  z.number(),
-  z.boolean(),
-  z.null(),
-]);
+export const ScalarLiteralZ = z.union([z.string().max(200), z.number(), z.boolean(), z.null()]);
 export type ScalarLiteral = z.infer<typeof ScalarLiteralZ>;
 
 /** Canonical field reference — `{entity}.{field}`. */
@@ -96,7 +91,7 @@ export const ClauseZ: z.ZodType<Clause, z.ZodTypeDef, unknown> = z.lazy(() =>
     z.object({ kind: z.literal("and"), clauses: z.array(ClauseZ).min(1).max(16) }),
     z.object({ kind: z.literal("or"), clauses: z.array(ClauseZ).min(1).max(16) }),
     z.object({ kind: z.literal("not"), clause: ClauseZ }),
-  ]),
+  ])
 );
 
 /** Severity values mirror @databridge/rule-core. */
@@ -117,7 +112,12 @@ export const LlmRuleZ = z.object({
   severity: z.enum(RULE_SEVERITIES),
   /** Optional tags — alphanumeric + dash only. */
   tags: z
-    .array(z.string().regex(/^[a-z0-9-]+$/).max(32))
+    .array(
+      z
+        .string()
+        .regex(/^[a-z0-9-]+$/)
+        .max(32)
+    )
     .max(16)
     .default([]),
   /** Message template — uses {{fieldName}} placeholders. NO HTML, NO markdown. */
@@ -165,9 +165,9 @@ export function collectFieldRefs(clause: Clause): FieldRef[] {
 export function staticSafetyCheck(rule: LlmRule): void {
   // Defensive: zod has already rejected disallowed characters in
   // messageTemplate, but explicit guard makes the contract obvious.
-  if (/(?:\b(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|TRUNCATE)\b)/i.test(
-      rule.messageTemplate,
-    )) {
+  if (
+    /(?:\b(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|EXEC|TRUNCATE)\b)/i.test(rule.messageTemplate)
+  ) {
     throw new Error("messageTemplate contains a SQL keyword — rejected");
   }
   walkOperandValues(rule.where, (v) => {

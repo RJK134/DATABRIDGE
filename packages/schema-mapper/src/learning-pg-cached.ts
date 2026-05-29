@@ -58,8 +58,7 @@ export class CachedPostgresLearningStore implements LearningStore {
   constructor(opts: CachedPostgresLearningStoreOptions, remote?: AsyncLearningStore) {
     this.remote = remote ?? new PostgresLearningStore(opts);
     this.onPersistError = opts.onPersistError ?? (() => {});
-    this.hydration =
-      (opts.hydrateOnStart ?? true) ? this.hydrate() : Promise.resolve();
+    this.hydration = (opts.hydrateOnStart ?? true) ? this.hydrate() : Promise.resolve();
   }
 
   /**

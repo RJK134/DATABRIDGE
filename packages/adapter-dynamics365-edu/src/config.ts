@@ -20,7 +20,10 @@ export const Dynamics365EduConfigSchema = z.object({
   /** Secrets-vault key for the app-registration client secret. */
   clientSecretKey: z.string().min(1),
   /** API version, e.g. v9.2. */
-  apiVersion: z.string().regex(/^v\d+\.\d+$/).default("v9.2"),
+  apiVersion: z
+    .string()
+    .regex(/^v\d+\.\d+$/)
+    .default("v9.2"),
   /** Request timeout ms. */
   timeoutMs: z.number().int().positive().default(60_000),
 });

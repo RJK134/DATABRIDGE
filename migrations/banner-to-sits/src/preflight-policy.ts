@@ -50,7 +50,7 @@ const SEVERITY_ORDER = ["info", "low", "medium", "high", "critical"] as const;
 
 export function evaluatePreFlightPolicy(
   input: PreFlightInput,
-  policy: PreFlightPolicy = BANNER_TO_SITS_PREFLIGHT_POLICY,
+  policy: PreFlightPolicy = BANNER_TO_SITS_PREFLIGHT_POLICY
 ): PreFlightDecision {
   const reasons: string[] = [];
 
@@ -59,15 +59,13 @@ export function evaluatePreFlightPolicy(
     const threshold = SEVERITY_ORDER.indexOf(policy.denyOnSeverityAtLeast);
     if (observed >= threshold) {
       reasons.push(
-        `denied: worst finding severity "${input.worstSeverity}" >= threshold "${policy.denyOnSeverityAtLeast}"`,
+        `denied: worst finding severity "${input.worstSeverity}" >= threshold "${policy.denyOnSeverityAtLeast}"`
       );
     }
   }
 
   if (input.sampleSize < policy.sampleSizeFloor) {
-    reasons.push(
-      `denied: sample size ${input.sampleSize} below floor ${policy.sampleSizeFloor}`,
-    );
+    reasons.push(`denied: sample size ${input.sampleSize} below floor ${policy.sampleSizeFloor}`);
   }
 
   for (const cs of policy.requiredCodesets) {
@@ -78,7 +76,7 @@ export function evaluatePreFlightPolicy(
     }
     if (cov < policy.requiredCodesetCoverage) {
       reasons.push(
-        `denied: codeset "${cs}" coverage ${cov.toFixed(3)} below floor ${policy.requiredCodesetCoverage}`,
+        `denied: codeset "${cs}" coverage ${cov.toFixed(3)} below floor ${policy.requiredCodesetCoverage}`
       );
     }
   }

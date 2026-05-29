@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * TermtimeAccommodation — where the student lives during term-time (HESA
@@ -19,8 +19,14 @@ export const TermtimeAccommodationZ = z.object({
   /** HESA TTPCDUR — proportion of term-time spent at this accommodation. */
   proportionPct: z.number().min(0).max(100).optional(),
   /** Effective from / to. */
-  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  startDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  endDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
   attributes: z.record(z.unknown()).optional(),
 });
 

@@ -1,9 +1,6 @@
 import { describe, it, expect } from "vitest";
 import type { FnAuditRule } from "@databridge/rule-core";
-import {
-  SALESFORCE_EDU_NATIVE_RULES,
-  SALESFORCE_EDU_NATIVE_AUDIT_PACK,
-} from "../index.js";
+import { SALESFORCE_EDU_NATIVE_RULES, SALESFORCE_EDU_NATIVE_AUDIT_PACK } from "../index.js";
 
 function asFn(id: string): FnAuditRule {
   const r = SALESFORCE_EDU_NATIVE_RULES.find((x) => x.id === id);
@@ -65,13 +62,13 @@ describe("SALESFORCE_EDU_NATIVE pack", () => {
   it("FERPA-mismatch detects Withheld + HasOptedOutOfEmail=false", () => {
     const r = asFn("SALESFORCE-EDU-06");
     expect(
-      r.evaluate({ Id: "001", hed__FERPA__c: "Withheld", HasOptedOutOfEmail: false }).pass,
+      r.evaluate({ Id: "001", hed__FERPA__c: "Withheld", HasOptedOutOfEmail: false }).pass
     ).toBe(false);
     expect(
-      r.evaluate({ Id: "002", hed__FERPA__c: "Withheld", HasOptedOutOfEmail: true }).pass,
+      r.evaluate({ Id: "002", hed__FERPA__c: "Withheld", HasOptedOutOfEmail: true }).pass
     ).toBe(true);
     expect(
-      r.evaluate({ Id: "003", hed__FERPA__c: "Granted", HasOptedOutOfEmail: false }).pass,
+      r.evaluate({ Id: "003", hed__FERPA__c: "Granted", HasOptedOutOfEmail: false }).pass
     ).toBe(true);
   });
 

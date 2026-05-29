@@ -32,7 +32,7 @@ export interface PgClientLike {
   connect(): Promise<void>;
   query<T = Record<string, unknown>>(
     sql: string,
-    params?: ReadonlyArray<unknown>,
+    params?: ReadonlyArray<unknown>
   ): Promise<{ rows: T[]; rowCount?: number | null }>;
   end(): Promise<void>;
 }
@@ -57,7 +57,7 @@ async function loadPg(): Promise<{ Client: PgClientCtor }> {
     throw new Error(
       "@databridge/rule-core: the optional peer 'pg' is not installed. " +
         "Install it in the consuming app with: pnpm add pg @types/pg\n" +
-        `Underlying error: ${(err as Error).message}`,
+        `Underlying error: ${(err as Error).message}`
     );
   }
 }
@@ -80,7 +80,7 @@ async function loadPg(): Promise<{ Client: PgClientCtor }> {
  */
 export function translateNamedBinds(
   sql: string,
-  params: Record<string, unknown>,
+  params: Record<string, unknown>
 ): { sql: string; values: unknown[] } {
   const values: unknown[] = [];
   const indexByName = new Map<string, number>();
@@ -117,9 +117,7 @@ export function translateNamedBinds(
       if (m) {
         const name = m[0];
         if (!(name in params)) {
-          throw new Error(
-            `translateNamedBinds: missing parameter ':${name}' in params map`,
-          );
+          throw new Error(`translateNamedBinds: missing parameter ':${name}' in params map`);
         }
         let idx = indexByName.get(name);
         if (idx === undefined) {
@@ -160,7 +158,7 @@ function splitFieldPath(fieldPath: string): {
     return { schema: parts[0]!, table: parts[1]!, column: parts[2]! };
   }
   throw new Error(
-    `splitFieldPath: expected TABLE.column or schema.TABLE.column, got '${fieldPath}'`,
+    `splitFieldPath: expected TABLE.column or schema.TABLE.column, got '${fieldPath}'`
   );
 }
 
@@ -177,10 +175,7 @@ function quoteIdent(name: string): string {
   return `"${name}"`;
 }
 
-function qualifiedTable(parsed: {
-  schema?: string;
-  table: string;
-}): string {
+function qualifiedTable(parsed: { schema?: string; table: string }): string {
   return parsed.schema
     ? `${quoteIdent(parsed.schema)}.${quoteIdent(parsed.table)}`
     : quoteIdent(parsed.table);
@@ -205,9 +200,7 @@ export interface PgSqlExecutorOptions {
    * Injectable Client factory — used by tests to substitute a fake pg.Client.
    * If unset, the real pg module is lazy-loaded.
    */
-  clientFactory?: (
-    config: Record<string, unknown>,
-  ) => PgClientLike | Promise<PgClientLike>;
+  clientFactory?: (config: Record<string, unknown>) => PgClientLike | Promise<PgClientLike>;
 
   /**
    * Column name used to filter rows by tenant. Defaults to "tenant_id". Each
@@ -241,7 +234,7 @@ export class PgSqlExecutor implements SqlExecutor {
    */
   async query(
     sql: string,
-    params: { tenantId: string } & Record<string, unknown>,
+    params: { tenantId: string } & Record<string, unknown>
   ): Promise<Record<string, unknown>[]> {
     const { sql: pgSql, values } = translateNamedBinds(sql, params);
     return this.withClient(async (client) => {
@@ -268,7 +261,7 @@ export class PgSqlExecutor implements SqlExecutor {
     fieldPath: string,
     validCodes: Set<string>,
     flagNulls: boolean,
-    tenantId: string,
+    tenantId: string
   ): Promise<Record<string, unknown>[]> {
     const parsed = splitFieldPath(fieldPath);
     const table = qualifiedTable(parsed);
@@ -291,9 +284,7 @@ export class PgSqlExecutor implements SqlExecutor {
 
     if (codes.length === 0) {
       // No valid codes — every non-null is a violation; nulls per flag.
-      sql = flagNulls
-        ? `${baseSelect}`
-        : `${baseSelect} AND ${col} IS NOT NULL`;
+      sql = flagNulls ? `${baseSelect}` : `${baseSelect} AND ${col} IS NOT NULL`;
       params = [tenantId];
     } else {
       const nullClause = flagNulls ? ` OR ${col} IS NULL` : "";
@@ -313,10 +304,7 @@ export class PgSqlExecutor implements SqlExecutor {
    * cast to numeric will throw at the DB layer, in which case we retry with
    * a text-only stats query.
    */
-  async queryFieldStats(
-    fieldPath: string,
-    tenantId: string,
-  ): Promise<FieldStats> {
+  async queryFieldStats(fieldPath: string, tenantId: string): Promise<FieldStats> {
     const parsed = splitFieldPath(fieldPath);
     const table = qualifiedTable(parsed);
     const col = quoteIdent(parsed.column);
@@ -357,9 +345,7 @@ export class PgSqlExecutor implements SqlExecutor {
         max_v: string | null;
       }>(statsSql, [tenantId]);
 
-      const top = await client.query<{ value: string; count: string }>(topSql, [
-        tenantId,
-      ]);
+      const top = await client.query<{ value: string; count: string }>(topSql, [tenantId]);
 
       const row = stats.rows[0] ?? {
         total: "0",
@@ -388,9 +374,7 @@ export class PgSqlExecutor implements SqlExecutor {
 
   /* ---------------------------- internals -------------------------------- */
 
-  private async withClient<T>(
-    fn: (client: PgClientLike) => Promise<T>,
-  ): Promise<T> {
+  private async withClient<T>(fn: (client: PgClientLike) => Promise<T>): Promise<T> {
     const client = await this.makeClient();
     await client.connect();
     try {

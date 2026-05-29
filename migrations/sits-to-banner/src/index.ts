@@ -10,10 +10,7 @@ export {
   type LoadPlanEntry,
 } from "./orchestrator.js";
 export { BannerLoadPlanWriter } from "./banner-load-plan-writer.js";
-export {
-  SitsToBannerConfigSchema,
-  type SitsToBannerConfig,
-} from "./config.js";
+export { SitsToBannerConfigSchema, type SitsToBannerConfig } from "./config.js";
 export {
   SITS_TO_BANNER_PREFLIGHT_POLICY,
   evaluatePreFlightPolicy,

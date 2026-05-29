@@ -8,7 +8,7 @@ Future Horizons Education · May 2026
 
 ## What is DataBridge?
 
-DataBridge sits *next to* your Student Record System (SITS, Banner, Workday, SJMS-5) and provides:
+DataBridge sits _next to_ your Student Record System (SITS, Banner, Workday, SJMS-5) and provides:
 
 - **Audit Engine** — 69 rules across 13 families covering HESA Data Futures, UCISA benchmarks, and SITS-specific integrity checks
 - **Data Health Picture (DHP)** — institution-level quality scorecards with UCISA benchmark overlays
@@ -86,6 +86,7 @@ pnpm build
 ## Deployment
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for deployment topologies:
+
 - **Vercel (web) + Railway (API) + Neon (DB)** — recommended SaaS
 - **Azure / AWS / OCI** — enterprise on-premise
 - **Cloud SITS in-VPC connector** — for locked-down Oracle environments

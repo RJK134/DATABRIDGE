@@ -9,10 +9,34 @@
       "description": "STVTERM — the term primary key consumed across enrolment, registration, and finance.",
       "source": "banner-student-validation",
       "entries": [
-        { "code": "202410", "description": "Autumn 2024/25", "isActive": true, "sortOrder": 1, "attributes": { "termType": "FALL" } },
-        { "code": "202420", "description": "Spring 2024/25", "isActive": true, "sortOrder": 2, "attributes": { "termType": "SPRING" } },
-        { "code": "202430", "description": "Summer 2024/25", "isActive": true, "sortOrder": 3, "attributes": { "termType": "SUMMER" } },
-        { "code": "202510", "description": "Autumn 2025/26", "isActive": true, "sortOrder": 4, "attributes": { "termType": "FALL" } }
+        {
+          "code": "202410",
+          "description": "Autumn 2024/25",
+          "isActive": true,
+          "sortOrder": 1,
+          "attributes": { "termType": "FALL" }
+        },
+        {
+          "code": "202420",
+          "description": "Spring 2024/25",
+          "isActive": true,
+          "sortOrder": 2,
+          "attributes": { "termType": "SPRING" }
+        },
+        {
+          "code": "202430",
+          "description": "Summer 2024/25",
+          "isActive": true,
+          "sortOrder": 3,
+          "attributes": { "termType": "SUMMER" }
+        },
+        {
+          "code": "202510",
+          "description": "Autumn 2025/26",
+          "isActive": true,
+          "sortOrder": 4,
+          "attributes": { "termType": "FALL" }
+        }
       ]
     },
     {
@@ -21,11 +45,11 @@
       "description": "STVMAJR — major code used in SORLCUR / SORLFOS.",
       "source": "banner-student-validation",
       "entries": [
-        { "code": "CS",    "description": "Computer Science", "isActive": true },
-        { "code": "EE",    "description": "Electrical Engineering", "isActive": true },
-        { "code": "BUS",   "description": "Business", "isActive": true },
-        { "code": "HIST",  "description": "History", "isActive": true },
-        { "code": "UNDC",  "description": "Undeclared", "isActive": true }
+        { "code": "CS", "description": "Computer Science", "isActive": true },
+        { "code": "EE", "description": "Electrical Engineering", "isActive": true },
+        { "code": "BUS", "description": "Business", "isActive": true },
+        { "code": "HIST", "description": "History", "isActive": true },
+        { "code": "UNDC", "description": "Undeclared", "isActive": true }
       ]
     },
     {
@@ -34,11 +58,36 @@
       "description": "STVDEGC — degree designations used in SHRDGMR.",
       "source": "banner-student-validation",
       "entries": [
-        { "code": "BS",   "description": "Bachelor of Science", "isActive": true, "attributes": { "level": "UG" } },
-        { "code": "BA",   "description": "Bachelor of Arts", "isActive": true, "attributes": { "level": "UG" } },
-        { "code": "MS",   "description": "Master of Science", "isActive": true, "attributes": { "level": "PG" } },
-        { "code": "MA",   "description": "Master of Arts", "isActive": true, "attributes": { "level": "PG" } },
-        { "code": "PHD",  "description": "Doctor of Philosophy", "isActive": true, "attributes": { "level": "PHD" } }
+        {
+          "code": "BS",
+          "description": "Bachelor of Science",
+          "isActive": true,
+          "attributes": { "level": "UG" }
+        },
+        {
+          "code": "BA",
+          "description": "Bachelor of Arts",
+          "isActive": true,
+          "attributes": { "level": "UG" }
+        },
+        {
+          "code": "MS",
+          "description": "Master of Science",
+          "isActive": true,
+          "attributes": { "level": "PG" }
+        },
+        {
+          "code": "MA",
+          "description": "Master of Arts",
+          "isActive": true,
+          "attributes": { "level": "PG" }
+        },
+        {
+          "code": "PHD",
+          "description": "Doctor of Philosophy",
+          "isActive": true,
+          "attributes": { "level": "PHD" }
+        }
       ]
     },
     {
@@ -47,9 +96,24 @@
       "description": "STVRESD — residency codes used in SGBSTDN, mapped to HESA FEESTATUS.",
       "source": "banner-student-validation",
       "entries": [
-        { "code": "H", "description": "Home / UK / state resident", "isActive": true, "attributes": { "hesa.feestatus": "1" } },
-        { "code": "O", "description": "Overseas / international", "isActive": true, "attributes": { "hesa.feestatus": "2" } },
-        { "code": "E", "description": "EU (legacy)", "isActive": true, "attributes": { "hesa.feestatus": "3" } },
+        {
+          "code": "H",
+          "description": "Home / UK / state resident",
+          "isActive": true,
+          "attributes": { "hesa.feestatus": "1" }
+        },
+        {
+          "code": "O",
+          "description": "Overseas / international",
+          "isActive": true,
+          "attributes": { "hesa.feestatus": "2" }
+        },
+        {
+          "code": "E",
+          "description": "EU (legacy)",
+          "isActive": true,
+          "attributes": { "hesa.feestatus": "3" }
+        },
         { "code": "X", "description": "Unknown", "isActive": true }
       ]
     },
@@ -59,12 +123,42 @@
       "description": "STVSTST — overall student status FK on SGBSTDN.",
       "source": "banner-student-validation",
       "entries": [
-        { "code": "AS", "description": "Active student", "isActive": true, "attributes": { "currentness": "active" } },
-        { "code": "GR", "description": "Graduated", "isActive": true, "attributes": { "currentness": "terminal" } },
-        { "code": "WD", "description": "Withdrawn", "isActive": true, "attributes": { "currentness": "terminal" } },
-        { "code": "CN", "description": "Cancelled / not started", "isActive": true, "attributes": { "currentness": "terminal" } },
-        { "code": "DM", "description": "Dismissed", "isActive": true, "attributes": { "currentness": "terminal" } },
-        { "code": "TR", "description": "Transferred out", "isActive": true, "attributes": { "currentness": "terminal" } }
+        {
+          "code": "AS",
+          "description": "Active student",
+          "isActive": true,
+          "attributes": { "currentness": "active" }
+        },
+        {
+          "code": "GR",
+          "description": "Graduated",
+          "isActive": true,
+          "attributes": { "currentness": "terminal" }
+        },
+        {
+          "code": "WD",
+          "description": "Withdrawn",
+          "isActive": true,
+          "attributes": { "currentness": "terminal" }
+        },
+        {
+          "code": "CN",
+          "description": "Cancelled / not started",
+          "isActive": true,
+          "attributes": { "currentness": "terminal" }
+        },
+        {
+          "code": "DM",
+          "description": "Dismissed",
+          "isActive": true,
+          "attributes": { "currentness": "terminal" }
+        },
+        {
+          "code": "TR",
+          "description": "Transferred out",
+          "isActive": true,
+          "attributes": { "currentness": "terminal" }
+        }
       ]
     },
     {
@@ -96,13 +190,48 @@
       "description": "STVGRDE — letter-grade codes with attached numeric points.",
       "source": "banner-student-validation",
       "entries": [
-        { "code": "A",  "description": "A — Excellent", "isActive": true, "attributes": { "points": "4.0" } },
-        { "code": "B",  "description": "B — Good", "isActive": true, "attributes": { "points": "3.0" } },
-        { "code": "C",  "description": "C — Satisfactory", "isActive": true, "attributes": { "points": "2.0" } },
-        { "code": "D",  "description": "D — Marginal pass", "isActive": true, "attributes": { "points": "1.0" } },
-        { "code": "F",  "description": "F — Fail", "isActive": true, "attributes": { "points": "0.0" } },
-        { "code": "I",  "description": "I — Incomplete", "isActive": true, "attributes": { "points": "0.0" } },
-        { "code": "W",  "description": "W — Withdrawn", "isActive": true, "attributes": { "points": "0.0" } }
+        {
+          "code": "A",
+          "description": "A — Excellent",
+          "isActive": true,
+          "attributes": { "points": "4.0" }
+        },
+        {
+          "code": "B",
+          "description": "B — Good",
+          "isActive": true,
+          "attributes": { "points": "3.0" }
+        },
+        {
+          "code": "C",
+          "description": "C — Satisfactory",
+          "isActive": true,
+          "attributes": { "points": "2.0" }
+        },
+        {
+          "code": "D",
+          "description": "D — Marginal pass",
+          "isActive": true,
+          "attributes": { "points": "1.0" }
+        },
+        {
+          "code": "F",
+          "description": "F — Fail",
+          "isActive": true,
+          "attributes": { "points": "0.0" }
+        },
+        {
+          "code": "I",
+          "description": "I — Incomplete",
+          "isActive": true,
+          "attributes": { "points": "0.0" }
+        },
+        {
+          "code": "W",
+          "description": "W — Withdrawn",
+          "isActive": true,
+          "attributes": { "points": "0.0" }
+        }
       ]
     },
     {
@@ -111,12 +240,12 @@
       "description": "STVNATN — nationality codes, partial sample.",
       "source": "banner-student-validation",
       "entries": [
-        { "code": "GB",  "description": "United Kingdom", "isActive": true },
-        { "code": "US",  "description": "United States", "isActive": true },
-        { "code": "FR",  "description": "France", "isActive": true },
-        { "code": "DE",  "description": "Germany", "isActive": true },
-        { "code": "CN",  "description": "China", "isActive": true },
-        { "code": "IN",  "description": "India", "isActive": true }
+        { "code": "GB", "description": "United Kingdom", "isActive": true },
+        { "code": "US", "description": "United States", "isActive": true },
+        { "code": "FR", "description": "France", "isActive": true },
+        { "code": "DE", "description": "Germany", "isActive": true },
+        { "code": "CN", "description": "China", "isActive": true },
+        { "code": "IN", "description": "India", "isActive": true }
       ]
     }
   ]

@@ -20,7 +20,7 @@ export const F01_completeness: AuditRule[] = [
            FROM STU
           WHERE (STU_SURN IS NULL OR TRIM(STU_SURN) = '')
             AND STU_TENT = :tenantId`,
-    messageTemplate: "Student {{subject_id}} ({{forenames}}, dob {{dob}}) has no surname"
+    messageTemplate: "Student {{subject_id}} ({{forenames}}, dob {{dob}}) has no surname",
   },
   {
     id: "F01-02",
@@ -36,7 +36,7 @@ export const F01_completeness: AuditRule[] = [
            FROM STU
           WHERE STU_DOB IS NULL
             AND STU_TENT = :tenantId`,
-    messageTemplate: "Student {{subject_id}} ({{surname}}, {{forenames}}) has no date of birth"
+    messageTemplate: "Student {{subject_id}} ({{surname}}, {{forenames}}) has no date of birth",
   },
   {
     id: "F01-03",
@@ -52,7 +52,7 @@ export const F01_completeness: AuditRule[] = [
            FROM SRS
           WHERE (SRS_PROG IS NULL OR TRIM(SRS_PROG) = '')
             AND SRS_TENT = :tenantId`,
-    messageTemplate: "Enrolment {{subject_id}} for student {{student_id}} has no programme code"
+    messageTemplate: "Enrolment {{subject_id}} for student {{student_id}} has no programme code",
   },
   {
     id: "F01-04",
@@ -68,7 +68,8 @@ export const F01_completeness: AuditRule[] = [
            FROM SRS
           WHERE SRS_BEGD IS NULL
             AND SRS_TENT = :tenantId`,
-    messageTemplate: "Enrolment {{subject_id}} (student {{student_id}}, programme {{programme}}) has no start date"
+    messageTemplate:
+      "Enrolment {{subject_id}} (student {{student_id}}, programme {{programme}}) has no start date",
   },
   {
     id: "F01-05",
@@ -84,7 +85,7 @@ export const F01_completeness: AuditRule[] = [
            FROM POS
           WHERE (POS_NAME IS NULL OR TRIM(POS_NAME) = '')
             AND POS_TENT = :tenantId`,
-    messageTemplate: "Programme {{subject_id}} has no title"
+    messageTemplate: "Programme {{subject_id}} has no title",
   },
   {
     id: "F01-06",
@@ -100,6 +101,6 @@ export const F01_completeness: AuditRule[] = [
            FROM MOD
           WHERE MOD_CRDT IS NULL
             AND MOD_TENT = :tenantId`,
-    messageTemplate: "Module {{subject_id}} ({{title}}) has no credit value"
-  }
+    messageTemplate: "Module {{subject_id}} ({{title}}) has no credit value",
+  },
 ];

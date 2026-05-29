@@ -78,10 +78,7 @@ export class BannerOracleAdapter implements SourceAdapter {
     return [];
   }
 
-  async *streamRows(
-    ctx: AdapterContext,
-    args: StreamRowsArgs,
-  ): AsyncIterable<StreamRowsPage> {
+  async *streamRows(ctx: AdapterContext, args: StreamRowsArgs): AsyncIterable<StreamRowsPage> {
     ctx.logger.debug("banner-oracle: streamRows", { resource: args.resource });
     if (!SUPPORTED_RESOURCES.includes(args.resource as SupportedResource)) {
       throw new Error(`banner-oracle: resource "${args.resource}" not supported`);
@@ -100,10 +97,7 @@ export class BannerOracleAdapter implements SourceAdapter {
     return [];
   }
 
-  async getRecordById(
-    ctx: AdapterContext,
-    args: GetRecordByIdArgs,
-  ): Promise<SampledRow | null> {
+  async getRecordById(ctx: AdapterContext, args: GetRecordByIdArgs): Promise<SampledRow | null> {
     ctx.logger.debug("banner-oracle: getRecordById", { resource: args.resource, id: args.id });
     if (!SUPPORTED_RESOURCES.includes(args.resource as SupportedResource)) {
       throw new Error(`banner-oracle: resource "${args.resource}" not supported`);

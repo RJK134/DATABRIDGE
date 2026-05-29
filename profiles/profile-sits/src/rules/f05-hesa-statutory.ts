@@ -22,7 +22,8 @@ export const F05_hesa_statutory: AuditRule[] = [
           WHERE (s.STU_HUSID IS NULL OR TRIM(s.STU_HUSID) = '')
             AND r.SRS_ENDD IS NULL
             AND s.STU_TENT = :tenantId`,
-    messageTemplate: "Active student {{subject_id}} ({{surname}}) has no HUSID — required for HESA return"
+    messageTemplate:
+      "Active student {{subject_id}} ({{surname}}) has no HUSID — required for HESA return",
   },
   {
     id: "F05-02",
@@ -38,14 +39,15 @@ export const F05_hesa_statutory: AuditRule[] = [
            FROM POS
           WHERE (POS_HCOS IS NULL OR TRIM(POS_HCOS) = '')
             AND POS_TENT = :tenantId`,
-    messageTemplate: "Programme {{subject_id}} ({{title}}) has no HECoS subject coding"
+    messageTemplate: "Programme {{subject_id}} ({{title}}) has no HECoS subject coding",
   },
   {
     id: "F05-03",
     family: "F05",
     type: "sql",
     name: "Student missing ethnicity declaration",
-    description: "Student has no ethnicity record — required for Equality Act monitoring and HESA return",
+    description:
+      "Student has no ethnicity record — required for Equality Act monitoring and HESA return",
     severity: "WARN",
     ucisa_benchmark_ref: "UCISA-DM-4.1",
     tags: ["hesa-df", "statutory", "equality", "sits"],
@@ -57,14 +59,15 @@ export const F05_hesa_statutory: AuditRule[] = [
              WHERE e.ETH_STUC = s.STU_CODE AND e.ETH_TENT = :tenantId
           )
             AND s.STU_TENT = :tenantId`,
-    messageTemplate: "Student {{subject_id}} ({{surname}}) has no ethnicity declaration"
+    messageTemplate: "Student {{subject_id}} ({{surname}}) has no ethnicity declaration",
   },
   {
     id: "F05-04",
     family: "F05",
     type: "sql",
     name: "Student missing nationality / domicile",
-    description: "Student has no nationality/domicile record — required for fee classification and HESA",
+    description:
+      "Student has no nationality/domicile record — required for fee classification and HESA",
     severity: "ERROR",
     ucisa_benchmark_ref: "UCISA-DM-4.1",
     tags: ["hesa-df", "statutory", "sits"],
@@ -76,14 +79,15 @@ export const F05_hesa_statutory: AuditRule[] = [
              WHERE n.NAT_STUC = s.STU_CODE AND n.NAT_TENT = :tenantId
           )
             AND s.STU_TENT = :tenantId`,
-    messageTemplate: "Student {{subject_id}} has no nationality/domicile record"
+    messageTemplate: "Student {{subject_id}} has no nationality/domicile record",
   },
   {
     id: "F05-05",
     family: "F05",
     type: "sql",
     name: "Enrolment funding body not populated for home/EU student",
-    description: "Home/EU classified enrolment has no funding body — required for OfS statutory return",
+    description:
+      "Home/EU classified enrolment has no funding body — required for OfS statutory return",
     severity: "ERROR",
     ucisa_benchmark_ref: "UCISA-DM-4.1",
     tags: ["hesa-df", "statutory", "sits", "ofs"],
@@ -93,6 +97,7 @@ export const F05_hesa_statutory: AuditRule[] = [
           WHERE (SRS_FUND IS NULL OR TRIM(SRS_FUND) = '')
             AND SRS_FDOM IN ('1', '2')  -- Home / EU domicile markers
             AND SRS_TENT = :tenantId`,
-    messageTemplate: "Home/EU enrolment {{subject_id}} (student {{student_id}}) has no funding body"
-  }
+    messageTemplate:
+      "Home/EU enrolment {{subject_id}} (student {{student_id}}) has no funding body",
+  },
 ];

@@ -1,9 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  MemoryLearningStore,
-  learnedConfidence,
-  SchemaSuggester,
-} from "../index.js";
+import { MemoryLearningStore, learnedConfidence, SchemaSuggester } from "../index.js";
 import { isFieldSuggestion } from "../types.js";
 
 describe("MemoryLearningStore", () => {

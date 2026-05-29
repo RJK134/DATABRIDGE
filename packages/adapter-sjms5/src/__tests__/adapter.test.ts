@@ -3,11 +3,7 @@
  * exercised end-to-end without standing up Postgres.
  */
 import { describe, it, expect, vi } from "vitest";
-import {
-  Sjms5Adapter,
-  SUPPORTED_RESOURCES,
-  type PgClientFactory,
-} from "../adapter.js";
+import { Sjms5Adapter, SUPPORTED_RESOURCES, type PgClientFactory } from "../adapter.js";
 import { Sjms5ConfigSchema } from "../config.js";
 import type { PgClientLike } from "../pg-client.js";
 
@@ -34,9 +30,7 @@ function makeMockClient(expectations: MockExpectation[]): PgClientLike & {
         throw new Error(`mock pg: unexpected query #${cursor}: ${sql}`);
       }
       if (!expectation.sqlMatch.test(sql)) {
-        throw new Error(
-          `mock pg: query #${cursor} did not match ${expectation.sqlMatch}: ${sql}`,
-        );
+        throw new Error(`mock pg: query #${cursor} did not match ${expectation.sqlMatch}: ${sql}`);
       }
       return { rows: expectation.rows as T[], rowCount: expectation.rows.length };
     },
@@ -119,18 +113,14 @@ describe("Sjms5Adapter — discoverSchema", () => {
       SUPPORTED_RESOURCES.map(() => ({
         sqlMatch: /information_schema\.columns/,
         rows: colsRows,
-      })),
+      }))
     );
     const factory: PgClientFactory = async () => mock;
     const adapter = new Sjms5Adapter(baseConfig, { clientFactory: factory });
     const schema = await adapter.discoverSchema(makeCtx());
     expect(schema.adapter).toBe("sjms5");
-    expect(schema.resources.map((r) => r.name).sort()).toEqual(
-      [...SUPPORTED_RESOURCES].sort(),
-    );
-    expect(schema.resources[0]?.fields.find((f) => f.name === "id")?.isKey).toBe(
-      true,
-    );
+    expect(schema.resources.map((r) => r.name).sort()).toEqual([...SUPPORTED_RESOURCES].sort());
+    expect(schema.resources[0]?.fields.find((f) => f.name === "id")?.isKey).toBe(true);
   });
 });
 
@@ -159,7 +149,7 @@ describe("Sjms5Adapter — sampleTable", () => {
       },
     });
     await expect(
-      adapter.sampleTable(makeCtx(), { resource: "DOES_NOT_EXIST", limit: 5 }),
+      adapter.sampleTable(makeCtx(), { resource: "DOES_NOT_EXIST", limit: 5 })
     ).rejects.toThrow(/not supported/);
   });
 });

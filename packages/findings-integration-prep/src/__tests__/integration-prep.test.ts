@@ -21,9 +21,7 @@ describe("generateIntegrationPrepReport", () => {
   it("emits 'update' findings with field deltas when source and target differ", () => {
     const report = generateIntegrationPrepReport({
       source: [{ studentId: "S1", lastName: "Smith", email: "x@y" }],
-      target: [
-        { External_Id__c: "S1", lastName: "Jones", email: "x@y", Id: "001a" },
-      ],
+      target: [{ External_Id__c: "S1", lastName: "Jones", email: "x@y", Id: "001a" }],
       sourceLabel: "SITS",
       targetLabel: "Salesforce",
       options: {

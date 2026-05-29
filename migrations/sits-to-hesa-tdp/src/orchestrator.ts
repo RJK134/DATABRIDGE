@@ -44,12 +44,12 @@ export class SitsToHesaTdpOrchestrator {
 
   constructor(
     rawConfig: unknown,
-    private readonly sourceAdapter: SourceAdapter,
+    private readonly sourceAdapter: SourceAdapter
   ) {
     this.config = SitsToHesaTdpConfigSchema.parse(rawConfig);
     if (!this.sourceAdapter.id.startsWith("sits-")) {
       throw new Error(
-        `SitsToHesaTdpOrchestrator: expected a SITS source adapter, got "${this.sourceAdapter.id}"`,
+        `SitsToHesaTdpOrchestrator: expected a SITS source adapter, got "${this.sourceAdapter.id}"`
       );
     }
   }
@@ -111,7 +111,7 @@ export class SitsToHesaTdpOrchestrator {
         acc.invalid += o.rowsInvalid;
         return acc;
       },
-      { read: 0, valid: 0, invalid: 0 },
+      { read: 0, valid: 0, invalid: 0 }
     );
 
     return {
@@ -129,7 +129,7 @@ export class SitsToHesaTdpOrchestrator {
   private async runEntity(
     ctx: AdapterContext,
     entity: string,
-    resource: string,
+    resource: string
   ): Promise<EntityValidationOutcome> {
     let rowsRead = 0;
     const errors: ValidationError[] = [];

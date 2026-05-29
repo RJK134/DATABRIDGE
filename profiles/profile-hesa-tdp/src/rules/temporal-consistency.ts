@@ -1,18 +1,18 @@
-import type { Rule } from '@databridge/rule-core';
+import type { Rule } from "@databridge/rule-core";
 
 export const temporalConsistencyRules: Rule[] = [
   {
-    id: 'HESA-TDP-020',
-    family: 'TEMPORAL',
-    severity: 'ERROR',
-    entity: 'StudentCourseSession',
-    field: 'ENDDATE',
-    label: 'End date after commencement date',
-    description: 'ENDDATE must be on or after COMDATE when both are present.',
+    id: "HESA-TDP-020",
+    family: "TEMPORAL",
+    severity: "ERROR",
+    entity: "StudentCourseSession",
+    field: "ENDDATE",
+    label: "End date after commencement date",
+    description: "ENDDATE must be on or after COMDATE when both are present.",
     ucisa_benchmark_ref: null,
     evaluate({ record }: { record: Record<string, unknown> }) {
-      const COMDATE = record['COMDATE'];
-      const ENDDATE = record['ENDDATE'];
+      const COMDATE = record["COMDATE"];
+      const ENDDATE = record["ENDDATE"];
       if (!COMDATE || !ENDDATE) return { pass: true };
       const com = new Date(String(COMDATE));
       const end = new Date(String(ENDDATE));
@@ -24,13 +24,13 @@ export const temporalConsistencyRules: Rule[] = [
     },
   },
   {
-    id: 'HESA-TDP-021',
-    family: 'TEMPORAL',
-    severity: 'WARNING',
-    entity: 'Student',
-    field: 'BIRTHDTE',
-    label: 'Plausible date of birth',
-    description: 'BIRTHDTE should result in an age between 14 and 100 at course commencement.',
+    id: "HESA-TDP-021",
+    family: "TEMPORAL",
+    severity: "WARNING",
+    entity: "Student",
+    field: "BIRTHDTE",
+    label: "Plausible date of birth",
+    description: "BIRTHDTE should result in an age between 14 and 100 at course commencement.",
     ucisa_benchmark_ref: null,
     evaluate({ value }: { value: unknown }) {
       if (!value) return { pass: true };

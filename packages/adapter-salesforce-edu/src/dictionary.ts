@@ -4,10 +4,7 @@
  */
 import type { DictionaryEntry } from "@databridge/adapter-spec";
 import type { DescribeResponse, SalesforceClient } from "./http.js";
-import {
-  RESOURCE_TO_SOBJECT,
-  type SupportedResource,
-} from "./resource-map.js";
+import { RESOURCE_TO_SOBJECT, type SupportedResource } from "./resource-map.js";
 
 /** Map a Salesforce field type to a dictionary "dataType" string. */
 export function mapFieldType(sfType: string): string {
@@ -43,7 +40,7 @@ export function mapFieldType(sfType: string): string {
 /** Convert a single describe payload to dictionary entries. */
 export function describeToDictionary(
   resource: SupportedResource,
-  describe: DescribeResponse,
+  describe: DescribeResponse
 ): DictionaryEntry[] {
   return describe.fields.map((f) => {
     const entry: DictionaryEntry = {
@@ -70,7 +67,7 @@ export function describeToDictionary(
 export async function buildDictionary(
   client: SalesforceClient,
   resources: readonly SupportedResource[],
-  cache: Map<string, DescribeResponse>,
+  cache: Map<string, DescribeResponse>
 ): Promise<DictionaryEntry[]> {
   const out: DictionaryEntry[] = [];
   for (const r of resources) {

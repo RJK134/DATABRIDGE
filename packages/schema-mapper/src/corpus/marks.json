@@ -3,16 +3,71 @@
   "section": "§9",
   "summary": "Banner has one mark per CRN (final grade). SITS has component marks (SAT) + aggregated module marks (SMR).",
   "fields": [
-    { "canonical": "personId", "banner": "SHRTCKG.PIDM (resolve)", "sits": "INS_SMR.smr_stuc (resolve)", "notes": "" },
-    { "canonical": "moduleInstanceId", "banner": "SHRTCKN parent row", "sits": "INS_SMR.smr_modc + period", "notes": "" },
-    { "canonical": "academicYear", "banner": "SHRTCKN.TERM_CODE", "sits": "INS_SMR.smr_ayrc", "notes": "" },
-    { "canonical": "finalMark", "banner": "SHRTCKG.GRDE_CODE_FINAL via STVGRDE", "sits": "INS_SMR.smr_agrm", "notes": "Banner letter → SITS numeric needs grade scale" },
-    { "canonical": "gradeDisplay", "banner": "SHRTCKG.GRDE_CODE_FINAL", "sits": "derive from SMR + grade scheme", "notes": "Preserve original" },
-    { "canonical": "pass", "banner": "STVGRDE.PASS_IND", "sits": "INS_SMR.smr_actc='P'", "notes": "" },
-    { "canonical": "gradePoints", "banner": "SHRTCKG.QUALITY_POINTS", "sits": "GPA where used", "notes": "" },
-    { "canonical": "creditsAwarded", "banner": "derived (full if pass, 0 if fail)", "sits": "INS_SMR.smr_crda", "notes": "Banner can't model partial credit" },
-    { "canonical": "attempt", "banner": "derived from repeat indicator + row count", "sits": "derived from SMR + SRA", "notes": "" },
-    { "canonical": "condonedFlag", "banner": "SHRTCKG.GCHG_CODE lookup", "sits": "INS_SMR.smr_actc='CR'", "notes": "" },
-    { "canonical": "gradedDate", "banner": "SHRTCKG.GRDE_DATE", "sits": null, "notes": "SITS typically not stored" }
+    {
+      "canonical": "personId",
+      "banner": "SHRTCKG.PIDM (resolve)",
+      "sits": "INS_SMR.smr_stuc (resolve)",
+      "notes": ""
+    },
+    {
+      "canonical": "moduleInstanceId",
+      "banner": "SHRTCKN parent row",
+      "sits": "INS_SMR.smr_modc + period",
+      "notes": ""
+    },
+    {
+      "canonical": "academicYear",
+      "banner": "SHRTCKN.TERM_CODE",
+      "sits": "INS_SMR.smr_ayrc",
+      "notes": ""
+    },
+    {
+      "canonical": "finalMark",
+      "banner": "SHRTCKG.GRDE_CODE_FINAL via STVGRDE",
+      "sits": "INS_SMR.smr_agrm",
+      "notes": "Banner letter → SITS numeric needs grade scale"
+    },
+    {
+      "canonical": "gradeDisplay",
+      "banner": "SHRTCKG.GRDE_CODE_FINAL",
+      "sits": "derive from SMR + grade scheme",
+      "notes": "Preserve original"
+    },
+    {
+      "canonical": "pass",
+      "banner": "STVGRDE.PASS_IND",
+      "sits": "INS_SMR.smr_actc='P'",
+      "notes": ""
+    },
+    {
+      "canonical": "gradePoints",
+      "banner": "SHRTCKG.QUALITY_POINTS",
+      "sits": "GPA where used",
+      "notes": ""
+    },
+    {
+      "canonical": "creditsAwarded",
+      "banner": "derived (full if pass, 0 if fail)",
+      "sits": "INS_SMR.smr_crda",
+      "notes": "Banner can't model partial credit"
+    },
+    {
+      "canonical": "attempt",
+      "banner": "derived from repeat indicator + row count",
+      "sits": "derived from SMR + SRA",
+      "notes": ""
+    },
+    {
+      "canonical": "condonedFlag",
+      "banner": "SHRTCKG.GCHG_CODE lookup",
+      "sits": "INS_SMR.smr_actc='CR'",
+      "notes": ""
+    },
+    {
+      "canonical": "gradedDate",
+      "banner": "SHRTCKG.GRDE_DATE",
+      "sits": null,
+      "notes": "SITS typically not stored"
+    }
   ]
 }

@@ -1,12 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { AuditFinding } from "@databridge/rule-core";
-import {
-  FindingWaiverStore,
-  WaiverError,
-  applyWaiver,
-  isActive,
-  isFutureIso,
-} from "../index.js";
+import { FindingWaiverStore, WaiverError, applyWaiver, isActive, isFutureIso } from "../index.js";
 
 const ISO_NOW = "2026-05-26T18:00:00.000Z";
 const ISO_FUTURE = "2026-06-25T18:00:00.000Z";
@@ -91,7 +85,7 @@ describe("FindingWaiverStore.waive", () => {
         actor: "alice",
         reason: "  ",
         waivedUntil: ISO_FUTURE,
-      }),
+      })
     ).toThrow(WaiverError);
   });
 
@@ -131,18 +125,14 @@ describe("FindingWaiverStore.revoke", () => {
 
   it("refuses to revoke when there is no history", () => {
     const store = new FindingWaiverStore(fixedClock(ISO_NOW));
-    expect(() =>
-      store.revoke({ findingId: "missing", actor: "carol" }),
-    ).toThrow(/no waiver/);
+    expect(() => store.revoke({ findingId: "missing", actor: "carol" })).toThrow(/no waiver/);
   });
 
   it("refuses to revoke twice in a row", () => {
     const store = new FindingWaiverStore(fixedClock(ISO_NOW));
     store.ack({ findingId: "f-1", actor: "alice" });
     store.revoke({ findingId: "f-1", actor: "carol" });
-    expect(() => store.revoke({ findingId: "f-1", actor: "carol" })).toThrow(
-      WaiverError,
-    );
+    expect(() => store.revoke({ findingId: "f-1", actor: "carol" })).toThrow(WaiverError);
   });
 });
 
@@ -291,8 +281,8 @@ describe("isActive", () => {
           actor: "a",
           decidedAt: ISO_NOW,
         },
-        ISO_NOW,
-      ),
+        ISO_NOW
+      )
     ).toBe(true);
   });
 
@@ -306,8 +296,8 @@ describe("isActive", () => {
           actor: "a",
           decidedAt: ISO_NOW,
         },
-        ISO_NOW,
-      ),
+        ISO_NOW
+      )
     ).toBe(false);
   });
 
@@ -322,8 +312,8 @@ describe("isActive", () => {
           decidedAt: ISO_NOW,
           waivedUntil: ISO_PAST,
         },
-        ISO_NOW,
-      ),
+        ISO_NOW
+      )
     ).toBe(false);
   });
 });

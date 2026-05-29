@@ -7,20 +7,20 @@
   "description": "US-style letter grade to UK-style numeric percentage. Approximation only — institutions with different scales must register a tenant override.",
   "entries": [
     { "sourceCode": "A+", "targetCode": "95" },
-    { "sourceCode": "A",  "targetCode": "90" },
+    { "sourceCode": "A", "targetCode": "90" },
     { "sourceCode": "A-", "targetCode": "85" },
     { "sourceCode": "B+", "targetCode": "78" },
-    { "sourceCode": "B",  "targetCode": "75" },
+    { "sourceCode": "B", "targetCode": "75" },
     { "sourceCode": "B-", "targetCode": "70" },
     { "sourceCode": "C+", "targetCode": "65" },
-    { "sourceCode": "C",  "targetCode": "60" },
+    { "sourceCode": "C", "targetCode": "60" },
     { "sourceCode": "C-", "targetCode": "55" },
     { "sourceCode": "D+", "targetCode": "50" },
-    { "sourceCode": "D",  "targetCode": "45" },
+    { "sourceCode": "D", "targetCode": "45" },
     { "sourceCode": "D-", "targetCode": "40" },
-    { "sourceCode": "F",  "targetCode": "0",  "notes": "Fail" },
-    { "sourceCode": "P",  "targetCode": "50", "notes": "Pass — minimum pass mark" },
-    { "sourceCode": "W",  "targetCode": "",   "notes": "Withdrawn — no numeric grade" },
-    { "sourceCode": "I",  "targetCode": "",   "notes": "Incomplete — no numeric grade" }
+    { "sourceCode": "F", "targetCode": "0", "notes": "Fail" },
+    { "sourceCode": "P", "targetCode": "50", "notes": "Pass — minimum pass mark" },
+    { "sourceCode": "W", "targetCode": "", "notes": "Withdrawn — no numeric grade" },
+    { "sourceCode": "I", "targetCode": "", "notes": "Incomplete — no numeric grade" }
   ]
 }

@@ -22,7 +22,7 @@ export const F09_programme_structure: AuditRule[] = [
              WHERE MAR_POSC = POS_CODE AND MAR_TENT = :tenantId
           )
             AND POS_TENT = :tenantId`,
-    messageTemplate: "Programme {{subject_id}} ({{title}}) has no module associations"
+    messageTemplate: "Programme {{subject_id}} ({{title}}) has no module associations",
   },
   {
     id: "F09-02",
@@ -39,6 +39,6 @@ export const F09_programme_structure: AuditRule[] = [
           WHERE (POS_JAC3 IS NULL OR TRIM(POS_JAC3) = '')
             AND (POS_HCOS IS NULL OR TRIM(POS_HCOS) = '')
             AND POS_TENT = :tenantId`,
-    messageTemplate: "Programme {{subject_id}} ({{title}}) has no JACS3 or HECoS subject coding"
-  }
+    messageTemplate: "Programme {{subject_id}} ({{title}}) has no JACS3 or HECoS subject coding",
+  },
 ];

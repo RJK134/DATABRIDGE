@@ -33,9 +33,7 @@ describe("Dynamics365EduAdapter — live path", () => {
   });
 
   it("healthCheck reports unhealthy on token failure", async () => {
-    const ad = adapterWith([
-      { ok: false, status: 401, statusText: "Unauthorized", body: "bad" },
-    ]);
+    const ad = adapterWith([{ ok: false, status: 401, statusText: "Unauthorized", body: "bad" }]);
     const r = await ad.healthCheck(makeCtx());
     expect(r.healthy).toBe(false);
   });
@@ -45,9 +43,7 @@ describe("Dynamics365EduAdapter — live path", () => {
       jsonResp(200, { access_token: "t", expires_in: 3600 }),
       jsonResp(200, {
         "@odata.context": "...",
-        value: [
-          { contactid: "id-1", lastname: "Lovelace", "@odata.etag": "W/x" },
-        ],
+        value: [{ contactid: "id-1", lastname: "Lovelace", "@odata.etag": "W/x" }],
       }),
     ]);
     const rows = await ad.sampleTable(makeCtx(), { resource: "Contact", limit: 5 });
@@ -98,7 +94,7 @@ describe("Dynamics365EduAdapter — live path", () => {
               },
             },
           ],
-        }),
+        })
       ),
     ]);
     const lists = await ad.getCodeLists(makeCtx());
@@ -120,7 +116,7 @@ describe("Dynamics365EduAdapter — live path", () => {
             },
             { LogicalName: "lastname", AttributeType: "String" },
           ],
-        }),
+        })
       ),
     ]);
     const dict = await ad.getDictionary(makeCtx());

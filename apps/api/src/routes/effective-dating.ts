@@ -67,19 +67,13 @@ export async function effectiveDatingRoutes(app: FastifyInstance): Promise<void>
         resolved = resolveTermKeyed(rows as Array<{ termEffectiveDate: string }>, at!);
         break;
       case "from-to-dated":
-        resolved = resolveFromToDated(
-          rows as Array<{ validFrom: string; validTo?: string }>,
-          at!,
-        );
+        resolved = resolveFromToDated(rows as Array<{ validFrom: string; validTo?: string }>, at!);
         break;
       case "change-indicator":
         resolved = resolveChangeIndicator(rows as Array<{ changeIndicator?: string | null }>);
         break;
       case "status-driven":
-        resolved = resolveStatusDriven(
-          rows as Array<{ status: string; ayr: string }>,
-          statusArgs!,
-        );
+        resolved = resolveStatusDriven(rows as Array<{ status: string; ayr: string }>, statusArgs!);
         break;
       case "snapshot":
         resolved = resolveSnapshot(rows);

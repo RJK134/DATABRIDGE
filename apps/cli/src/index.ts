@@ -72,9 +72,7 @@ async function main(): Promise<number> {
       const { exitCode } = await runAuditCmd(args);
       return exitCode;
     } catch (err) {
-      process.stderr.write(
-        `databridge audit: ${(err as Error).message}\n\n${AUDIT_HELP}`,
-      );
+      process.stderr.write(`databridge audit: ${(err as Error).message}\n\n${AUDIT_HELP}`);
       return 2;
     }
   }
@@ -88,5 +86,5 @@ main().then(
   (err) => {
     process.stderr.write(`databridge: ${(err as Error).stack ?? err}\n`);
     process.exit(1);
-  },
+  }
 );

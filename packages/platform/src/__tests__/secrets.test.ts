@@ -2,10 +2,7 @@
  * Secrets adapter tests for EnvSecretsAdapter + MemorySecretsAdapter.
  */
 import { describe, it, expect } from "vitest";
-import {
-  EnvSecretsAdapter,
-  MemorySecretsAdapter,
-} from "../adapters/secrets-impls.js";
+import { EnvSecretsAdapter, MemorySecretsAdapter } from "../adapters/secrets-impls.js";
 
 describe("MemorySecretsAdapter", () => {
   it("get/set/list round-trip", async () => {

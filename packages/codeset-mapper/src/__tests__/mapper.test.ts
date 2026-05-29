@@ -103,9 +103,19 @@ describe("translateCode", () => {
         { sourceCode: "X", targetCode: "T2", activeFrom: "2025-01-01" },
       ],
     });
-    const a = translateCode(reg2, { sourceCodelist: "S", targetCodelist: "T", sourceCode: "X", at: "2023-06-01" });
+    const a = translateCode(reg2, {
+      sourceCodelist: "S",
+      targetCodelist: "T",
+      sourceCode: "X",
+      at: "2023-06-01",
+    });
     expect(a.targetCode).toBe("T1");
-    const b = translateCode(reg2, { sourceCodelist: "S", targetCodelist: "T", sourceCode: "X", at: "2026-01-01" });
+    const b = translateCode(reg2, {
+      sourceCodelist: "S",
+      targetCodelist: "T",
+      sourceCode: "X",
+      at: "2026-01-01",
+    });
     expect(b.targetCode).toBe("T2");
   });
 });

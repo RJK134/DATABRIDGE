@@ -8,11 +8,7 @@
  *   - {@link suggestionsToMd} — pretty-print a batch of suggestions.
  */
 export * from "./types.js";
-export {
-  loadBundledCorpus,
-  buildFlatIndex,
-  type FlatIndexEntry,
-} from "./corpus-loader.js";
+export { loadBundledCorpus, buildFlatIndex, type FlatIndexEntry } from "./corpus-loader.js";
 export { SchemaSuggester, tokens, jaccard } from "./suggester.js";
 export {
   MemoryLearningStore,
@@ -51,7 +47,7 @@ export function suggestionsToMd(results: readonly SuggestionResult[]): string {
   for (const r of results) {
     if (isFieldSuggestion(r)) {
       lines.push(
-        `| \`${r.sourceColumn}\` | \`${r.canonical}\` | ${r.entity} | ${r.score.toFixed(2)} | ${r.rationale} |`,
+        `| \`${r.sourceColumn}\` | \`${r.canonical}\` | ${r.entity} | ${r.score.toFixed(2)} | ${r.rationale} |`
       );
     } else {
       lines.push(`| \`${r.sourceColumn}\` | _(none)_ | — | — | ${r.reason} |`);

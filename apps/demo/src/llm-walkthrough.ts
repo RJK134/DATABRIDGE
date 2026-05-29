@@ -63,7 +63,8 @@ export const SCRIPTED_PROMPTS: readonly ScriptedPrompt[] = [
       id: "contacts-ferpa-mismatch",
       entity: "Contact",
       name: "FERPA withheld but not opted out",
-      description: "Salesforce Contacts whose hed__FERPA__c is Withheld but HasOptedOutOfEmail is false.",
+      description:
+        "Salesforce Contacts whose hed__FERPA__c is Withheld but HasOptedOutOfEmail is false.",
       severity: "ERROR",
       tags: ["crm", "privacy"],
       messageTemplate: "Contact {{Id}} has FERPA Withheld but is not opted out",
@@ -277,9 +278,21 @@ function buildNarrativeMock(): DeterministicMockProvider {
       top_cluster_root_cause:
         "The dominant cluster is consent mismatch in the Salesforce Contact entity, driven by a stale marketing list left in place after the FERPA flag was raised.",
       recommended_next_actions: [
-        { owner: "Registry", action: "Resolve the SITS HUSID gaps before the next HESA submission.", priority: 1 },
-        { owner: "CRM admin", action: "Reconcile FERPA flags with marketing-list membership.", priority: 1 },
-        { owner: "Banner admin", action: "Retire the XX_LEGACY major and update STVMAJR.", priority: 2 },
+        {
+          owner: "Registry",
+          action: "Resolve the SITS HUSID gaps before the next HESA submission.",
+          priority: 1,
+        },
+        {
+          owner: "CRM admin",
+          action: "Reconcile FERPA flags with marketing-list membership.",
+          priority: 1,
+        },
+        {
+          owner: "Banner admin",
+          action: "Retire the XX_LEGACY major and update STVMAJR.",
+          priority: 2,
+        },
       ],
     },
   });

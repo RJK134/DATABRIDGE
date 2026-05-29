@@ -3,31 +3,156 @@
   "section": "§6",
   "summary": "Identity and demographics. Banner splits across SPRIDEN, SPBPERS, GOREMAL, SPRADDR, SPRTELE, GORDISA, GORPRAC. SITS splits across INS_MST, INS_STU, INS_ADD.",
   "fields": [
-    { "canonical": "id", "banner": "PIDM (altIds.banner.pidm)", "sits": "mst_code (altIds.sits.mst)", "notes": "Generate at canonical insert" },
-    { "canonical": "publicId", "banner": "SPRIDEN.SPRIDEN_ID", "sits": "INS_STU.stu_code", "notes": "Current row only on Banner side" },
-    { "canonical": "husid", "banner": "GORADID where type=HESA", "sits": "INS_STU.stu_hesa", "notes": "UK HESA-only" },
-    { "canonical": "surname", "banner": "SPRIDEN.SPRIDEN_LAST_NAME", "sits": "INS_MST.mst_surn", "notes": "Upper-case at boundary" },
-    { "canonical": "surnameDisplay", "banner": "SPRIDEN.SPRIDEN_LAST_NAME", "sits": "INS_MST.mst_surn", "notes": "Preserve original case" },
-    { "canonical": "firstName", "banner": "SPRIDEN.SPRIDEN_FIRST_NAME", "sits": "INS_MST.mst_fnm1", "notes": "" },
-    { "canonical": "middleName", "banner": "SPRIDEN.SPRIDEN_MI", "sits": "INS_MST.mst_fnm2", "notes": "SITS supports up to 3 — concat fnm2+fnm3" },
+    {
+      "canonical": "id",
+      "banner": "PIDM (altIds.banner.pidm)",
+      "sits": "mst_code (altIds.sits.mst)",
+      "notes": "Generate at canonical insert"
+    },
+    {
+      "canonical": "publicId",
+      "banner": "SPRIDEN.SPRIDEN_ID",
+      "sits": "INS_STU.stu_code",
+      "notes": "Current row only on Banner side"
+    },
+    {
+      "canonical": "husid",
+      "banner": "GORADID where type=HESA",
+      "sits": "INS_STU.stu_hesa",
+      "notes": "UK HESA-only"
+    },
+    {
+      "canonical": "surname",
+      "banner": "SPRIDEN.SPRIDEN_LAST_NAME",
+      "sits": "INS_MST.mst_surn",
+      "notes": "Upper-case at boundary"
+    },
+    {
+      "canonical": "surnameDisplay",
+      "banner": "SPRIDEN.SPRIDEN_LAST_NAME",
+      "sits": "INS_MST.mst_surn",
+      "notes": "Preserve original case"
+    },
+    {
+      "canonical": "firstName",
+      "banner": "SPRIDEN.SPRIDEN_FIRST_NAME",
+      "sits": "INS_MST.mst_fnm1",
+      "notes": ""
+    },
+    {
+      "canonical": "middleName",
+      "banner": "SPRIDEN.SPRIDEN_MI",
+      "sits": "INS_MST.mst_fnm2",
+      "notes": "SITS supports up to 3 — concat fnm2+fnm3"
+    },
     { "canonical": "title", "banner": "SPRIDEN_PREFIX", "sits": "INS_MST.mst_titl", "notes": "" },
-    { "canonical": "dateOfBirth", "banner": "SPBPERS.SPBPERS_BIRTH_DATE", "sits": "INS_MST.mst_dob", "notes": "" },
-    { "canonical": "legalSex", "banner": "SPBPERS.SPBPERS_SEX", "sits": "INS_MST.mst_gend", "notes": "Map M/F/N ↔ SITS M/F/N/I" },
-    { "canonical": "genderIdentity", "banner": "GOBGEII.GOBGEII_GNDR_CODE", "sits": "INS_STU.stu_gidn", "notes": "HESA GENDERID" },
-    { "canonical": "sexualOrientation", "banner": null, "sits": "INS_STU.stu_sexo", "notes": "HESA SEXORT — Banner extension only" },
-    { "canonical": "religion", "banner": "SPBPERS.SPBPERS_RELG_CODE", "sits": "INS_STU.stu_relg", "notes": "HESA RELBLF in UK" },
-    { "canonical": "ethnicity", "banner": "SPBPERS.SPBPERS_ETHN_CODE + GORPRAC.GORPRAC_RACE_CDE", "sits": "INS_STU.stu_ethn", "notes": "US/UK schemes differ — see §14" },
-    { "canonical": "nationality", "banner": "SPBPERS.SPBPERS_CITZ_CODE", "sits": "INS_MST.mst_natn / INS_STU.stu_natn", "notes": "" },
-    { "canonical": "secondNationality", "banner": null, "sits": "INS_MST.mst_natc", "notes": "Banner extension only" },
-    { "canonical": "domicile", "banner": "derived from SPRADDR permanent type", "sits": "INS_STU.stu_domc", "notes": "Canonical = HESA DOMICILE" },
-    { "canonical": "disability", "banner": "GORDISA + SOTRLBL", "sits": "INS_STU.stu_diss", "notes": "HESA DISABLE" },
-    { "canonical": "feeStatus", "banner": "derived from SGBSTDN.SGBSTDN_RESD_CODE", "sits": "INS_STU.stu_fees / INS_SCE.sce_fees", "notes": "UK Home/EU/Overseas vs US in/out-state" },
-    { "canonical": "dateOfDeath", "banner": "SPBPERS.SPBPERS_DEAD_DATE", "sits": "INS_MST.mst_dod", "notes": "" },
-    { "canonical": "confidentialFlag", "banner": "SPBPERS.SPBPERS_CONFIDENTIAL_IND", "sits": "INS_STU.stu_dptr", "notes": "FERPA vs UK GDPR — not equivalent" },
-    { "canonical": "primaryEmail", "banner": "GOREMAL where PREFERRED_IND='Y'", "sits": "INS_STU.stu_email", "notes": "" },
-    { "canonical": "currentMailingAddress", "banner": "SPRADDR where ATYP_CODE='MA' and current", "sits": "INS_ADD where add_styp='C'", "notes": "" },
-    { "canonical": "permanentHomeAddress", "banner": "SPRADDR where ATYP_CODE='PR'", "sits": "INS_ADD where add_styp='H'", "notes": "" },
-    { "canonical": "termAddress", "banner": "SPRADDR where ATYP_CODE in ('1','LO')", "sits": "INS_ADD where add_styp='T'", "notes": "" },
-    { "canonical": "mobilePhone", "banner": "SPRTELE where TELE_CODE='MOBI'", "sits": "INS_ADD.add_mob", "notes": "" }
+    {
+      "canonical": "dateOfBirth",
+      "banner": "SPBPERS.SPBPERS_BIRTH_DATE",
+      "sits": "INS_MST.mst_dob",
+      "notes": ""
+    },
+    {
+      "canonical": "legalSex",
+      "banner": "SPBPERS.SPBPERS_SEX",
+      "sits": "INS_MST.mst_gend",
+      "notes": "Map M/F/N ↔ SITS M/F/N/I"
+    },
+    {
+      "canonical": "genderIdentity",
+      "banner": "GOBGEII.GOBGEII_GNDR_CODE",
+      "sits": "INS_STU.stu_gidn",
+      "notes": "HESA GENDERID"
+    },
+    {
+      "canonical": "sexualOrientation",
+      "banner": null,
+      "sits": "INS_STU.stu_sexo",
+      "notes": "HESA SEXORT — Banner extension only"
+    },
+    {
+      "canonical": "religion",
+      "banner": "SPBPERS.SPBPERS_RELG_CODE",
+      "sits": "INS_STU.stu_relg",
+      "notes": "HESA RELBLF in UK"
+    },
+    {
+      "canonical": "ethnicity",
+      "banner": "SPBPERS.SPBPERS_ETHN_CODE + GORPRAC.GORPRAC_RACE_CDE",
+      "sits": "INS_STU.stu_ethn",
+      "notes": "US/UK schemes differ — see §14"
+    },
+    {
+      "canonical": "nationality",
+      "banner": "SPBPERS.SPBPERS_CITZ_CODE",
+      "sits": "INS_MST.mst_natn / INS_STU.stu_natn",
+      "notes": ""
+    },
+    {
+      "canonical": "secondNationality",
+      "banner": null,
+      "sits": "INS_MST.mst_natc",
+      "notes": "Banner extension only"
+    },
+    {
+      "canonical": "domicile",
+      "banner": "derived from SPRADDR permanent type",
+      "sits": "INS_STU.stu_domc",
+      "notes": "Canonical = HESA DOMICILE"
+    },
+    {
+      "canonical": "disability",
+      "banner": "GORDISA + SOTRLBL",
+      "sits": "INS_STU.stu_diss",
+      "notes": "HESA DISABLE"
+    },
+    {
+      "canonical": "feeStatus",
+      "banner": "derived from SGBSTDN.SGBSTDN_RESD_CODE",
+      "sits": "INS_STU.stu_fees / INS_SCE.sce_fees",
+      "notes": "UK Home/EU/Overseas vs US in/out-state"
+    },
+    {
+      "canonical": "dateOfDeath",
+      "banner": "SPBPERS.SPBPERS_DEAD_DATE",
+      "sits": "INS_MST.mst_dod",
+      "notes": ""
+    },
+    {
+      "canonical": "confidentialFlag",
+      "banner": "SPBPERS.SPBPERS_CONFIDENTIAL_IND",
+      "sits": "INS_STU.stu_dptr",
+      "notes": "FERPA vs UK GDPR — not equivalent"
+    },
+    {
+      "canonical": "primaryEmail",
+      "banner": "GOREMAL where PREFERRED_IND='Y'",
+      "sits": "INS_STU.stu_email",
+      "notes": ""
+    },
+    {
+      "canonical": "currentMailingAddress",
+      "banner": "SPRADDR where ATYP_CODE='MA' and current",
+      "sits": "INS_ADD where add_styp='C'",
+      "notes": ""
+    },
+    {
+      "canonical": "permanentHomeAddress",
+      "banner": "SPRADDR where ATYP_CODE='PR'",
+      "sits": "INS_ADD where add_styp='H'",
+      "notes": ""
+    },
+    {
+      "canonical": "termAddress",
+      "banner": "SPRADDR where ATYP_CODE in ('1','LO')",
+      "sits": "INS_ADD where add_styp='T'",
+      "notes": ""
+    },
+    {
+      "canonical": "mobilePhone",
+      "banner": "SPRTELE where TELE_CODE='MOBI'",
+      "sits": "INS_ADD.add_mob",
+      "notes": ""
+    }
   ]
 }

@@ -41,9 +41,76 @@ function seededRandom(seed: number): () => number {
   };
 }
 
-const FIRST_NAMES = ["Alice", "Bob", "Carol", "David", "Eve", "Frank", "Grace", "Henry", "Ivy", "Jack", "Kate", "Liam", "Mia", "Noah", "Olivia", "Pat", "Quinn", "Ruby", "Sam", "Tara", "Uma", "Vince", "Wendy", "Xander", "Yael", "Zara"];
-const LAST_NAMES = ["Smith", "Jones", "Williams", "Brown", "Taylor", "Davies", "Evans", "Wilson", "Thomas", "Roberts", "Johnson", "Lewis", "Walker", "Robinson", "Wood", "Thompson", "White", "Watson", "Jackson", "Wright", "Green", "Harris", "Cooper", "King", "Lee", "Martin"];
-const PROGRAMME_CODES = ["CS", "EE", "BUS", "HIST", "MATH", "BIO", "CHEM", "PHYS", "ECON", "LAW", "ENG", "MED"];
+const FIRST_NAMES = [
+  "Alice",
+  "Bob",
+  "Carol",
+  "David",
+  "Eve",
+  "Frank",
+  "Grace",
+  "Henry",
+  "Ivy",
+  "Jack",
+  "Kate",
+  "Liam",
+  "Mia",
+  "Noah",
+  "Olivia",
+  "Pat",
+  "Quinn",
+  "Ruby",
+  "Sam",
+  "Tara",
+  "Uma",
+  "Vince",
+  "Wendy",
+  "Xander",
+  "Yael",
+  "Zara",
+];
+const LAST_NAMES = [
+  "Smith",
+  "Jones",
+  "Williams",
+  "Brown",
+  "Taylor",
+  "Davies",
+  "Evans",
+  "Wilson",
+  "Thomas",
+  "Roberts",
+  "Johnson",
+  "Lewis",
+  "Walker",
+  "Robinson",
+  "Wood",
+  "Thompson",
+  "White",
+  "Watson",
+  "Jackson",
+  "Wright",
+  "Green",
+  "Harris",
+  "Cooper",
+  "King",
+  "Lee",
+  "Martin",
+];
+const PROGRAMME_CODES = [
+  "CS",
+  "EE",
+  "BUS",
+  "HIST",
+  "MATH",
+  "BIO",
+  "CHEM",
+  "PHYS",
+  "ECON",
+  "LAW",
+  "ENG",
+  "MED",
+];
 const CAMPUSES_BANNER = ["MAIN", "NORTH", "WEST", "BUSINESS", "DISTANCE", "OVS"];
 const CAMPUSES_SITS = ["M", "N", "W", "B", "D", "O"];
 const MODES_BANNER = ["FT", "PT", "SW", "OL", "BL", "DR"];
@@ -155,7 +222,9 @@ function buildSitsFixture(): FixtureFile {
       feeStatus: ["01", "02", "03"][Math.floor(rnd() * 3)]!,
       ethnicity: ETHNICITIES[ethIdx]!,
       lastName: missingSurn ? null : name.last,
-      email: duplicateEmail ? "shared@uni.example" : `${name.first.toLowerCase()}.${name.last.toLowerCase()}.${i}@uni.example`,
+      email: duplicateEmail
+        ? "shared@uni.example"
+        : `${name.first.toLowerCase()}.${name.last.toLowerCase()}.${i}@uni.example`,
     };
     rows.push(row);
   }
@@ -196,12 +265,16 @@ function buildSalesforceFixture(): FixtureFile {
       FirstName: name.first,
       LastName: name.last,
       lastName: name.last,
-      Email: duplicateEmail ? "shared.contact@uni.example" : `${name.first.toLowerCase()}.${name.last.toLowerCase()}.${i}@uni.example`,
-      email: duplicateEmail ? "shared.contact@uni.example" : `${name.first.toLowerCase()}.${name.last.toLowerCase()}.${i}@uni.example`,
+      Email: duplicateEmail
+        ? "shared.contact@uni.example"
+        : `${name.first.toLowerCase()}.${name.last.toLowerCase()}.${i}@uni.example`,
+      email: duplicateEmail
+        ? "shared.contact@uni.example"
+        : `${name.first.toLowerCase()}.${name.last.toLowerCase()}.${i}@uni.example`,
       hed__Account__c: orphanAff ? null : `001Acc${String(i % 50).padStart(4, "0")}`,
       hed__Contact__c: sfid,
       hed__Program_Plan__c: `001PP${String(i % 80).padStart(4, "0")}`,
-      hed__Status__c: stalePlan ? "Current" : (i % 5 === 0 ? "Closed" : "Current"),
+      hed__Status__c: stalePlan ? "Current" : i % 5 === 0 ? "Closed" : "Current",
       hed__Course_Offering__c: orphanEnrol ? null : `001CO${String(i % 120).padStart(4, "0")}`,
       hed__FERPA__c: ferpaBug ? "Withheld" : "Granted",
       HasOptedOutOfEmail: ferpaBug ? false : true,
@@ -245,8 +318,12 @@ function buildDynamicsFixture(): FixtureFile {
       firstname: name.first,
       lastname: name.last,
       lastName: name.last,
-      emailaddress1: duplicateEmail ? "shared.contact@uni.example" : `${name.first.toLowerCase()}.${name.last.toLowerCase()}.${i}@uni.example`,
-      email: duplicateEmail ? "shared.contact@uni.example" : `${name.first.toLowerCase()}.${name.last.toLowerCase()}.${i}@uni.example`,
+      emailaddress1: duplicateEmail
+        ? "shared.contact@uni.example"
+        : `${name.first.toLowerCase()}.${name.last.toLowerCase()}.${i}@uni.example`,
+      email: duplicateEmail
+        ? "shared.contact@uni.example"
+        : `${name.first.toLowerCase()}.${name.last.toLowerCase()}.${i}@uni.example`,
       msdyn_studentid: i % 25 === 0 ? null : externalId,
       msdyn_studentprogramid: `sp-${String(i).padStart(6, "0")}`,
       msdyn_program: orphanSp ? null : `prog-${String(i % 60).padStart(4, "0")}`,

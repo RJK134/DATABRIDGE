@@ -21,7 +21,7 @@ export type FetchLike = (
     headers?: Record<string, string>;
     body?: string;
     signal?: AbortSignal;
-  },
+  }
 ) => Promise<{
   ok: boolean;
   status: number;
@@ -82,9 +82,7 @@ export class DataverseClient {
   private readonly now: () => number;
 
   constructor(private readonly opts: DataverseClientOptions) {
-    this.fetchImpl =
-      opts.fetchImpl ??
-      ((globalThis as { fetch?: FetchLike }).fetch as FetchLike);
+    this.fetchImpl = opts.fetchImpl ?? ((globalThis as { fetch?: FetchLike }).fetch as FetchLike);
     if (!this.fetchImpl) {
       throw new Error("DataverseClient: no fetch implementation available");
     }
@@ -111,7 +109,7 @@ export class DataverseClient {
     if (!resp.ok) {
       const text = await resp.text();
       throw new Error(
-        `dataverse: OAuth2 token request failed: ${resp.status} ${resp.statusText} — ${text}`,
+        `dataverse: OAuth2 token request failed: ${resp.status} ${resp.statusText} — ${text}`
       );
     }
     const json = (await resp.json()) as { access_token: string; expires_in?: number };
@@ -137,7 +135,7 @@ export class DataverseClient {
 
   private async doWithRetry<T>(url: string, accessToken: string): Promise<T> {
     let attempt = 0;
-    while (true) {
+    for (;;) {
       const resp = await this.fetchImpl(url, {
         method: "GET",
         headers: {
@@ -154,12 +152,11 @@ export class DataverseClient {
       if (!retryable || attempt >= this.maxRetries) {
         const text = await safeText(resp);
         throw new Error(
-          `dataverse: GET ${url} failed: ${resp.status} ${resp.statusText} — ${text}`,
+          `dataverse: GET ${url} failed: ${resp.status} ${resp.statusText} — ${text}`
         );
       }
       const retryAfter = parseRetryAfter(resp.headers.get("retry-after"));
-      const wait =
-        retryAfter ?? this.baseBackoffMs * Math.pow(2, attempt) * (0.5 + Math.random());
+      const wait = retryAfter ?? this.baseBackoffMs * Math.pow(2, attempt) * (0.5 + Math.random());
       this.opts.logger.warn("dataverse: retrying", {
         attempt: attempt + 1,
         status: resp.status,
@@ -173,7 +170,7 @@ export class DataverseClient {
   /** Issue an OData query (single page). */
   async query<T = Record<string, unknown>>(
     entitySet: string,
-    options: { select?: string; filter?: string; top?: number } = {},
+    options: { select?: string; filter?: string; top?: number } = {}
   ): Promise<ODataPage<T>> {
     const parts: string[] = [];
     if (options.select) parts.push(`$select=${options.select}`);
@@ -185,7 +182,7 @@ export class DataverseClient {
 
   async *queryAll<T = Record<string, unknown>>(
     entitySet: string,
-    options: { select?: string; filter?: string } = {},
+    options: { select?: string; filter?: string } = {}
   ): AsyncIterable<ODataPage<T>> {
     let page = await this.query<T>(entitySet, options);
     yield page;
@@ -203,7 +200,7 @@ export class DataverseClient {
   async getRecord<T = Record<string, unknown>>(
     entitySet: string,
     id: string,
-    select?: string,
+    select?: string
   ): Promise<T | null> {
     const qs = select ? `?$select=${select}` : "";
     try {

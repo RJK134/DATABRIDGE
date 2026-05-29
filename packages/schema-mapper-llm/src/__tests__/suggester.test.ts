@@ -12,7 +12,9 @@ const explanation = (chosen: string, confidence = 0.9) => ({
   confidence,
 });
 
-function buildSuggester(overrides: Partial<ConstructorParameters<typeof LlmAssistedSuggester>[0]> = {}) {
+function buildSuggester(
+  overrides: Partial<ConstructorParameters<typeof LlmAssistedSuggester>[0]> = {}
+) {
   const deterministic = new SchemaSuggester();
   const provider = new DeterministicMockProvider({
     entries: [
@@ -99,7 +101,7 @@ describe("LlmAssistedSuggester — tie-breaker path", () => {
     });
     const consulted = results.filter(
       (r): r is LlmAssistedFieldSuggestion =>
-        (r as LlmAssistedFieldSuggestion).llmConsulted === true,
+        (r as LlmAssistedFieldSuggestion).llmConsulted === true
     );
     expect(consulted).toHaveLength(suggester.getLlmCallCount());
     for (const r of consulted) expect(r.provenance).toBeDefined();

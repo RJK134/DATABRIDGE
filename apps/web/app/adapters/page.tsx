@@ -30,8 +30,8 @@ export default async function AdaptersPage() {
       {adapters.length === 0 ? (
         <p>
           The API gateway is not reachable at{" "}
-          <code>{process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001"}</code>.
-          Start <code>apps/api</code> in a separate shell.
+          <code>{process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001"}</code>. Start{" "}
+          <code>apps/api</code> in a separate shell.
         </p>
       ) : (
         <table style={{ borderCollapse: "collapse", width: "100%", maxWidth: 900 }}>

@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * QualificationAwarded — a qualification conferred on a student at the

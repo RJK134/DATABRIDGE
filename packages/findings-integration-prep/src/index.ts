@@ -73,7 +73,14 @@ export function generateIntegrationPrepReport(args: {
   }
 
   const findings: IntegrationFinding[] = [];
-  const totals = { source: 0, target: args.target.length, create: 0, update: 0, reject: 0, skip: 0 };
+  const totals = {
+    source: 0,
+    target: args.target.length,
+    create: 0,
+    update: 0,
+    reject: 0,
+    skip: 0,
+  };
 
   for (const s of args.source) {
     totals.source += 1;

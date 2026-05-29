@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { ProvenanceFieldsZ } from './provenance.js';
+import { z } from "zod";
+import { ProvenanceFieldsZ } from "./provenance.js";
 
 /**
  * Programme — the named award-bearing course of study (e.g. "BSc Computer
@@ -19,7 +19,10 @@ export const ProgrammeZ = z
     /** Department / school owning the programme. */
     owningDepartment: z.string().optional(),
     /** HECoS subject code (6 digits) of primary subject. */
-    primaryHecos: z.string().regex(/^\d{6}$/).optional(),
+    primaryHecos: z
+      .string()
+      .regex(/^\d{6}$/)
+      .optional(),
     attributes: z.record(z.unknown()).optional(),
   })
   .merge(ProvenanceFieldsZ);
@@ -37,7 +40,10 @@ export const ProgrammeEnrolmentZ = z
     /** Enrolment start date (YYYY-MM-DD). */
     startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     /** Enrolment end date (YYYY-MM-DD), if completed/withdrawn. */
-    endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    endDate: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
     /** ACTIVE | WITHDRAWN | TRANSFERRED | INTERCALATING | COMPLETED | DORMANT. */
     status: z.string(),
     /** FULL_TIME | PART_TIME | SANDWICH | DL | OTHER. */

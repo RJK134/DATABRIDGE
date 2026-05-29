@@ -52,8 +52,16 @@ describe("SalesforceClient — token acquisition", () => {
       logger: makeLogger(),
       signal: new AbortController().signal,
       fetchImpl: buildFetch([
-        jsonResp(200, { access_token: "t1", instance_url: "https://acme.my.salesforce.com", expires_in: 70 }),
-        jsonResp(200, { access_token: "t2", instance_url: "https://acme.my.salesforce.com", expires_in: 3600 }),
+        jsonResp(200, {
+          access_token: "t1",
+          instance_url: "https://acme.my.salesforce.com",
+          expires_in: 70,
+        }),
+        jsonResp(200, {
+          access_token: "t2",
+          instance_url: "https://acme.my.salesforce.com",
+          expires_in: 3600,
+        }),
       ]),
       maxRetries: 2,
       baseBackoffMs: 1,
@@ -69,9 +77,7 @@ describe("SalesforceClient — token acquisition", () => {
   });
 
   it("throws when OAuth returns a non-2xx response", async () => {
-    const c = client([
-      { ok: false, status: 401, statusText: "Unauthorized", body: "bad creds" },
-    ]);
+    const c = client([{ ok: false, status: 401, statusText: "Unauthorized", body: "bad creds" }]);
     await expect(c.getAccessToken()).rejects.toThrow(/OAuth2 token request failed/);
   });
 });
@@ -79,7 +85,11 @@ describe("SalesforceClient — token acquisition", () => {
 describe("SalesforceClient — query", () => {
   it("executes SOQL and returns the first page", async () => {
     const c = client([
-      jsonResp(200, { access_token: "t", instance_url: "https://acme.my.salesforce.com", expires_in: 3600 }),
+      jsonResp(200, {
+        access_token: "t",
+        instance_url: "https://acme.my.salesforce.com",
+        expires_in: 3600,
+      }),
       jsonResp(200, {
         totalSize: 2,
         done: true,
@@ -96,7 +106,11 @@ describe("SalesforceClient — query", () => {
 
   it("queryAll iterates pages via nextRecordsUrl", async () => {
     const c = client([
-      jsonResp(200, { access_token: "t", instance_url: "https://acme.my.salesforce.com", expires_in: 3600 }),
+      jsonResp(200, {
+        access_token: "t",
+        instance_url: "https://acme.my.salesforce.com",
+        expires_in: 3600,
+      }),
       jsonResp(200, {
         totalSize: 4,
         done: false,
@@ -120,7 +134,11 @@ describe("SalesforceClient — query", () => {
 describe("SalesforceClient — describe", () => {
   it("returns the describe payload for an SObject", async () => {
     const c = client([
-      jsonResp(200, { access_token: "t", instance_url: "https://acme.my.salesforce.com", expires_in: 3600 }),
+      jsonResp(200, {
+        access_token: "t",
+        instance_url: "https://acme.my.salesforce.com",
+        expires_in: 3600,
+      }),
       jsonResp(200, {
         name: "Contact",
         fields: [
@@ -138,7 +156,11 @@ describe("SalesforceClient — describe", () => {
 describe("SalesforceClient — retry behaviour", () => {
   it("retries on 503 and eventually succeeds", async () => {
     const c = client([
-      jsonResp(200, { access_token: "t", instance_url: "https://acme.my.salesforce.com", expires_in: 3600 }),
+      jsonResp(200, {
+        access_token: "t",
+        instance_url: "https://acme.my.salesforce.com",
+        expires_in: 3600,
+      }),
       { ok: false, status: 503, statusText: "Busy", body: "{}", headers: { "retry-after": "0" } },
       jsonResp(200, { totalSize: 0, done: true, records: [] }),
     ]);
@@ -148,7 +170,11 @@ describe("SalesforceClient — retry behaviour", () => {
 
   it("gives up after maxRetries non-2xx responses", async () => {
     const c = client([
-      jsonResp(200, { access_token: "t", instance_url: "https://acme.my.salesforce.com", expires_in: 3600 }),
+      jsonResp(200, {
+        access_token: "t",
+        instance_url: "https://acme.my.salesforce.com",
+        expires_in: 3600,
+      }),
       { ok: false, status: 503, statusText: "Busy", body: "down", headers: { "retry-after": "0" } },
       { ok: false, status: 503, statusText: "Busy", body: "down", headers: { "retry-after": "0" } },
       { ok: false, status: 503, statusText: "Busy", body: "down", headers: { "retry-after": "0" } },
@@ -158,7 +184,11 @@ describe("SalesforceClient — retry behaviour", () => {
 
   it("returns null from getRecord on a 404", async () => {
     const c = client([
-      jsonResp(200, { access_token: "t", instance_url: "https://acme.my.salesforce.com", expires_in: 3600 }),
+      jsonResp(200, {
+        access_token: "t",
+        instance_url: "https://acme.my.salesforce.com",
+        expires_in: 3600,
+      }),
       { ok: false, status: 404, statusText: "Not Found", body: "[]" },
     ]);
     const row = await c.getRecord("Contact", "001missing");

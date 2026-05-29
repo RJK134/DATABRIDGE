@@ -32,10 +32,7 @@ const sits = (id: string, canonicalId?: string): PersonRecord => {
 
 describe("buildBidirectionalIndex", () => {
   it("groups paired Banner + SITS records under a shared canonicalId", () => {
-    const records: PersonRecord[] = [
-      banner("PIDM-1", "CAN-1"),
-      sits("STU-1", "CAN-1"),
-    ];
+    const records: PersonRecord[] = [banner("PIDM-1", "CAN-1"), sits("STU-1", "CAN-1")];
     const idx = buildBidirectionalIndex(records);
     expect(idx.byCanonical.size).toBe(1);
     expect(idx.byBanner.get("PIDM-1")?.sits).toBe("STU-1");

@@ -40,16 +40,14 @@ export const RESOURCE_TO_PK: Record<SupportedResource, string> = {
 export const RESOURCE_TO_SELECT: Record<SupportedResource, string> = {
   Contact:
     "Id, FirstName, LastName, Email, Birthdate, AccountId, hed__Primary_Affiliation__c, hed__Citizenship__c, hed__FERPA__c",
-  Account:
-    "Id, Name, Type, RecordTypeId, hed__Education_Level__c",
+  Account: "Id, Name, Type, RecordTypeId, hed__Education_Level__c",
   ProgramPlan:
     "Id, Name, hed__Account__c, hed__Status__c, hed__Start_Date__c, hed__End_Date__c, hed__Award_Type__c",
   Affiliation:
     "Id, Name, hed__Contact__c, hed__Account__c, hed__Status__c, hed__Role__c, hed__StartDate__c, hed__EndDate__c, hed__Primary__c",
   CourseEnrollment:
     "Id, Name, hed__Contact__c, hed__Course_Offering__c, hed__Status__c, hed__Grade__c, hed__Credits_Earned__c, hed__Program_Plan__c",
-  Course:
-    "Id, Name, hed__Account__c, hed__Course_ID__c, hed__Credit_Hours__c, hed__Description__c",
+  Course: "Id, Name, hed__Account__c, hed__Course_ID__c, hed__Credit_Hours__c, hed__Description__c",
 };
 
 export function isSupportedResource(name: string): name is SupportedResource {

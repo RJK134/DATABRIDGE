@@ -26,7 +26,7 @@ import type { AuditRecord, AuditStoreLike, AuditStatus } from "./audit-store.js"
 export interface PgPoolLike {
   query<T = Record<string, unknown>>(
     sql: string,
-    params?: ReadonlyArray<unknown>,
+    params?: ReadonlyArray<unknown>
   ): Promise<{ rows: T[]; rowCount?: number | null }>;
   end?(): Promise<void>;
 }
@@ -51,7 +51,7 @@ async function loadPgPool(): Promise<PgPoolCtor> {
     throw new Error(
       "@databridge/api: optional peer 'pg' is not installed. " +
         "Install it in apps/api or unset DATABASE_URL to fall back to the in-memory store.\n" +
-        `Underlying error: ${(err as Error).message}`,
+        `Underlying error: ${(err as Error).message}`
     );
   }
 }
@@ -103,8 +103,7 @@ export class PgAuditStore implements AuditStoreLike {
     if (this.pool) return this.pool;
     const Pool = await loadPgPool();
     this.pool = new Pool({
-      connectionString:
-        this.opts.connectionString ?? process.env["DATABASE_URL"],
+      connectionString: this.opts.connectionString ?? process.env["DATABASE_URL"],
     });
     return this.pool;
   }
@@ -120,9 +119,7 @@ export class PgAuditStore implements AuditStoreLike {
     this.schemaEnsured = true;
   }
 
-  async create(
-    record: Omit<AuditRecord, "createdAt" | "updatedAt">,
-  ): Promise<AuditRecord> {
+  async create(record: Omit<AuditRecord, "createdAt" | "updatedAt">): Promise<AuditRecord> {
     await this.ensureSchema();
     const pool = await this.getPool();
     const now = new Date().toISOString();
@@ -138,7 +135,7 @@ export class PgAuditStore implements AuditStoreLike {
         now,
         record.report ? JSON.stringify(record.report) : null,
         record.error ?? null,
-      ],
+      ]
     );
     return {
       ...record,
@@ -149,7 +146,7 @@ export class PgAuditStore implements AuditStoreLike {
 
   async update(
     auditId: string,
-    patch: Partial<Omit<AuditRecord, "auditId" | "createdAt">>,
+    patch: Partial<Omit<AuditRecord, "auditId" | "createdAt">>
   ): Promise<AuditRecord | undefined> {
     await this.ensureSchema();
     const pool = await this.getPool();
@@ -190,7 +187,7 @@ export class PgAuditStore implements AuditStoreLike {
     const { rows } = await pool.query<Record<string, unknown>>(
       `SELECT audit_id, tenant_id, profile_id, status, created_at, updated_at, report, error
        FROM audits WHERE audit_id = $1`,
-      [auditId],
+      [auditId]
     );
     const row = rows[0];
     if (!row) return undefined;
@@ -210,7 +207,7 @@ export class PgAuditStore implements AuditStoreLike {
       `SELECT audit_id, tenant_id, profile_id, status, created_at, updated_at, report, error
        FROM audits ${where}
        ORDER BY created_at DESC`,
-      params,
+      params
     );
     return rows.map(rowToRecord);
   }
@@ -242,12 +239,8 @@ function rowToRecord(row: Record<string, unknown>): AuditRecord {
     status: String(row["status"]) as AuditStatus,
     createdAt,
     updatedAt,
-    ...(report !== null && report !== undefined
-      ? { report: parseReport(report) }
-      : {}),
-    ...(errorVal !== null && errorVal !== undefined
-      ? { error: String(errorVal) }
-      : {}),
+    ...(report !== null && report !== undefined ? { report: parseReport(report) } : {}),
+    ...(errorVal !== null && errorVal !== undefined ? { error: String(errorVal) } : {}),
   };
   return record;
 }

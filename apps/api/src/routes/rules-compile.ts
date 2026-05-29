@@ -50,7 +50,7 @@ const CompileBodyZ = z.object({
             field: z.string(),
             type: z.string().optional(),
             codelistId: z.string().optional(),
-          }),
+          })
         )
         .max(2_000),
     })
@@ -61,7 +61,7 @@ const CompileBodyZ = z.object({
       z.object({
         match: z.string().min(1).max(500),
         response: z.unknown(),
-      }),
+      })
     )
     .max(50)
     .optional(),

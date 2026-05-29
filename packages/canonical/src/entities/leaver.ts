@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * Leaver — a student who has left the institution. HESA Leaver entity:

@@ -40,11 +40,16 @@ const DUPLICATE_EMAIL: FnAuditRule = {
   enabledByDefault: true,
   evaluate(input, context?: { seenEmails?: Set<string> }) {
     const r = rec(input);
-    const email = typeof r["emailaddress1"] === "string" ? (r["emailaddress1"] as string).trim().toLowerCase() : "";
+    const email =
+      typeof r["emailaddress1"] === "string"
+        ? (r["emailaddress1"] as string).trim().toLowerCase()
+        : "";
     if (!email) return pass();
     if (context?.seenEmails) {
       if (context.seenEmails.has(email)) {
-        return fail(`Contact with duplicate emailaddress1 "${email}"`, { contactid: r["contactid"] });
+        return fail(`Contact with duplicate emailaddress1 "${email}"`, {
+          contactid: r["contactid"],
+        });
       }
       context.seenEmails.add(email);
     }
@@ -66,7 +71,9 @@ const ORPHAN_STUDENT_PROGRAM: FnAuditRule = {
   evaluate(input) {
     const r = rec(input);
     if (!r["msdyn_program"]) {
-      return fail(`StudentProgram ${String(r["msdyn_studentprogramid"] ?? "<unknown>")} has no programme link`);
+      return fail(
+        `StudentProgram ${String(r["msdyn_studentprogramid"] ?? "<unknown>")} has no programme link`
+      );
     }
     return pass();
   },
@@ -131,7 +138,9 @@ const COURSEINSTANCE_NO_COURSE: FnAuditRule = {
   evaluate(input) {
     const r = rec(input);
     if (!r["msdyn_course"]) {
-      return fail(`CourseInstance ${String(r["msdyn_courseinstanceid"] ?? "<unknown>")} has no parent course`);
+      return fail(
+        `CourseInstance ${String(r["msdyn_courseinstanceid"] ?? "<unknown>")} has no parent course`
+      );
     }
     return pass();
   },
@@ -154,9 +163,7 @@ const PRIVACY_MISMATCH: FnAuditRule = {
     if (!doNotBulk && !doNotEmail) return pass();
     const id = String(r["contactid"] ?? "");
     if (context?.contactsInMarketingList?.has(id)) {
-      return fail(
-        `Contact ${id} has email opt-out flags but is still on a marketing list`,
-      );
+      return fail(`Contact ${id} has email opt-out flags but is still on a marketing list`);
     }
     return pass();
   },
@@ -200,7 +207,7 @@ const STUDENTPROGRAM_INACTIVE_PROGRAM: FnAuditRule = {
     const status = context?.programStatus?.[prog];
     if (status !== undefined && status !== 1 && status !== "1") {
       return fail(
-        `StudentProgram ${String(r["msdyn_studentprogramid"] ?? "")} references inactive Program ${prog} (status ${status})`,
+        `StudentProgram ${String(r["msdyn_studentprogramid"] ?? "")} references inactive Program ${prog} (status ${status})`
       );
     }
     return pass();

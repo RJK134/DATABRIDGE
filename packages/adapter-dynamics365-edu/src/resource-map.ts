@@ -52,8 +52,7 @@ export const RESOURCE_TO_SELECT: Record<SupportedResource, string> = {
   Account: "accountid,name,accountclassificationcode,statecode",
   Program:
     "msdyn_programid,msdyn_name,msdyn_programstatus,msdyn_startdate,msdyn_enddate,msdyn_account",
-  CourseInstance:
-    "msdyn_courseinstanceid,msdyn_name,msdyn_course,msdyn_startdate,msdyn_enddate",
+  CourseInstance: "msdyn_courseinstanceid,msdyn_name,msdyn_course,msdyn_startdate,msdyn_enddate",
   StudentProgram:
     "msdyn_studentprogramid,msdyn_student,msdyn_program,msdyn_status,msdyn_startdate,msdyn_enddate",
   Course: "msdyn_courseid,msdyn_name,msdyn_account,msdyn_creditpoints",

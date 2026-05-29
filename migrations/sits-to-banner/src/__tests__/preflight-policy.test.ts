@@ -1,8 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  SITS_TO_BANNER_PREFLIGHT_POLICY,
-  evaluatePreFlightPolicy,
-} from "../preflight-policy.js";
+import { SITS_TO_BANNER_PREFLIGHT_POLICY, evaluatePreFlightPolicy } from "../preflight-policy.js";
 
 const fullCoverage = (): Record<string, number> => {
   const m: Record<string, number> = {};

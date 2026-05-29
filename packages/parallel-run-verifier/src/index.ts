@@ -87,7 +87,7 @@ function isBlank(v: unknown): boolean {
 export function verifyCanonical(
   aRecords: CanonicalRecord[],
   bRecords: CanonicalRecord[],
-  options: VerifyOptions = {},
+  options: VerifyOptions = {}
 ): VerificationReport {
   const aIdx = index(aRecords);
   const bIdx = index(bRecords);
@@ -243,7 +243,7 @@ function defaultEquals(a: unknown, b: unknown): boolean {
 export function diffsToCsv(diffs: readonly FieldDiff[]): string {
   const head = "entity,id,field,status,a,b";
   const body = diffs.map((d) =>
-    [d.entity, d.id, d.field, d.status, csvCell(d.a), csvCell(d.b)].join(","),
+    [d.entity, d.id, d.field, d.status, csvCell(d.a), csvCell(d.b)].join(",")
   );
   return [head, ...body].join("\n");
 }

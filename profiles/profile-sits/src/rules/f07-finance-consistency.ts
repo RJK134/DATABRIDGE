@@ -22,7 +22,8 @@ export const F07_finance_consistency: AuditRule[] = [
               SELECT 1 FROM SFE WHERE SFE_SRSC = SRS_CODE AND SFE_TENT = :tenantId
             )
             AND SRS_TENT = :tenantId`,
-    messageTemplate: "Active enrolment {{subject_id}} (student {{student_id}}) has no fee liability record"
+    messageTemplate:
+      "Active enrolment {{subject_id}} (student {{student_id}}) has no fee liability record",
   },
   {
     id: "F07-02",
@@ -38,6 +39,7 @@ export const F07_finance_consistency: AuditRule[] = [
            FROM SFE
           WHERE SFE_AMNT < 0
             AND SFE_TENT = :tenantId`,
-    messageTemplate: "Fee record {{subject_id}} on enrolment {{enrolment_id}} has negative amount: {{amount}}"
-  }
+    messageTemplate:
+      "Fee record {{subject_id}} on enrolment {{enrolment_id}} has negative amount: {{amount}}",
+  },
 ];

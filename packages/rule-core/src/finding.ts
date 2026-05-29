@@ -66,24 +66,21 @@ export interface AuditFinding {
 }
 
 /** Factory — creates an AuditFinding from a SQL rule row. */
-export function findingFromSqlRow(
-  params: {
-    ruleId: string;
-    ruleName: string;
-    severity: RuleSeverity;
-    entityType: string;
-    row: Record<string, unknown>;
-    messageTemplate: string;
-    tenantId: string;
-    sourceSystem?: string;
-    nativeKeys?: Record<string, string | number>;
-    ruleProvenance?: RuleProvenance;
-    runId?: string;
-  }
-): AuditFinding {
-  const message = params.messageTemplate.replace(
-    /\{\{(\w+)\}\}/g,
-    (_, key) => String(params.row[key] ?? "")
+export function findingFromSqlRow(params: {
+  ruleId: string;
+  ruleName: string;
+  severity: RuleSeverity;
+  entityType: string;
+  row: Record<string, unknown>;
+  messageTemplate: string;
+  tenantId: string;
+  sourceSystem?: string;
+  nativeKeys?: Record<string, string | number>;
+  ruleProvenance?: RuleProvenance;
+  runId?: string;
+}): AuditFinding {
+  const message = params.messageTemplate.replace(/\{\{(\w+)\}\}/g, (_, key) =>
+    String(params.row[key] ?? "")
   );
 
   const finding: AuditFinding = {

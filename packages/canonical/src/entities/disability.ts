@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * Disability — record of a student's declared disability (HESA Data Futures
@@ -13,7 +13,10 @@ export const DisabilityZ = z.object({
   /** HESA DISABLE code (00 = no known disability, 51..58 = specific types). */
   disableCode: z.string(),
   /** Date the disability was declared. */
-  declaredDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  declaredDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
   /** HESA DISALL — allowance received indicator. */
   allowanceReceived: z.boolean().optional(),
   /** Free-text accommodation description (PII — redact in logs). */

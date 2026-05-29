@@ -25,23 +25,11 @@
  */
 
 import { randomUUID } from "node:crypto";
-import type {
-  SourceAdapter,
-  AdapterContext,
-  SampledRow,
-} from "@databridge/adapter-spec";
+import type { SourceAdapter, AdapterContext, SampledRow } from "@databridge/adapter-spec";
 
-import type {
-  AuditRule,
-  FnAuditRule,
-  RuleEvalContext,
-} from "./types.js";
+import type { AuditRule, FnAuditRule, RuleEvalContext } from "./types.js";
 import type { AuditFinding } from "./finding.js";
-import {
-  RuleEngine,
-  type SqlExecutor,
-  type EngineRunSummary,
-} from "./engine.js";
+import { RuleEngine, type SqlExecutor, type EngineRunSummary } from "./engine.js";
 import {
   FnRuleRunner,
   type EntityRow,
@@ -152,7 +140,7 @@ function pickSubjectId(
   row: SampledRow,
   resource: string,
   pkMap: PrimaryKeyMap | undefined,
-  fallbackIndex: number,
+  fallbackIndex: number
 ): string {
   const explicitKey = pkMap?.[resource];
   const candidates: string[] = [];
@@ -171,7 +159,7 @@ function pickSubjectId(
 export class AuditEngine {
   constructor(
     private readonly sqlExecutor: SqlExecutor,
-    private readonly opts: AuditEngineOptions = {},
+    private readonly opts: AuditEngineOptions = {}
   ) {}
 
   async runAudit(args: RunAuditArgs): Promise<AuditReport> {
@@ -191,9 +179,7 @@ export class AuditEngine {
     const findingsBySeverity: Record<string, number> = {};
     const sink = (f: AuditFinding): void => {
       // Stamp tenantId here — FnRuleRunner leaves it as "" by contract.
-      const stamped: AuditFinding = f.tenantId
-        ? f
-        : { ...f, tenantId: args.tenantId };
+      const stamped: AuditFinding = f.tenantId ? f : { ...f, tenantId: args.tenantId };
       findings.push(stamped);
       const sev = stamped.severity;
       findingsBySeverity[sev] = (findingsBySeverity[sev] ?? 0) + 1;
@@ -202,9 +188,10 @@ export class AuditEngine {
     // 2. Run SQL-family rules.
     let sqlSummary: EngineRunSummary | undefined;
     if (sqlFamilyRules.length > 0) {
-      const engineOpts = this.opts.maxFindingsPerRule !== undefined
-        ? { maxFindingsPerRule: this.opts.maxFindingsPerRule }
-        : {};
+      const engineOpts =
+        this.opts.maxFindingsPerRule !== undefined
+          ? { maxFindingsPerRule: this.opts.maxFindingsPerRule }
+          : {};
       const engine = new RuleEngine(this.sqlExecutor, engineOpts);
       sqlSummary = await engine.run(sqlFamilyRules, args.ctx, async (f) => {
         sink(f);
@@ -217,7 +204,7 @@ export class AuditEngine {
     if (fnRules.length > 0) {
       if (!args.source || !args.adapterCtx) {
         warnings.push(
-          `audit has ${fnRules.length} Fn rule(s) but no source/adapterCtx was provided — Fn rules skipped`,
+          `audit has ${fnRules.length} Fn rule(s) but no source/adapterCtx was provided — Fn rules skipped`
         );
       } else {
         const runnerOpts: FnRunnerOptions = {
@@ -227,9 +214,7 @@ export class AuditEngine {
           ...(this.opts.maxFindingsTotal !== undefined
             ? { maxFindingsTotal: this.opts.maxFindingsTotal }
             : {}),
-          ...(this.opts.contextProvider
-            ? { contextProvider: this.opts.contextProvider }
-            : {}),
+          ...(this.opts.contextProvider ? { contextProvider: this.opts.contextProvider } : {}),
         };
 
         // True streaming path: count rows as they flow through to the runner.
@@ -237,13 +222,8 @@ export class AuditEngine {
         // exactly the rows the Fn runner consumed (including aborted runs).
         const counter = { n: 0 };
         const rowStream = this.countingIterable(
-          this.streamRows(
-            args.source,
-            args.adapterCtx,
-            args.resourceMap,
-            args.primaryKeyMap,
-          ),
-          counter,
+          this.streamRows(args.source, args.adapterCtx, args.resourceMap, args.primaryKeyMap),
+          counter
         );
 
         const runner = new FnRuleRunner(runnerOpts);
@@ -285,7 +265,7 @@ export class AuditEngine {
     source: SourceAdapter,
     adapterCtx: AdapterContext,
     resourceMap: ResourceEntityMap,
-    pkMap: PrimaryKeyMap | undefined,
+    pkMap: PrimaryKeyMap | undefined
   ): AsyncGenerator<EntityRow, void, unknown> {
     const entries = Object.entries(resourceMap);
     const concurrency = Math.max(1, this.opts.resourceConcurrency ?? 1);
@@ -293,23 +273,17 @@ export class AuditEngine {
     if (concurrency === 1 || entries.length <= 1) {
       for (const [resource, entity] of entries) {
         if (adapterCtx.signal.aborted) return;
-        yield* this.streamResource(
-          source,
-          adapterCtx,
-          resource,
-          entity,
-          pkMap,
-        );
+        yield* this.streamResource(source, adapterCtx, resource, entity, pkMap);
       }
       return;
     }
 
     yield* mergeAsync(
       entries.map(([resource, entity]) =>
-        this.streamResource(source, adapterCtx, resource, entity, pkMap),
+        this.streamResource(source, adapterCtx, resource, entity, pkMap)
       ),
       concurrency,
-      adapterCtx.signal,
+      adapterCtx.signal
     );
   }
 
@@ -323,7 +297,7 @@ export class AuditEngine {
     adapterCtx: AdapterContext,
     resource: string,
     entity: string,
-    pkMap: PrimaryKeyMap | undefined,
+    pkMap: PrimaryKeyMap | undefined
   ): AsyncGenerator<EntityRow, void, unknown> {
     let cursor: string | undefined;
     let index = 0;
@@ -333,9 +307,7 @@ export class AuditEngine {
       const streamArgs = {
         resource,
         ...(cursor !== undefined ? { cursor } : {}),
-        ...(this.opts.pageSize !== undefined
-          ? { pageSize: this.opts.pageSize }
-          : {}),
+        ...(this.opts.pageSize !== undefined ? { pageSize: this.opts.pageSize } : {}),
       };
       const iter = source.streamRows(adapterCtx, streamArgs);
       let receivedAny = false;
@@ -372,7 +344,7 @@ export class AuditEngine {
    */
   private async *countingIterable<T>(
     iter: AsyncIterable<T>,
-    counter: { n: number },
+    counter: { n: number }
   ): AsyncGenerator<T, void, unknown> {
     for await (const x of iter) {
       counter.n++;
@@ -398,7 +370,7 @@ export class AuditEngine {
 async function* mergeAsync<T>(
   sources: AsyncGenerator<T, void, unknown>[],
   concurrency: number,
-  signal: AbortSignal,
+  signal: AbortSignal
 ): AsyncGenerator<T, void, unknown> {
   const pending = sources.slice();
   // Active slots: { source, promise }. promise resolves to {done,value,slot}

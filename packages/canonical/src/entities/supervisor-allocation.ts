@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * SupervisorAllocation — mapping between a doctoral student's Instance and
@@ -16,10 +16,13 @@ export const SupervisorAllocationZ = z.object({
   /** Display name (PII — redact in logs). */
   supervisorName: z.string().optional(),
   /** HESA SUPROLE — supervisory role (e.g. lead, second, external). */
-  role: z.enum(['lead', 'second', 'external', 'other']),
+  role: z.enum(["lead", "second", "external", "other"]),
   /** Allocation start/end dates. */
   startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  endDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
   attributes: z.record(z.unknown()).optional(),
 });
 

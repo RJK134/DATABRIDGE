@@ -47,15 +47,15 @@ describe("Banner native audit pack", () => {
     const blob = BANNER_NATIVE_RULES.map((r) => r.name + " " + r.description)
       .join(" \n ")
       .toLowerCase();
-    expect(blob).toMatch(/spriden/);          // 1. PIDM no SPRIDEN
-    expect(blob).toMatch(/sorlcur/);          // 2. SGBSTDN no SORLCUR
-    expect(blob).toMatch(/ssbsect|sfrstcr/);  // 3. SFRSTCR no SSBSECT
-    expect(blob).toMatch(/shrtckg|shrtckn/);  // 4. SHRTCKG no SHRTCKN
-    expect(blob).toMatch(/spbpers|birth/);    // 5. SPBPERS DOB > entry
-    expect(blob).toMatch(/terminal/);         // 6. SGBSTDN terminal stvstst
-    expect(blob).toMatch(/tbraccd|balance/);  // 7. TBRACCD non-zero
-    expect(blob).toMatch(/gorvisa|visa/);     // 8. GORVISA expired
-    expect(blob).toMatch(/saradap|admit/);    // 9. SARADAP admit no SGBSTDN
-    expect(blob).toMatch(/shrdgmr|outcome/);  // 10. SHRDGMR AW null date
+    expect(blob).toMatch(/spriden/); // 1. PIDM no SPRIDEN
+    expect(blob).toMatch(/sorlcur/); // 2. SGBSTDN no SORLCUR
+    expect(blob).toMatch(/ssbsect|sfrstcr/); // 3. SFRSTCR no SSBSECT
+    expect(blob).toMatch(/shrtckg|shrtckn/); // 4. SHRTCKG no SHRTCKN
+    expect(blob).toMatch(/spbpers|birth/); // 5. SPBPERS DOB > entry
+    expect(blob).toMatch(/terminal/); // 6. SGBSTDN terminal stvstst
+    expect(blob).toMatch(/tbraccd|balance/); // 7. TBRACCD non-zero
+    expect(blob).toMatch(/gorvisa|visa/); // 8. GORVISA expired
+    expect(blob).toMatch(/saradap|admit/); // 9. SARADAP admit no SGBSTDN
+    expect(blob).toMatch(/shrdgmr|outcome/); // 10. SHRDGMR AW null date
   });
 });

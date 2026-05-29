@@ -13,27 +13,17 @@
  *   4. The deterministic suggester's NoSuggestion is preserved when
  *      neither it nor the embedding index produces any candidate.
  */
+import type { SchemaSuggester } from "@databridge/schema-mapper";
 import {
-  SchemaSuggester,
   type FieldSuggestion,
   type NoSuggestion,
   type SuggestionResult,
   type SuggestRequest,
   isFieldSuggestion,
 } from "@databridge/schema-mapper";
-import {
-  EmbeddingIndex,
-  DeterministicHashEmbedding,
-  type EmbeddingBackend,
-} from "./embedding.js";
-import {
-  explainSuggestion,
-  type Explanation,
-} from "./explainer.js";
-import {
-  type LlmProvider,
-  type LlmCallOptions,
-} from "@databridge/rule-compiler-llm";
+import { EmbeddingIndex, DeterministicHashEmbedding, type EmbeddingBackend } from "./embedding.js";
+import { explainSuggestion } from "./explainer.js";
+import { type LlmProvider, type LlmCallOptions } from "@databridge/rule-compiler-llm";
 import type { LlmCallProvenance } from "@databridge/provenance-core";
 
 export interface LlmAssistedSuggesterOptions {
@@ -73,7 +63,11 @@ export class LlmAssistedSuggester {
   private readonly embedding: EmbeddingBackend;
   private readonly index: EmbeddingIndex;
   private indexReady?: Promise<void>;
-  private readonly seedEntries: ReadonlyArray<{ canonical: string; entity: string; description?: string }>;
+  private readonly seedEntries: ReadonlyArray<{
+    canonical: string;
+    entity: string;
+    description?: string;
+  }>;
   private readonly llmOptions?: LlmCallOptions;
 
   /** Counter used by tests to assert the LLM was (or wasn't) consulted. */
@@ -107,7 +101,7 @@ export class LlmAssistedSuggester {
 
   private async handleOne(
     d: SuggestionResult,
-    column: string,
+    column: string
   ): Promise<LlmAssistedSuggestionResult> {
     if (!isFieldSuggestion(d)) {
       return d;
@@ -124,7 +118,7 @@ export class LlmAssistedSuggester {
     const { explanation, provenance } = await explainSuggestion(
       { sourceColumn: column, candidates },
       this.provider,
-      this.llmOptions,
+      this.llmOptions
     );
     const chosen = explanation.chosen;
     // The LLM may pick a candidate from the merged set OR re-affirm the
@@ -183,7 +177,7 @@ interface MergedCandidate {
 
 function mergeCandidates(
   d: FieldSuggestion,
-  nearest: ReadonlyArray<{ id: string; score: number }>,
+  nearest: ReadonlyArray<{ id: string; score: number }>
 ): MergedCandidate[] {
   const seen = new Set<string>();
   const out: MergedCandidate[] = [];
@@ -197,7 +191,12 @@ function mergeCandidates(
     const [entity, ...rest] = n.id.split(".");
     if (!entity) continue;
     const canonical = rest.length > 0 ? rest.join(".") : entity;
-    push({ canonical, entity, score: n.score, rationale: `embedding nearest-neighbour (cosine ${n.score.toFixed(2)})` });
+    push({
+      canonical,
+      entity,
+      score: n.score,
+      rationale: `embedding nearest-neighbour (cosine ${n.score.toFixed(2)})`,
+    });
   }
   return out;
 

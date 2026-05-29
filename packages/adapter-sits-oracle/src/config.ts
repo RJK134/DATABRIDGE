@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const SitsOracleConfigSchema = z.object({
   /** Oracle connection string e.g. "hostname:1521/SITS" */
@@ -11,7 +11,7 @@ export const SitsOracleConfigSchema = z.object({
   /** Query timeout in milliseconds. Default 30s. */
   queryTimeoutMs: z.number().int().positive().default(30_000),
   /** SITS schema owner prefix. Usually blank or 'SITS'. */
-  schemaPrefix: z.string().default(''),
+  schemaPrefix: z.string().default(""),
 });
 
 export type SitsOracleConfig = z.infer<typeof SitsOracleConfigSchema>;

@@ -119,10 +119,7 @@ export function buildCodeLists(input: {
       const e: CodeList["entries"][number] = {
         code: d.lkd_code,
         description: d.lkd_desc,
-        isActive:
-          d.lkd_inus === null || d.lkd_inus === undefined
-            ? true
-            : truthy(d.lkd_inus),
+        isActive: d.lkd_inus === null || d.lkd_inus === undefined ? true : truthy(d.lkd_inus),
       };
       if (d.lkd_sdesc) e.shortDescription = d.lkd_sdesc;
       if (typeof d.lkd_seq === "number") e.sortOrder = d.lkd_seq;
@@ -147,7 +144,7 @@ export function buildCodeLists(input: {
 /** Top-level reader: pull all five tables in parallel, compose results. */
 export async function readSitsDictionary(
   source: SitsDictionarySource,
-  options: { snapshotAt?: string } = {},
+  options: { snapshotAt?: string } = {}
 ): Promise<{ entries: DictionaryEntry[]; codeLists: CodeList[] }> {
   const [entities, fields, lookups, details, udfs] = await Promise.all([
     source.fetchEntities(),
@@ -177,12 +174,10 @@ export function findUnregisteredUdfs(input: {
   udfs: MenUdfRow[];
 }): Array<{ entityCode: string; fieldCode: string }> {
   const registered = new Set(
-    input.udfs.map((u) => `${u.udf_ent.toUpperCase()}.${u.udf_col.toUpperCase()}`),
+    input.udfs.map((u) => `${u.udf_ent.toUpperCase()}.${u.udf_col.toUpperCase()}`)
   );
   return input.fields
     .filter((f) => /_UDF\d+$/i.test(f.fld_code))
-    .filter(
-      (f) => !registered.has(`${f.fld_ent.toUpperCase()}.${f.fld_code.toUpperCase()}`),
-    )
+    .filter((f) => !registered.has(`${f.fld_ent.toUpperCase()}.${f.fld_code.toUpperCase()}`))
     .map((f) => ({ entityCode: f.fld_ent, fieldCode: f.fld_code }));
 }

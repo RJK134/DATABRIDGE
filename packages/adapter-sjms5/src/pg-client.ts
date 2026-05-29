@@ -17,7 +17,7 @@ export interface PgClientLike {
   connect(): Promise<void>;
   query<T = Record<string, unknown>>(
     sql: string,
-    params?: ReadonlyArray<unknown>,
+    params?: ReadonlyArray<unknown>
   ): Promise<{ rows: T[]; rowCount?: number | null }>;
   end(): Promise<void>;
 }
@@ -47,7 +47,7 @@ export async function loadPg(): Promise<{ Client: PgClientCtor }> {
     throw new Error(
       "@databridge/adapter-sjms5: the optional peer 'pg' is not installed. " +
         "Install it in the consuming app with: pnpm add pg @types/pg\n" +
-        `Underlying error: ${(err as Error).message}`,
+        `Underlying error: ${(err as Error).message}`
     );
   }
 }

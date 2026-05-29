@@ -77,7 +77,7 @@ describe("resolveChangeIndicator", () => {
   it("returns the row with null/empty change indicator", () => {
     const r = resolveChangeIndicator([
       { changeIndicator: "I", activityDate: "2024-01-01", v: "old1" },
-      { changeIndicator: null,  activityDate: "2025-05-05", v: "current" },
+      { changeIndicator: null, activityDate: "2025-05-05", v: "current" },
       { changeIndicator: "U", activityDate: "2024-06-01", v: "old2" },
     ]);
     expect(r?.row.v).toBe("current");
@@ -90,7 +90,7 @@ describe("resolveChangeIndicator", () => {
       resolveChangeIndicator([
         { changeIndicator: "I", v: "x" },
         { changeIndicator: "U", v: "y" },
-      ]),
+      ])
     ).toBeUndefined();
   });
 });

@@ -1,8 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  verifyCanonical,
-  type CanonicalRecord,
-} from "@databridge/parallel-run-verifier";
+import { verifyCanonical, type CanonicalRecord } from "@databridge/parallel-run-verifier";
 import { BannerToSitsOrchestrator } from "../orchestrator.js";
 
 /**
@@ -51,8 +48,6 @@ describe("BannerToSits parallel-run verifier (500-row fixture)", () => {
   });
 
   it("supports SUPPORTED_ENTITIES enumeration", () => {
-    expect(BannerToSitsOrchestrator.SUPPORTED_ENTITIES.length).toBeGreaterThan(
-      0,
-    );
+    expect(BannerToSitsOrchestrator.SUPPORTED_ENTITIES.length).toBeGreaterThan(0);
   });
 });

@@ -1,8 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import {
-  describeRulePack,
-  listRulePackSummaries,
-} from "../rule-pack-registry.js";
+import { describeRulePack, listRulePackSummaries } from "../rule-pack-registry.js";
 
 /**
  * Rule-pack routes (Phase H):

@@ -45,7 +45,7 @@ function stamp(bundle: CodesetSeedBundle, snapshotAt: string): CodeList[] {
  */
 export function loadCodesetSeed(
   id: SeedBundleId,
-  options: { snapshotAt?: string; baseDir?: string } = {},
+  options: { snapshotAt?: string; baseDir?: string } = {}
 ): CodeList[] {
   const bundle = readBundleSync(id, options.baseDir);
   const snapshotAt = options.snapshotAt ?? new Date().toISOString();
@@ -54,7 +54,7 @@ export function loadCodesetSeed(
 
 /** Load every known seed bundle into a Map keyed by CodeList.id. */
 export function loadAllCodesetSeeds(
-  options: { snapshotAt?: string; baseDir?: string } = {},
+  options: { snapshotAt?: string; baseDir?: string } = {}
 ): Map<string, CodeList> {
   const out = new Map<string, CodeList>();
   for (const id of SEED_BUNDLE_IDS) {
@@ -68,7 +68,7 @@ export function loadAllCodesetSeeds(
 /** Asynchronous variant — handy in tests + future remote loaders. */
 export async function loadCodesetSeedAsync(
   id: SeedBundleId,
-  options: { snapshotAt?: string; baseDir?: string } = {},
+  options: { snapshotAt?: string; baseDir?: string } = {}
 ): Promise<CodeList[]> {
   const file = resolveSeedPath(id, options.baseDir);
   const raw = await readFile(file, "utf8");

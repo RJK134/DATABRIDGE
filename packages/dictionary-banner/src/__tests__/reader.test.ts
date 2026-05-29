@@ -53,9 +53,7 @@ describe("buildBannerCodeLists", () => {
   it("uses human-readable names where known and falls back otherwise", () => {
     const lists = buildBannerCodeLists({ rows, snapshotAt: "2026-01-01T00:00:00.000Z" });
     expect(lists.find((l) => l.id === "BANNER.STVTERM")?.name).toBe("Term codes");
-    expect(lists.find((l) => l.id === "BANNER.STVMAJR")?.name).toBe(
-      "Major / programme of study",
-    );
+    expect(lists.find((l) => l.id === "BANNER.STVMAJR")?.name).toBe("Major / programme of study");
     expect(lists.find((l) => l.id === "BANNER.GTVZIPC")?.name).toBe("Postcode");
   });
 

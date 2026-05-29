@@ -15,7 +15,10 @@ import {
   type DataBridgePrincipal,
 } from "../middleware/auth.js";
 
-function buildAppWithAuth(validator: TokenValidator, opts?: { disabled?: boolean }): Promise<FastifyInstance> {
+function buildAppWithAuth(
+  validator: TokenValidator,
+  opts?: { disabled?: boolean }
+): Promise<FastifyInstance> {
   const app = Fastify();
   return (async () => {
     await registerAuth(app, {
@@ -27,11 +30,16 @@ function buildAppWithAuth(validator: TokenValidator, opts?: { disabled?: boolean
     app.get("/me", async (req) => ({ principal: req.principal }));
     app.get(
       "/tenants/:tenantId/secret",
-      { preHandler: requireRole({ resolveTenantId: (r) => (r.params as { tenantId: string }).tenantId, anyOf: ["data:viewer"] }) },
+      {
+        preHandler: requireRole({
+          resolveTenantId: (r) => (r.params as { tenantId: string }).tenantId,
+          anyOf: ["data:viewer"],
+        }),
+      },
       async (req) => ({
         tenant: (req.params as { tenantId: string }).tenantId,
         sub: req.principal?.sub,
-      }),
+      })
     );
     return app;
   })();
@@ -63,7 +71,7 @@ describe("mapClaimsToPrincipal", () => {
         sub: "u1",
         tenants: [{ tenantId: "t1", roles: ["viewer", "made-up"] }],
       },
-      { viewer: "data:viewer" },
+      { viewer: "data:viewer" }
     );
     expect(p.tenants[0]?.roles).toEqual(["data:viewer"]);
   });
@@ -273,9 +281,7 @@ describe("parseStaticTokensEnv", () => {
   });
 
   it("parses multiple tenants with multiple roles each", () => {
-    const e = parseStaticTokensEnv(
-      "tok-a=alice,t1:data:viewer+audit:viewer|t2:data:steward",
-    );
+    const e = parseStaticTokensEnv("tok-a=alice,t1:data:viewer+audit:viewer|t2:data:steward");
     expect(e[0]?.tenants).toEqual([
       { tenantId: "t1", roles: ["data:viewer", "audit:viewer"] },
       { tenantId: "t2", roles: ["data:steward"] },
@@ -283,9 +289,7 @@ describe("parseStaticTokensEnv", () => {
   });
 
   it("parses multiple semicolon-separated entries", () => {
-    const e = parseStaticTokensEnv(
-      "tok-a=alice,t1:data:viewer; tok-b=bob,t2:data:steward",
-    );
+    const e = parseStaticTokensEnv("tok-a=alice,t1:data:viewer; tok-b=bob,t2:data:steward");
     expect(e).toHaveLength(2);
     expect(e[0]?.sub).toBe("alice");
     expect(e[1]?.sub).toBe("bob");
@@ -293,15 +297,11 @@ describe("parseStaticTokensEnv", () => {
 
   it("accepts wildcard tenant + superadmin", () => {
     const e = parseStaticTokensEnv("tok-ci=ci-bot,*:system:superadmin");
-    expect(e[0]?.tenants).toEqual([
-      { tenantId: "*", roles: ["system:superadmin"] },
-    ]);
+    expect(e[0]?.tenants).toEqual([{ tenantId: "*", roles: ["system:superadmin"] }]);
   });
 
   it("rejects unknown role names", () => {
-    expect(() =>
-      parseStaticTokensEnv("tok-x=u,t1:bogus:role"),
-    ).toThrow(/unknown role/);
+    expect(() => parseStaticTokensEnv("tok-x=u,t1:bogus:role")).toThrow(/unknown role/);
   });
 
   it("rejects malformed entries", () => {

@@ -1,19 +1,19 @@
-import { z } from 'zod';
-import { ProvenanceFieldsZ } from './provenance.js';
+import { z } from "zod";
+import { ProvenanceFieldsZ } from "./provenance.js";
 
 /**
  * Address — a postal address, typed by usage (home / term-time / corresp.).
  * Banner: SPRADDR rows keyed by ATYP_CODE. SITS: INS_ADD rows keyed by add_atyp.
  */
 export const AddressTypeZ = z.enum([
-  'home',
-  'term-time',
-  'correspondence',
-  'employer',
-  'billing',
-  'permanent',
-  'previous',
-  'other',
+  "home",
+  "term-time",
+  "correspondence",
+  "employer",
+  "billing",
+  "permanent",
+  "previous",
+  "other",
 ]);
 export type AddressType = z.infer<typeof AddressTypeZ>;
 

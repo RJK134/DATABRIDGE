@@ -3,15 +3,65 @@
   "section": "§8",
   "summary": "Banner enrols per CRN per term (SFRSTCR); SITS enrols per module per year (SMO). Grain mismatch.",
   "fields": [
-    { "canonical": "personId", "banner": "SFRSTCR.SFRSTCR_PIDM (resolve)", "sits": "INS_SMO.smo_stuc (resolve)", "notes": "" },
-    { "canonical": "moduleInstanceId", "banner": "SFRSTCR.SFRSTCR_CRN → SSBSECT", "sits": "INS_SMO.smo_modc + smo_mavc", "notes": "" },
-    { "canonical": "academicYear", "banner": "derived from SFRSTCR.TERM_CODE", "sits": "INS_SMO.smo_ayrc", "notes": "" },
-    { "canonical": "term", "banner": "SFRSTCR.TERM_CODE", "sits": null, "notes": "SITS has no equivalent; drop or aggregate" },
-    { "canonical": "enrolledDate", "banner": "SFRSTCR.SFRSTCR_ADD_DATE", "sits": null, "notes": "SITS typically not stored" },
-    { "canonical": "status", "banner": "SFRSTCR.RSTS_CODE → §12", "sits": "derived from INS_SMR.smr_actc", "notes": "" },
-    { "canonical": "creditsAttempted", "banner": "SFRSTCR.CREDIT_HR", "sits": "INS_SMR.smr_crdt", "notes": "Banner hours vs SITS CATS — see §14" },
-    { "canonical": "creditsBillable", "banner": "SFRSTCR.BILL_HR", "sits": null, "notes": "Not stored separately on SITS" },
-    { "canonical": "gradeMode", "banner": "SFRSTCR.GMOD_CODE", "sits": null, "notes": "SITS configures on module not enrolment" },
-    { "canonical": "gradeAtRegistration", "banner": "SFRSTCR.GRDE_CODE", "sits": "live in INS_SMR", "notes": "" }
+    {
+      "canonical": "personId",
+      "banner": "SFRSTCR.SFRSTCR_PIDM (resolve)",
+      "sits": "INS_SMO.smo_stuc (resolve)",
+      "notes": ""
+    },
+    {
+      "canonical": "moduleInstanceId",
+      "banner": "SFRSTCR.SFRSTCR_CRN → SSBSECT",
+      "sits": "INS_SMO.smo_modc + smo_mavc",
+      "notes": ""
+    },
+    {
+      "canonical": "academicYear",
+      "banner": "derived from SFRSTCR.TERM_CODE",
+      "sits": "INS_SMO.smo_ayrc",
+      "notes": ""
+    },
+    {
+      "canonical": "term",
+      "banner": "SFRSTCR.TERM_CODE",
+      "sits": null,
+      "notes": "SITS has no equivalent; drop or aggregate"
+    },
+    {
+      "canonical": "enrolledDate",
+      "banner": "SFRSTCR.SFRSTCR_ADD_DATE",
+      "sits": null,
+      "notes": "SITS typically not stored"
+    },
+    {
+      "canonical": "status",
+      "banner": "SFRSTCR.RSTS_CODE → §12",
+      "sits": "derived from INS_SMR.smr_actc",
+      "notes": ""
+    },
+    {
+      "canonical": "creditsAttempted",
+      "banner": "SFRSTCR.CREDIT_HR",
+      "sits": "INS_SMR.smr_crdt",
+      "notes": "Banner hours vs SITS CATS — see §14"
+    },
+    {
+      "canonical": "creditsBillable",
+      "banner": "SFRSTCR.BILL_HR",
+      "sits": null,
+      "notes": "Not stored separately on SITS"
+    },
+    {
+      "canonical": "gradeMode",
+      "banner": "SFRSTCR.GMOD_CODE",
+      "sits": null,
+      "notes": "SITS configures on module not enrolment"
+    },
+    {
+      "canonical": "gradeAtRegistration",
+      "banner": "SFRSTCR.GRDE_CODE",
+      "sits": "live in INS_SMR",
+      "notes": ""
+    }
   ]
 }

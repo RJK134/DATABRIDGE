@@ -4,29 +4,30 @@ This document captures the full build history of DATABRIDGE through the v1.4 DEM
 
 ## Timeline
 
-| Date | Event | Tag | PR |
-|---|---|---|---|
-| 26 May 2026 (AM) | Phases G/H/I/J/K-L + post-L hardening | — | #1-#6 |
-| 26 May 2026 (PM) | v1.1.0 — live TechOne, audit-pack split, FsLearningStore | v1.1.0 | #7 |
-| 26 May 2026 (PM) | v1.2.0 — PostgresLearningStore + Workday live HTTP + TechOne CIA fallback | v1.2.0 | #8 |
-| 26 May 2026 (PM) | **v1.3.0 — Phase A DEMO build** | v1.3.0 | #9 |
-| 27 May 2026 (AM) | **v1.4 — Phase B LLM data review (PR open)** | (pending) | #10 |
+| Date             | Event                                                                     | Tag       | PR    |
+| ---------------- | ------------------------------------------------------------------------- | --------- | ----- |
+| 26 May 2026 (AM) | Phases G/H/I/J/K-L + post-L hardening                                     | —         | #1-#6 |
+| 26 May 2026 (PM) | v1.1.0 — live TechOne, audit-pack split, FsLearningStore                  | v1.1.0    | #7    |
+| 26 May 2026 (PM) | v1.2.0 — PostgresLearningStore + Workday live HTTP + TechOne CIA fallback | v1.2.0    | #8    |
+| 26 May 2026 (PM) | **v1.3.0 — Phase A DEMO build**                                           | v1.3.0    | #9    |
+| 27 May 2026 (AM) | **v1.4 — Phase B LLM data review (PR open)**                              | (pending) | #10   |
 
 ## Test count progression
 
-| Milestone | Tests | Workspaces |
-|---|---|---|
-| v1.0 (Phase L close) | ~700 | ~40 |
-| v1.1 | 744 | 44 |
-| v1.2 | 798 | 47 |
-| v1.3 (Phase A) | 976 | 51 |
-| v1.4 (Phase B PR #10) | 1182 | 55 |
+| Milestone             | Tests | Workspaces |
+| --------------------- | ----- | ---------- |
+| v1.0 (Phase L close)  | ~700  | ~40        |
+| v1.1                  | 744   | 44         |
+| v1.2                  | 798   | 47         |
+| v1.3 (Phase A)        | 976   | 51         |
+| v1.4 (Phase B PR #10) | 1182  | 55         |
 
 ## Phase A — DEMO build (v1.3.0, PR #9)
 
 ### Workstreams shipped
 
 **A1 — Banner↔SITS migrations**
+
 - `migrations/banner-to-sits/` — full canonical-via-canonical migration
 - `migrations/sits-to-banner/` — symmetric reverse
 - `packages/profile-banner/` — Banner canonical profile (mirror of profile-sits)
@@ -35,19 +36,23 @@ This document captures the full build history of DATABRIDGE through the v1.4 DEM
 - pre-flight-check policies for both profiles
 
 **A2 — Salesforce Education Cloud**
+
 - `packages/adapter-salesforce-edu/` — REST + OAuth2 client-credentials, stub-fallback pattern
 - `packages/audit-pack-salesforce-edu-native/` — 8 rules, family `SALESFORCE-EDU-NATIVE`
 - `packages/findings-integration-prep/` — shared CRM integration-prep report package
 
 **A3 — Dynamics 365 Education**
+
 - `packages/adapter-dynamics365-edu/` — Dataverse Web API, Azure AD OAuth2
 - `packages/audit-pack-dynamics365-edu-native/` — 8 rules, family `DYNAMICS365-EDU-NATIVE`
 
 **A4 — Demo harness**
+
 - `apps/demo/` — scripted orchestrator + 4 synthetic fixtures (~2k rows each) with seeded UK HE failure modes
 - `docs/DEMO_SCRIPT.md` — 45-minute presenter script
 
 ### Deferred from Phase A (carried to later phases)
+
 - Salesforce Bulk API 2.0 write throughput → Phase B
 - Docker-compose auto-bring-up in the demo orchestrator → Phase B
 - All previously out-of-scope: LLM (B), real CRM tenants (B), prod write paths (B), cloud targets (C), RBAC (D)
@@ -57,6 +62,7 @@ This document captures the full build history of DATABRIDGE through the v1.4 DEM
 ### Workstreams shipped
 
 **B1 — NL→Rule compiler** (`packages/rule-compiler-llm/`)
+
 - Grammar-constrained JSON output (`src/rule-grammar.ts`) — never free SQL
 - 4 provider adapters: OpenAI, Anthropic, Azure OpenAI, DeterministicMockProvider (default)
 - 50-prompt regression corpus
@@ -65,6 +71,7 @@ This document captures the full build history of DATABRIDGE through the v1.4 DEM
 - Full provenance via `provenance-core`
 
 **B2 — Schema-mapping LLM co-pilot** (`packages/schema-mapper-llm/`)
+
 - `LlmAssistedSuggester` wraps existing `SchemaSuggester`
 - LLM only invoked below confidence threshold (deterministic-first)
 - ONNX embedding index (peer-optional) with deterministic hash fallback
@@ -72,16 +79,19 @@ This document captures the full build history of DATABRIDGE through the v1.4 DEM
 - Test proves deterministic-high-confidence path NEVER calls the LLM
 
 **B3 — Narrative findings** (`packages/findings-narrative-llm/`)
+
 - Strictly slot-templated output (regex-validated, character-limited)
 - Slots: headline, severity bullets, top cluster root cause, recommended actions
 - `POST /v1/findings/{runId}:narrate` endpoint
 
 **B4 — Demo polish**
+
 - `apps/web/query` — NL bar wired to compile endpoint
 - Demo orchestrator: 5-prompt scripted run against fixtures
 - `docs/DEMO_SCRIPT.md` Block 2B added (10-min LLM walkthrough)
 
 ### Safety guarantees (non-negotiable, enforced)
+
 - LLM never emits free SQL — grammar-constrained JSON only
 - Deterministic compiler executes; LLM only suggests structure
 - DeterministicMockProvider is the default — demo runs with zero paid LLM access
@@ -89,6 +99,7 @@ This document captures the full build history of DATABRIDGE through the v1.4 DEM
 - Per-run cost ceiling enforced
 
 ### Deferred from Phase B (carried to later phases)
+
 - Real ONNX tokeniser/inference → Phase C (sandbox lacks model file)
 - Live web E2E test → Phase C
 - Auto-launch of web from demo orchestrator → Phase C

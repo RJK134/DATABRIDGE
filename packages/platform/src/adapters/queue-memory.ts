@@ -34,11 +34,7 @@ export class MemoryQueueAdapter implements QueueAdapter {
   private stopped = false;
   private pumpTimer: NodeJS.Timeout | undefined;
 
-  async enqueue<T extends object>(
-    queue: string,
-    data: T,
-    opts?: EnqueueOptions,
-  ): Promise<string> {
+  async enqueue<T extends object>(queue: string, data: T, opts?: EnqueueOptions): Promise<string> {
     if (this.stopped) throw new Error("MemoryQueueAdapter: cannot enqueue after stop()");
 
     // Honor singletonKey: skip if an active/created job exists with the same key + queue.
@@ -75,7 +71,7 @@ export class MemoryQueueAdapter implements QueueAdapter {
   async work<T extends object>(
     queue: string,
     handler: JobHandler<T>,
-    _opts?: WorkOptions,
+    _opts?: WorkOptions
   ): Promise<void> {
     this.workers.set(queue, handler as JobHandler<object>);
     this.schedulePump();

@@ -1,8 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  compileLlmRule,
-  RuleCompilerError,
-} from "../compiler.js";
+import { compileLlmRule, RuleCompilerError } from "../compiler.js";
 import { DEMO_DICTIONARY } from "../dictionary.js";
 
 const okRule = {
@@ -36,7 +33,7 @@ describe("compileLlmRule", () => {
 
   it("rejects an unknown entity", () => {
     expect(() =>
-      compileLlmRule({ ...okRule, entity: "GhostEntity" }, { dictionary: DEMO_DICTIONARY }),
+      compileLlmRule({ ...okRule, entity: "GhostEntity" }, { dictionary: DEMO_DICTIONARY })
     ).toThrowError(RuleCompilerError);
   });
 
@@ -45,10 +42,13 @@ describe("compileLlmRule", () => {
       compileLlmRule(
         {
           ...okRule,
-          where: { ...okRule.where, field: { kind: "field", entity: "Student", field: "imaginaryField" } },
+          where: {
+            ...okRule.where,
+            field: { kind: "field", entity: "Student", field: "imaginaryField" },
+          },
         },
-        { dictionary: DEMO_DICTIONARY },
-      ),
+        { dictionary: DEMO_DICTIONARY }
+      )
     ).toThrowError(/not in the dictionary/);
   });
 
@@ -58,16 +58,19 @@ describe("compileLlmRule", () => {
         {
           ...okRule,
           entity: "Student",
-          where: { ...okRule.where, field: { kind: "field", entity: "Engagement", field: "startDate" } },
+          where: {
+            ...okRule.where,
+            field: { kind: "field", entity: "Engagement", field: "startDate" },
+          },
         },
-        { dictionary: DEMO_DICTIONARY },
-      ),
+        { dictionary: DEMO_DICTIONARY }
+      )
     ).toThrowError(/different entity/);
   });
 
   it("rejects when grammar fails", () => {
     expect(() =>
-      compileLlmRule({ ...okRule, severity: "PANIC" }, { dictionary: DEMO_DICTIONARY }),
+      compileLlmRule({ ...okRule, severity: "PANIC" }, { dictionary: DEMO_DICTIONARY })
     ).toThrowError(/grammar/);
   });
 
@@ -87,7 +90,7 @@ describe("compileLlmRule", () => {
           operands: [{ kind: "literal", value: "03" }],
         },
       },
-      { dictionary: DEMO_DICTIONARY },
+      { dictionary: DEMO_DICTIONARY }
     );
     expect(rule.evaluate({ feeStatus: "03" })).toBe(true);
     expect(rule.evaluate({ feeStatus: 3 })).toBe(true);
@@ -131,12 +134,20 @@ describe("compileLlmRule", () => {
           ],
         },
       },
-      { dictionary: DEMO_DICTIONARY },
+      { dictionary: DEMO_DICTIONARY }
     );
-    expect(rule.evaluate({ collectionYear: "2024/25", programmeCode: null, startDate: "2024-09-01" })).toBe(true);
-    expect(rule.evaluate({ collectionYear: "2024/25", programmeCode: "CS", startDate: null })).toBe(true);
-    expect(rule.evaluate({ collectionYear: "2024/25", programmeCode: "CS", startDate: "2024-09-01" })).toBe(false);
-    expect(rule.evaluate({ collectionYear: "2023/24", programmeCode: null, startDate: "2024-09-01" })).toBe(false);
+    expect(
+      rule.evaluate({ collectionYear: "2024/25", programmeCode: null, startDate: "2024-09-01" })
+    ).toBe(true);
+    expect(rule.evaluate({ collectionYear: "2024/25", programmeCode: "CS", startDate: null })).toBe(
+      true
+    );
+    expect(
+      rule.evaluate({ collectionYear: "2024/25", programmeCode: "CS", startDate: "2024-09-01" })
+    ).toBe(false);
+    expect(
+      rule.evaluate({ collectionYear: "2023/24", programmeCode: null, startDate: "2024-09-01" })
+    ).toBe(false);
   });
 
   it("evaluates between, in, notIn, gt, lt", () => {
@@ -154,7 +165,7 @@ describe("compileLlmRule", () => {
           ],
         },
       },
-      { dictionary: DEMO_DICTIONARY },
+      { dictionary: DEMO_DICTIONARY }
     );
     expect(between.evaluate({ credits: 15 })).toBe(true);
     expect(between.evaluate({ credits: 5 })).toBe(false);
@@ -173,7 +184,7 @@ describe("compileLlmRule", () => {
           ],
         },
       },
-      { dictionary: DEMO_DICTIONARY },
+      { dictionary: DEMO_DICTIONARY }
     );
     expect(inList.evaluate({ Status: "Pending" })).toBe(true);
     expect(inList.evaluate({ Status: "Paid" })).toBe(false);
@@ -190,7 +201,7 @@ describe("compileLlmRule", () => {
           operands: [{ kind: "literal", value: "(unterminated" }],
         },
       },
-      { dictionary: DEMO_DICTIONARY },
+      { dictionary: DEMO_DICTIONARY }
     );
     expect(rule.evaluate({ firstName: "Alice" })).toBe(false);
   });

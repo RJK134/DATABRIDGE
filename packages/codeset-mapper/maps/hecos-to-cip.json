@@ -6,15 +6,39 @@
   "version": "1.0.0",
   "description": "HESA Higher Education Classification of Subjects to US Classification of Instructional Programs. Approximate mapping at the top level — institutions reporting deep specialisations must register tenant overrides.",
   "entries": [
-    { "sourceCode": "100100", "targetCode": "11.0701", "notes": "computer science → computer science" },
-    { "sourceCode": "100358", "targetCode": "14.0901", "notes": "software engineering → computer engineering" },
-    { "sourceCode": "100343", "targetCode": "27.0101", "notes": "mathematics → mathematics, general" },
-    { "sourceCode": "100390", "targetCode": "26.0101", "notes": "biology → biology/biological sciences, general" },
+    {
+      "sourceCode": "100100",
+      "targetCode": "11.0701",
+      "notes": "computer science → computer science"
+    },
+    {
+      "sourceCode": "100358",
+      "targetCode": "14.0901",
+      "notes": "software engineering → computer engineering"
+    },
+    {
+      "sourceCode": "100343",
+      "targetCode": "27.0101",
+      "notes": "mathematics → mathematics, general"
+    },
+    {
+      "sourceCode": "100390",
+      "targetCode": "26.0101",
+      "notes": "biology → biology/biological sciences, general"
+    },
     { "sourceCode": "100417", "targetCode": "40.0501", "notes": "chemistry → chemistry, general" },
     { "sourceCode": "100425", "targetCode": "40.0801", "notes": "physics → physics, general" },
-    { "sourceCode": "100078", "targetCode": "51.0701", "notes": "health management → health and medical administrative services" },
+    {
+      "sourceCode": "100078",
+      "targetCode": "51.0701",
+      "notes": "health management → health and medical administrative services"
+    },
     { "sourceCode": "100476", "targetCode": "51.3801", "notes": "nursing → registered nursing" },
-    { "sourceCode": "100079", "targetCode": "52.0201", "notes": "business management → business administration and management" },
+    {
+      "sourceCode": "100079",
+      "targetCode": "52.0201",
+      "notes": "business management → business administration and management"
+    },
     { "sourceCode": "100107", "targetCode": "13.0101", "notes": "education → education, general" }
   ]
 }

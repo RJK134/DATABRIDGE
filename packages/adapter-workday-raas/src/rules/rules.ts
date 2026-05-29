@@ -287,8 +287,7 @@ export const WORKDAY_NATIVE_RULES: AuditRule[] = [
              AND cfv.Custom_Field_Name = 'HESA_HUSID'
            WHERE (cfv.Value IS NULL OR TRIM(cfv.Value) = '')
              AND (:tenantId IS NULL OR s.TenantId = :tenantId)`,
-    messageTemplate:
-      "Student {{subject_id}} has no HESA_HUSID populated",
+    messageTemplate: "Student {{subject_id}} has no HESA_HUSID populated",
   },
   {
     id: "WORKDAY-NAT-12",
@@ -308,8 +307,7 @@ export const WORKDAY_NATIVE_RULES: AuditRule[] = [
              AND cfv.Object_Type       = 'Student'
              AND NOT REGEXP_LIKE(cfv.Value, '^[0-9]{13}$')
              AND (:tenantId IS NULL OR cfv.TenantId = :tenantId)`,
-    messageTemplate:
-      "Student {{subject_id}} HUSID '{{husid}}' is not 13 digits",
+    messageTemplate: "Student {{subject_id}} HUSID '{{husid}}' is not 13 digits",
   },
 
   // ─── §19.7 — Business process health ─────────────────────────────────

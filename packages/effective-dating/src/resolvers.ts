@@ -32,7 +32,7 @@ function lt(a: string | undefined, b: string | undefined): boolean {
  */
 export function resolveActivityDated<R extends ActivityDatedRow>(
   rows: readonly R[],
-  at: string,
+  at: string
 ): ResolvedRow<R> | undefined {
   let winner: R | undefined;
   for (const r of rows) {
@@ -58,7 +58,7 @@ export function resolveActivityDated<R extends ActivityDatedRow>(
  */
 export function resolveTermKeyed<R extends TermKeyedRow>(
   rows: readonly R[],
-  at: string,
+  at: string
 ): ResolvedRow<R> | undefined {
   let winner: R | undefined;
   for (const r of rows) {
@@ -84,7 +84,7 @@ export function resolveTermKeyed<R extends TermKeyedRow>(
  */
 export function resolveFromToDated<R extends FromToDatedRow>(
   rows: readonly R[],
-  at: string,
+  at: string
 ): ResolvedRow<R> | undefined {
   for (const r of rows) {
     const startOk = lte(r.validFrom, at);
@@ -108,10 +108,10 @@ export function resolveFromToDated<R extends FromToDatedRow>(
  * one with the latest `activityDate` wins.
  */
 export function resolveChangeIndicator<R extends ChangeIndicatorRow>(
-  rows: readonly R[],
+  rows: readonly R[]
 ): ResolvedRow<R> | undefined {
   const current = rows.filter(
-    (r) => r.changeIndicator === undefined || r.changeIndicator === null || r.changeIndicator === "",
+    (r) => r.changeIndicator === undefined || r.changeIndicator === null || r.changeIndicator === ""
   );
   if (current.length === 0) return undefined;
   current.sort((a, b) => {
@@ -137,7 +137,7 @@ export function resolveChangeIndicator<R extends ChangeIndicatorRow>(
  */
 export function resolveStatusDriven<R extends StatusDrivenRow>(
   rows: readonly R[],
-  args: { activeStatuses: readonly string[]; currentAyr: string },
+  args: { activeStatuses: readonly string[]; currentAyr: string }
 ): ResolvedRow<R> | undefined {
   const active = new Set(args.activeStatuses);
   const winner = rows.find((r) => active.has(r.status) && r.ayr === args.currentAyr);
@@ -153,7 +153,7 @@ export function resolveStatusDriven<R extends StatusDrivenRow>(
 
 /** snapshot — exactly one row expected; returned verbatim. */
 export function resolveSnapshot<R extends SnapshotRow>(
-  rows: readonly R[],
+  rows: readonly R[]
 ): ResolvedRow<R> | undefined {
   if (rows.length === 0) return undefined;
   const winner = rows[0] as R;

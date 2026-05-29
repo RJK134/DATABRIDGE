@@ -36,7 +36,7 @@ export type FetchLike = (
     headers?: Record<string, string>;
     body?: string;
     signal?: AbortSignal;
-  },
+  }
 ) => Promise<{
   ok: boolean;
   status: number;
@@ -108,9 +108,7 @@ export class WorkdayRaasClient {
     // btoa is available in modern Node + browsers; fall back to Buffer.
     const raw = `${this.config.username}:${this.password}`;
     const b64 =
-      typeof btoa === "function"
-        ? btoa(raw)
-        : Buffer.from(raw, "utf8").toString("base64");
+      typeof btoa === "function" ? btoa(raw) : Buffer.from(raw, "utf8").toString("base64");
     return `Basic ${b64}`;
   }
 
@@ -119,9 +117,7 @@ export class WorkdayRaasClient {
    * Retries 429/5xx honouring `Retry-After`. Returns the parsed JSON
    * report payload.
    */
-  async get<T = Record<string, unknown>>(
-    opts: RaasGetOptions,
-  ): Promise<RaasReportResponse<T>> {
+  async get<T = Record<string, unknown>>(opts: RaasGetOptions): Promise<RaasReportResponse<T>> {
     const url = this.buildUrl(opts.reportName, opts.query);
     let attempt = 0;
     let lastError: unknown;
@@ -161,7 +157,7 @@ export class WorkdayRaasClient {
       // Non-retryable.
       const text = await res.text().catch(() => "");
       throw new Error(
-        `workday-raas: ${res.status} ${res.statusText} on ${url} — ${text.slice(0, 500)}`,
+        `workday-raas: ${res.status} ${res.statusText} on ${url} — ${text.slice(0, 500)}`
       );
     }
 
@@ -175,9 +171,7 @@ export class WorkdayRaasClient {
    * returns a top-level array, sometimes wraps under `Report_Entry`.
    * This normaliser accepts both.
    */
-  static extractRows<T = Record<string, unknown>>(
-    payload: RaasReportResponse<T> | T[],
-  ): T[] {
+  static extractRows<T = Record<string, unknown>>(payload: RaasReportResponse<T> | T[]): T[] {
     if (Array.isArray(payload)) return payload;
     const wrapped = payload?.Report_Entry;
     if (Array.isArray(wrapped)) return wrapped;
@@ -190,7 +184,7 @@ export class WorkdayRaasClient {
    * adapter passes a cursor through here; we yield once if cursorless.
    */
   async *paginate<T = Record<string, unknown>>(
-    opts: RaasGetOptions,
+    opts: RaasGetOptions
   ): AsyncIterable<{ rows: T[]; total: number; cursor?: string }> {
     // Workday RaaS returns whole payload; we do one pass.
     const payload = await this.get<T>(opts);
@@ -200,7 +194,7 @@ export class WorkdayRaasClient {
 
   private buildUrl(
     reportName: string,
-    query: Record<string, string | number | boolean | undefined> | undefined,
+    query: Record<string, string | number | boolean | undefined> | undefined
   ): string {
     const base = `${this.stripTrailingSlash(this.config.tenantUrl)}/${this.stripLeadingSlash(reportName)}`;
     const qs = new URLSearchParams();

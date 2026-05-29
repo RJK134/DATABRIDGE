@@ -25,7 +25,7 @@ export function listKnownAdapterIds(): string[] {
 
 export function instantiateAdapter(
   id: string,
-  config: Record<string, unknown>,
+  config: Record<string, unknown>
 ): SourceAdapter | { error: string } {
   const entry = KNOWN.find((k) => k.id === id);
   if (!entry) return { error: `adapter '${id}' not registered in CLI` };
@@ -39,7 +39,7 @@ export function instantiateAdapter(
 export function makeAdapterContext(
   tenantId: string,
   connectionId: string,
-  signal: AbortSignal,
+  signal: AbortSignal
 ): AdapterContext {
   return {
     tenantId,
@@ -47,8 +47,7 @@ export function makeAdapterContext(
     secrets: {
       async get(key: string) {
         const v = process.env[key];
-        if (v === undefined)
-          throw new Error(`secret '${key}' not found in env`);
+        if (v === undefined) throw new Error(`secret '${key}' not found in env`);
         return v;
       },
     },

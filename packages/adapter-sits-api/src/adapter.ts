@@ -78,10 +78,7 @@ export class SitsApiAdapter implements SourceAdapter {
     return [];
   }
 
-  async *streamRows(
-    ctx: AdapterContext,
-    args: StreamRowsArgs,
-  ): AsyncIterable<StreamRowsPage> {
+  async *streamRows(ctx: AdapterContext, args: StreamRowsArgs): AsyncIterable<StreamRowsPage> {
     ctx.logger.debug("sits-api: streamRows", { resource: args.resource });
     if (!SUPPORTED_RESOURCES.includes(args.resource as SupportedResource)) {
       throw new Error(`sits-api: resource "${args.resource}" not supported`);
@@ -100,10 +97,7 @@ export class SitsApiAdapter implements SourceAdapter {
     return [];
   }
 
-  async getRecordById(
-    ctx: AdapterContext,
-    args: GetRecordByIdArgs,
-  ): Promise<SampledRow | null> {
+  async getRecordById(ctx: AdapterContext, args: GetRecordByIdArgs): Promise<SampledRow | null> {
     ctx.logger.debug("sits-api: getRecordById", { resource: args.resource, id: args.id });
     if (!SUPPORTED_RESOURCES.includes(args.resource as SupportedResource)) {
       throw new Error(`sits-api: resource "${args.resource}" not supported`);

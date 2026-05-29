@@ -6,13 +6,13 @@
   "version": "1.0.0",
   "description": "Banner student-status code to HESA reason-for-ending-instance code.",
   "entries": [
-    { "sourceCode": "AS",  "targetCode": "00", "notes": "Active student — instance not ended" },
-    { "sourceCode": "GR",  "targetCode": "01", "notes": "Graduated — successful completion" },
-    { "sourceCode": "WD",  "targetCode": "02", "notes": "Withdrew — voluntary withdrawal" },
-    { "sourceCode": "AW",  "targetCode": "03", "notes": "Academic failure" },
-    { "sourceCode": "IT",  "targetCode": "04", "notes": "Intermitted / suspended" },
-    { "sourceCode": "TR",  "targetCode": "05", "notes": "Transferred to another HEI" },
-    { "sourceCode": "DC",  "targetCode": "07", "notes": "Deceased" },
-    { "sourceCode": "EX",  "targetCode": "08", "notes": "Excluded / disciplinary" }
+    { "sourceCode": "AS", "targetCode": "00", "notes": "Active student — instance not ended" },
+    { "sourceCode": "GR", "targetCode": "01", "notes": "Graduated — successful completion" },
+    { "sourceCode": "WD", "targetCode": "02", "notes": "Withdrew — voluntary withdrawal" },
+    { "sourceCode": "AW", "targetCode": "03", "notes": "Academic failure" },
+    { "sourceCode": "IT", "targetCode": "04", "notes": "Intermitted / suspended" },
+    { "sourceCode": "TR", "targetCode": "05", "notes": "Transferred to another HEI" },
+    { "sourceCode": "DC", "targetCode": "07", "notes": "Deceased" },
+    { "sourceCode": "EX", "targetCode": "08", "notes": "Excluded / disciplinary" }
   ]
 }

@@ -9,10 +9,10 @@
       "description": "HESA Coding Manual — SEXID.",
       "source": "hesa-data-futures",
       "entries": [
-        { "code": "1",  "description": "Female", "isActive": true },
-        { "code": "2",  "description": "Male", "isActive": true },
-        { "code": "3",  "description": "Other", "isActive": true },
-        { "code": "4",  "description": "Information refused", "isActive": true }
+        { "code": "1", "description": "Female", "isActive": true },
+        { "code": "2", "description": "Male", "isActive": true },
+        { "code": "3", "description": "Other", "isActive": true },
+        { "code": "4", "description": "Information refused", "isActive": true }
       ]
     },
     {
@@ -21,11 +21,11 @@
       "description": "Statutory fee-status classification.",
       "source": "hesa-data-futures",
       "entries": [
-        { "code": "1",  "description": "Home", "isActive": true },
-        { "code": "2",  "description": "Overseas (non-EU)", "isActive": true },
-        { "code": "3",  "description": "EU", "isActive": true },
-        { "code": "4",  "description": "Channel Islands and Isle of Man", "isActive": true },
-        { "code": "5",  "description": "Not applicable / not known", "isActive": true }
+        { "code": "1", "description": "Home", "isActive": true },
+        { "code": "2", "description": "Overseas (non-EU)", "isActive": true },
+        { "code": "3", "description": "EU", "isActive": true },
+        { "code": "4", "description": "Channel Islands and Isle of Man", "isActive": true },
+        { "code": "5", "description": "Not applicable / not known", "isActive": true }
       ]
     },
     {
@@ -34,7 +34,11 @@
       "description": "HESA RSNEND — termination reason for an enrolment.",
       "source": "hesa-data-futures",
       "entries": [
-        { "code": "01", "description": "Academic failure / left in bad standing", "isActive": true },
+        {
+          "code": "01",
+          "description": "Academic failure / left in bad standing",
+          "isActive": true
+        },
         { "code": "02", "description": "Health reasons", "isActive": true },
         { "code": "03", "description": "Financial reasons", "isActive": true },
         { "code": "04", "description": "Other personal reasons", "isActive": true },
@@ -95,12 +99,12 @@
       "description": "UK degree classification scheme.",
       "source": "hesa-data-futures",
       "entries": [
-        { "code": "1",  "description": "First class honours", "isActive": true },
+        { "code": "1", "description": "First class honours", "isActive": true },
         { "code": "21", "description": "Upper second class honours (2:1)", "isActive": true },
         { "code": "22", "description": "Lower second class honours (2:2)", "isActive": true },
-        { "code": "3",  "description": "Third class honours", "isActive": true },
-        { "code": "4",  "description": "Pass (no honours)", "isActive": true },
-        { "code": "5",  "description": "Fail / no award", "isActive": true },
+        { "code": "3", "description": "Third class honours", "isActive": true },
+        { "code": "4", "description": "Pass (no honours)", "isActive": true },
+        { "code": "5", "description": "Fail / no award", "isActive": true },
         { "code": "97", "description": "Not classified", "isActive": true }
       ]
     }

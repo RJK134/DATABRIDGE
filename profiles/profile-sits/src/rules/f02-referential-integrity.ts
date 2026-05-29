@@ -19,7 +19,8 @@ export const F02_referential_integrity: AuditRule[] = [
            FROM SRS
           WHERE SRS_STUC NOT IN (SELECT STU_CODE FROM STU WHERE STU_TENT = :tenantId)
             AND SRS_TENT = :tenantId`,
-    messageTemplate: "Enrolment {{subject_id}} references student {{student_id}} which does not exist"
+    messageTemplate:
+      "Enrolment {{subject_id}} references student {{student_id}} which does not exist",
   },
   {
     id: "F02-02",
@@ -35,7 +36,8 @@ export const F02_referential_integrity: AuditRule[] = [
            FROM SRS
           WHERE SRS_PROG NOT IN (SELECT POS_CODE FROM POS WHERE POS_TENT = :tenantId)
             AND SRS_TENT = :tenantId`,
-    messageTemplate: "Enrolment {{subject_id}} references programme {{programme_code}} which does not exist"
+    messageTemplate:
+      "Enrolment {{subject_id}} references programme {{programme_code}} which does not exist",
   },
   {
     id: "F02-03",
@@ -51,7 +53,8 @@ export const F02_referential_integrity: AuditRule[] = [
            FROM SMO
           WHERE SMO_SRSC NOT IN (SELECT SRS_CODE FROM SRS WHERE SRS_TENT = :tenantId)
             AND SMO_TENT = :tenantId`,
-    messageTemplate: "Module registration {{subject_id}} references enrolment {{enrolment_id}} which does not exist"
+    messageTemplate:
+      "Module registration {{subject_id}} references enrolment {{enrolment_id}} which does not exist",
   },
   {
     id: "F02-04",
@@ -67,6 +70,6 @@ export const F02_referential_integrity: AuditRule[] = [
            FROM SAW
           WHERE SAW_STUC NOT IN (SELECT STU_CODE FROM STU WHERE STU_TENT = :tenantId)
             AND SAW_TENT = :tenantId`,
-    messageTemplate: "Award {{subject_id}} references student {{student_id}} which does not exist"
-  }
+    messageTemplate: "Award {{subject_id}} references student {{student_id}} which does not exist",
+  },
 ];

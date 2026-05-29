@@ -1,10 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { InMemoryTransport, type TargetTransport } from "@databridge/target-adapters";
-import {
-  runPreFlightCheck,
-  summarisePreFlight,
-  BUNDLED_REQUIREMENTS,
-} from "../index.js";
+import { runPreFlightCheck, summarisePreFlight, BUNDLED_REQUIREMENTS } from "../index.js";
 import type { SampledRow } from "@databridge/adapter-spec";
 
 describe("runPreFlightCheck", () => {
@@ -64,7 +60,7 @@ describe("runPreFlightCheck", () => {
   it("throws on an unknown bundle id", async () => {
     const t = new InMemoryTransport();
     await expect(
-      runPreFlightCheck({ transport: t, requirements: "no-such-bundle" }),
+      runPreFlightCheck({ transport: t, requirements: "no-such-bundle" })
     ).rejects.toThrow(/unknown requirement bundle/);
   });
 

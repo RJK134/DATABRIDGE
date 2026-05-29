@@ -18,19 +18,10 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import {
-  SALESFORCE_EDU_NATIVE_RULES,
-} from "@databridge/audit-pack-salesforce-edu-native";
-import {
-  DYNAMICS365_EDU_NATIVE_RULES,
-} from "@databridge/audit-pack-dynamics365-edu-native";
-import {
-  generateIntegrationPrepReport,
-} from "@databridge/findings-integration-prep";
-import {
-  verifyCanonical,
-  type CanonicalRecord,
-} from "@databridge/parallel-run-verifier";
+import { SALESFORCE_EDU_NATIVE_RULES } from "@databridge/audit-pack-salesforce-edu-native";
+import { DYNAMICS365_EDU_NATIVE_RULES } from "@databridge/audit-pack-dynamics365-edu-native";
+import { generateIntegrationPrepReport } from "@databridge/findings-integration-prep";
+import { verifyCanonical, type CanonicalRecord } from "@databridge/parallel-run-verifier";
 
 import { runFixtureAudit, type FixtureAuditReport } from "./audit.js";
 import {
@@ -90,7 +81,7 @@ function printUsage(): void {
       "",
       "After running, open: http://localhost:3000 (api) and http://localhost:5173 (web).",
       "",
-    ].join("\n"),
+    ].join("\n")
   );
 }
 
@@ -203,39 +194,44 @@ async function main(argv: readonly string[]): Promise<void> {
   // CRM integration-prep — SITS source vs Salesforce / Dynamics fixtures.
   const sfFix = fixtures.find((f) => f.source === "salesforce-edu");
   const dvFix = fixtures.find((f) => f.source === "dynamics365-edu");
-  const sfPrep = sitsFix && sfFix
-    ? generateIntegrationPrepReport({
-        source: sitsFix.rows,
-        target: sfFix.rows,
-        sourceLabel: "SITS",
-        targetLabel: "Salesforce Education Cloud",
-        options: {
-          sourceKey: "studentId",
-          targetKey: "External_Id__c",
-          compareFields: ["lastName", "email"],
-        },
-      })
-    : undefined;
-  const dvPrep = sitsFix && dvFix
-    ? generateIntegrationPrepReport({
-        source: sitsFix.rows,
-        target: dvFix.rows,
-        sourceLabel: "SITS",
-        targetLabel: "Dynamics 365 Education",
-        options: {
-          sourceKey: "studentId",
-          targetKey: "msdyn_externalstudentid",
-          compareFields: ["lastName", "email"],
-        },
-      })
-    : undefined;
+  const sfPrep =
+    sitsFix && sfFix
+      ? generateIntegrationPrepReport({
+          source: sitsFix.rows,
+          target: sfFix.rows,
+          sourceLabel: "SITS",
+          targetLabel: "Salesforce Education Cloud",
+          options: {
+            sourceKey: "studentId",
+            targetKey: "External_Id__c",
+            compareFields: ["lastName", "email"],
+          },
+        })
+      : undefined;
+  const dvPrep =
+    sitsFix && dvFix
+      ? generateIntegrationPrepReport({
+          source: sitsFix.rows,
+          target: dvFix.rows,
+          sourceLabel: "SITS",
+          targetLabel: "Dynamics 365 Education",
+          options: {
+            sourceKey: "studentId",
+            targetKey: "msdyn_externalstudentid",
+            compareFields: ["lastName", "email"],
+          },
+        })
+      : undefined;
 
   const report: DemoReport = {
     generatedAt: new Date().toISOString(),
     fixtures: auditByFixture,
     migrations: {
       bannerToSits: { rowsRead: banner2sitsRows, planTables: ["STU", "POS", "SCE", "STA"] },
-      sitsToBanner: { rowsRead: sits2bannerRows, planTables: ["SPRIDEN", "STVMAJR", "SGBSTDN", "SHRTGPA"] },
+      sitsToBanner: {
+        rowsRead: sits2bannerRows,
+        planTables: ["SPRIDEN", "STVMAJR", "SGBSTDN", "SHRTGPA"],
+      },
     },
     integrationPrep: {
       sitsToSalesforce: {
@@ -295,24 +291,36 @@ function printHumanReport(report: DemoReport, opts: CliOptions): void {
   lines.push("");
   lines.push("Fixtures + audits:");
   for (const f of report.fixtures) {
-    lines.push(`  - ${f.fixture} (${f.source}): ${f.rows} rows, ${f.audit.findingsTotal} findings (${f.audit.bySeverity["ERROR"] ?? 0} errors)`);
+    lines.push(
+      `  - ${f.fixture} (${f.source}): ${f.rows} rows, ${f.audit.findingsTotal} findings (${f.audit.bySeverity["ERROR"] ?? 0} errors)`
+    );
   }
   lines.push("");
   lines.push("Bidirectional migration (load-plan only):");
-  lines.push(`  Banner → SITS: ${report.migrations.bannerToSits.rowsRead} rows → tables [${report.migrations.bannerToSits.planTables.join(", ")}]`);
-  lines.push(`  SITS → Banner: ${report.migrations.sitsToBanner.rowsRead} rows → tables [${report.migrations.sitsToBanner.planTables.join(", ")}]`);
+  lines.push(
+    `  Banner → SITS: ${report.migrations.bannerToSits.rowsRead} rows → tables [${report.migrations.bannerToSits.planTables.join(", ")}]`
+  );
+  lines.push(
+    `  SITS → Banner: ${report.migrations.sitsToBanner.rowsRead} rows → tables [${report.migrations.sitsToBanner.planTables.join(", ")}]`
+  );
   lines.push("");
   lines.push("CRM integration-prep:");
-  lines.push(`  SITS → Salesforce: create=${report.integrationPrep.sitsToSalesforce.create} update=${report.integrationPrep.sitsToSalesforce.update} skip=${report.integrationPrep.sitsToSalesforce.skip} reject=${report.integrationPrep.sitsToSalesforce.reject}`);
-  lines.push(`  SITS → Dynamics:   create=${report.integrationPrep.sitsToDynamics.create} update=${report.integrationPrep.sitsToDynamics.update} skip=${report.integrationPrep.sitsToDynamics.skip} reject=${report.integrationPrep.sitsToDynamics.reject}`);
+  lines.push(
+    `  SITS → Salesforce: create=${report.integrationPrep.sitsToSalesforce.create} update=${report.integrationPrep.sitsToSalesforce.update} skip=${report.integrationPrep.sitsToSalesforce.skip} reject=${report.integrationPrep.sitsToSalesforce.reject}`
+  );
+  lines.push(
+    `  SITS → Dynamics:   create=${report.integrationPrep.sitsToDynamics.create} update=${report.integrationPrep.sitsToDynamics.update} skip=${report.integrationPrep.sitsToDynamics.skip} reject=${report.integrationPrep.sitsToDynamics.reject}`
+  );
   lines.push("");
   lines.push("Parallel-run verifier (Banner vs SITS canonical projections):");
-  lines.push(`  DHP: ${report.parallelRun.bannerSitsDhp.toFixed(3)}, drift rows: ${report.parallelRun.drift}`);
+  lines.push(
+    `  DHP: ${report.parallelRun.bannerSitsDhp.toFixed(3)}, drift rows: ${report.parallelRun.drift}`
+  );
   lines.push("");
   lines.push("LLM walkthrough (NL → rule → findings, deterministic-mock provider):");
   for (const p of report.llm.prompts) {
     lines.push(
-      `  ${p.id} [${p.fixture}] "${p.nl}" → rule=${p.ruleId} severity=${p.severity}, ${p.findings}/${p.rowsScanned} flagged (latency ${p.latencyMs}ms, prompt-sha256=${p.promptHashPrefix}…)`,
+      `  ${p.id} [${p.fixture}] "${p.nl}" → rule=${p.ruleId} severity=${p.severity}, ${p.findings}/${p.rowsScanned} flagged (latency ${p.latencyMs}ms, prompt-sha256=${p.promptHashPrefix}…)`
     );
   }
   if (report.llm.narrative) {

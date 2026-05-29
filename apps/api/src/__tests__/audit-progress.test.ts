@@ -6,16 +6,12 @@
  * forget() cleanup hook.
  */
 import { afterEach, describe, expect, it } from "vitest";
-import {
-  auditProgress,
-  isTerminalStatus,
-  type AuditProgressEvent,
-} from "../audit-progress.js";
+import { auditProgress, isTerminalStatus, type AuditProgressEvent } from "../audit-progress.js";
 
 function ev(
   auditId: string,
   status: AuditProgressEvent["status"],
-  extra: Partial<AuditProgressEvent> = {},
+  extra: Partial<AuditProgressEvent> = {}
 ): AuditProgressEvent {
   return { auditId, ts: new Date().toISOString(), status, ...extra };
 }
@@ -44,11 +40,7 @@ describe("auditProgress emitter", () => {
     const seen: AuditProgressEvent[] = [];
     const unsub = auditProgress.subscribe("a2", (e) => seen.push(e));
 
-    expect(seen.map((e) => e.status)).toEqual([
-      "queued",
-      "running",
-      "succeeded",
-    ]);
+    expect(seen.map((e) => e.status)).toEqual(["queued", "running", "succeeded"]);
     unsub();
   });
 
@@ -88,10 +80,7 @@ describe("auditProgress emitter", () => {
 
     expect(seen.map((e) => e.status)).toEqual(["running"]);
     // History keeps both for any future late subscriber.
-    expect(auditProgress._historyFor("a4").map((e) => e.status)).toEqual([
-      "running",
-      "succeeded",
-    ]);
+    expect(auditProgress._historyFor("a4").map((e) => e.status)).toEqual(["running", "succeeded"]);
   });
 
   it("forget() clears history for the given audit", () => {

@@ -22,10 +22,7 @@ function makeLogger() {
   return { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() };
 }
 
-function jsonRes(
-  body: unknown,
-  init: { status?: number; headers?: Record<string, string> } = {},
-) {
+function jsonRes(body: unknown, init: { status?: number; headers?: Record<string, string> } = {}) {
   const status = init.status ?? 200;
   const headers = new Map(Object.entries(init.headers ?? {}));
   return {
@@ -48,7 +45,7 @@ describe("CiaCubeClient.cubePathFor", () => {
 
   it("preserves trailing id segments (single-record GET)", () => {
     expect(CiaCubeClient.cubePathFor("financials/ar/customers/CUST-001")).toBe(
-      "customers/CUST-001",
+      "customers/CUST-001"
     );
   });
 
@@ -62,10 +59,15 @@ describe("CiaCubeClient.get", () => {
   it("issues GET against /cia/cube/v1/<path> with bearer auth and returns parsed JSON", async () => {
     const fetchImpl: FetchLike = vi.fn(async (url, init) => {
       expect(url).toBe(
-        "https://customer.techoneglobal.com/cia/cube/v1/customers?pageNumber=1&pageSize=500",
+        "https://customer.techoneglobal.com/cia/cube/v1/customers?pageNumber=1&pageSize=500"
       );
       expect(init?.headers?.["authorization"]).toBe("Bearer cube-token");
-      return jsonRes({ data: [{ CustomerCode: "C1" }], pageNumber: 1, pageSize: 500, totalRecords: 1 });
+      return jsonRes({
+        data: [{ CustomerCode: "C1" }],
+        pageNumber: 1,
+        pageSize: 500,
+        totalRecords: 1,
+      });
     });
     const client = new CiaCubeClient({
       config: CONFIG,
@@ -90,7 +92,7 @@ describe("CiaCubeClient.get", () => {
       fetchImpl: vi.fn(),
     });
     await expect(client.get({ path: "workflow/instances" })).rejects.toThrow(
-      /not modelled in cube/,
+      /not modelled in cube/
     );
   });
 
@@ -182,7 +184,7 @@ describe("CiaFallbackController", () => {
   });
 
   it("reset() clears state for a single resource or all", () => {
-    let now = 1_000_000;
+    const now = 1_000_000;
     const ctrl = new CiaFallbackController({
       threshold: 1,
       cooldownMs: 60_000,
@@ -199,7 +201,7 @@ describe("CiaFallbackController", () => {
   });
 
   it("snapshot exposes counts and openUntil for diagnostics", () => {
-    let now = 1_000_000;
+    const now = 1_000_000;
     const ctrl = new CiaFallbackController({
       threshold: 2,
       cooldownMs: 5_000,

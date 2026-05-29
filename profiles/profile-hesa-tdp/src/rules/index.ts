@@ -1,16 +1,16 @@
-import type { Rule, RuleDefinition } from '@databridge/rule-core';
-import { husidFormatRule } from './husid-format';
-import { codingFrameConformanceRules } from './coding-frame-conformance';
-import { temporalConsistencyRules } from './temporal-consistency';
-import { crossEntityIntegrityRules } from './cross-entity-integrity';
-import { stuloadModeConsistencyRule } from './stuload-mode-consistency';
-import { H01_RULES } from './h01-husid';
-import { H02_RULES } from './h02-coding-frames';
-import { H03_RULES } from './h03-mandatory-fields';
-import { H04_RULES } from './h04-temporal';
-import { H05_RULES } from './h05-cross-entity';
-import { H06_RULES } from './h06-hecos';
-import { H07_RULES } from './h07-fee-consistency';
+import type { Rule, RuleDefinition } from "@databridge/rule-core";
+import { husidFormatRule } from "./husid-format";
+import { codingFrameConformanceRules } from "./coding-frame-conformance";
+import { temporalConsistencyRules } from "./temporal-consistency";
+import { crossEntityIntegrityRules } from "./cross-entity-integrity";
+import { stuloadModeConsistencyRule } from "./stuload-mode-consistency";
+import { H01_RULES } from "./h01-husid";
+import { H02_RULES } from "./h02-coding-frames";
+import { H03_RULES } from "./h03-mandatory-fields";
+import { H04_RULES } from "./h04-temporal";
+import { H05_RULES } from "./h05-cross-entity";
+import { H06_RULES } from "./h06-hecos";
+import { H07_RULES } from "./h07-fee-consistency";
 
 /**
  * Inline-style HESA TDP rules (legacy shape — single rule or rule arrays

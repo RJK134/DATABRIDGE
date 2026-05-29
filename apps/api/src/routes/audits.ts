@@ -27,11 +27,7 @@ import type { AuditQueue } from "../audit-queue.js";
 import { cancelAudit } from "../audit-runner.js";
 import { findProfile } from "../profile-registry.js";
 import { findAdapter } from "../adapter-registry.js";
-import {
-  auditProgress,
-  isTerminalStatus,
-  type AuditProgressEvent,
-} from "../audit-progress.js";
+import { auditProgress, isTerminalStatus, type AuditProgressEvent } from "../audit-progress.js";
 
 /* ---------------------------- request schema ------------------------------ */
 
@@ -94,7 +90,7 @@ function resolveTenantFromQuery(req: FastifyRequest): string | undefined {
  */
 async function waitForTerminalState(
   auditId: string,
-  timeoutMs: number,
+  timeoutMs: number
 ): Promise<AuditRecord | undefined> {
   const start = Date.now();
   const TERMINAL = new Set(["succeeded", "failed", "cancelled"]);
@@ -124,7 +120,7 @@ export interface AuditRoutesOptions {
 
 export async function auditRoutes(
   app: FastifyInstance,
-  routeOpts: AuditRoutesOptions,
+  routeOpts: AuditRoutesOptions
 ): Promise<void> {
   // POST /audits/run — requires write authority. data:steward and
   // migration:operator are both legitimate — stewards run quality audits,
@@ -144,9 +140,7 @@ export async function auditRoutes(
     async (req, reply) => {
       const parsed = RunAuditBodyZ.safeParse(req.body);
       if (!parsed.success) {
-        return reply
-          .code(400)
-          .send({ error: "invalid_body", details: parsed.error.flatten() });
+        return reply.code(400).send({ error: "invalid_body", details: parsed.error.flatten() });
       }
       const body = parsed.data;
 
@@ -154,9 +148,7 @@ export async function auditRoutes(
       // 202 + later-failed audit for typos.
       const profileEntry = findProfile(body.profileId);
       if (!profileEntry) {
-        return reply
-          .code(404)
-          .send({ error: "profile_not_found", id: body.profileId });
+        return reply.code(404).send({ error: "profile_not_found", id: body.profileId });
       }
       // Fail fast on unknown adapter id rather than spending a queue slot.
       // Adapter construction (which can read config) is still deferred to
@@ -185,22 +177,14 @@ export async function auditRoutes(
         tenantId: body.tenantId,
         profileId: body.profileId,
         ...(body.adapterId !== undefined ? { adapterId: body.adapterId } : {}),
-        ...(body.adapterConfig !== undefined
-          ? { adapterConfig: body.adapterConfig }
-          : {}),
-        ...(body.resourceMap !== undefined
-          ? { resourceMap: body.resourceMap }
-          : {}),
-        ...(body.primaryKeyMap !== undefined
-          ? { primaryKeyMap: body.primaryKeyMap }
-          : {}),
+        ...(body.adapterConfig !== undefined ? { adapterConfig: body.adapterConfig } : {}),
+        ...(body.resourceMap !== undefined ? { resourceMap: body.resourceMap } : {}),
+        ...(body.primaryKeyMap !== undefined ? { primaryKeyMap: body.primaryKeyMap } : {}),
         ...(body.pageSize !== undefined ? { pageSize: body.pageSize } : {}),
         ...(body.maxFindingsPerRule !== undefined
           ? { maxFindingsPerRule: body.maxFindingsPerRule }
           : {}),
-        ...(body.maxFindingsTotal !== undefined
-          ? { maxFindingsTotal: body.maxFindingsTotal }
-          : {}),
+        ...(body.maxFindingsTotal !== undefined ? { maxFindingsTotal: body.maxFindingsTotal } : {}),
       };
 
       try {
@@ -230,16 +214,13 @@ export async function auditRoutes(
         return reply.code(200).send(final);
       }
 
-      return reply
-        .code(202)
-        .header("location", `/audits/${record.auditId}`)
-        .send({
-          auditId: record.auditId,
-          status: "queued",
-          tenantId: record.tenantId,
-          profileId: record.profileId,
-        });
-    },
+      return reply.code(202).header("location", `/audits/${record.auditId}`).send({
+        auditId: record.auditId,
+        status: "queued",
+        tenantId: record.tenantId,
+        profileId: record.profileId,
+      });
+    }
   );
 
   // POST /audits/:id/cancel — thin wrapper around the runner registry.
@@ -251,9 +232,7 @@ export async function auditRoutes(
         // Look up the audit to resolve its tenant, then run requireRole.
         const rec = await auditStore.get(req.params.id);
         if (!rec) {
-          return reply
-            .code(404)
-            .send({ error: "audit_not_found", id: req.params.id });
+          return reply.code(404).send({ error: "audit_not_found", id: req.params.id });
         }
         const handler = requireRole({
           resolveTenantId: () => rec.tenantId,
@@ -272,7 +251,7 @@ export async function auditRoutes(
         return reply.code(200).send({ auditId: req.params.id, aborted: false });
       }
       return reply.code(202).send({ auditId: req.params.id, aborted: true });
-    },
+    }
   );
 
   app.get<{ Querystring: { tenantId?: string } }>(
@@ -282,7 +261,7 @@ export async function auditRoutes(
       const tenantId = req.query.tenantId;
       const filter = tenantId !== undefined ? { tenantId } : undefined;
       return { audits: await auditStore.list(filter) };
-    },
+    }
   );
 
   // GET /audits/:id/stream — Server-Sent Events. Streams every status
@@ -293,122 +272,109 @@ export async function auditRoutes(
   // Auth: same surface as GET /audits/:id — viewer roles in the record's
   // tenant, or superadmin. We apply RBAC at the handler since we need the
   // record first to resolve the tenant.
-  app.get<{ Params: { id: string } }>(
-    "/audits/:id/stream",
-    async (req, reply) => {
-      const rec = await auditStore.get(req.params.id);
-      if (!rec) {
-        return reply
-          .code(404)
-          .send({ error: "audit_not_found", id: req.params.id });
-      }
-      const principal = req.principal;
-      if (principal) {
-        const isSuper = principal.tenants.some((t) =>
-          t.roles.includes("system:superadmin"),
-        );
-        if (!isSuper) {
-          const membership = principal.tenants.find(
-            (t) => t.tenantId === rec.tenantId,
-          );
-          const allowed = ["audit:viewer", "data:viewer", "data:steward"];
-          const ok =
-            membership !== undefined &&
-            allowed.some((r) =>
-              membership.roles.includes(
-                r as (typeof membership.roles)[number],
-              ),
-            );
-          if (!ok) {
-            return reply.code(403).send({
-              error: "forbidden",
-              message: `no viewer role in tenant ${rec.tenantId}`,
-            });
-          }
+  app.get<{ Params: { id: string } }>("/audits/:id/stream", async (req, reply) => {
+    const rec = await auditStore.get(req.params.id);
+    if (!rec) {
+      return reply.code(404).send({ error: "audit_not_found", id: req.params.id });
+    }
+    const principal = req.principal;
+    if (principal) {
+      const isSuper = principal.tenants.some((t) => t.roles.includes("system:superadmin"));
+      if (!isSuper) {
+        const membership = principal.tenants.find((t) => t.tenantId === rec.tenantId);
+        const allowed = ["audit:viewer", "data:viewer", "data:steward"];
+        const ok =
+          membership !== undefined &&
+          allowed.some((r) => membership.roles.includes(r as (typeof membership.roles)[number]));
+        if (!ok) {
+          return reply.code(403).send({
+            error: "forbidden",
+            message: `no viewer role in tenant ${rec.tenantId}`,
+          });
         }
       }
+    }
 
-      // Switch to raw mode so we can write the SSE frames ourselves.
-      // hijack() tells Fastify we own the response — it won't try to send
-      // a reply when the handler returns, which would otherwise fight with
-      // our direct reply.raw.write() / reply.raw.end() calls.
-      reply.hijack();
-      reply.raw.statusCode = 200;
-      reply.raw.setHeader("content-type", "text/event-stream");
-      reply.raw.setHeader("cache-control", "no-cache, no-transform");
-      reply.raw.setHeader("connection", "keep-alive");
-      // Defeat proxy buffering (nginx etc.) so events arrive promptly.
-      reply.raw.setHeader("x-accel-buffering", "no");
-      reply.raw.flushHeaders?.();
+    // Switch to raw mode so we can write the SSE frames ourselves.
+    // hijack() tells Fastify we own the response — it won't try to send
+    // a reply when the handler returns, which would otherwise fight with
+    // our direct reply.raw.write() / reply.raw.end() calls.
+    reply.hijack();
+    reply.raw.statusCode = 200;
+    reply.raw.setHeader("content-type", "text/event-stream");
+    reply.raw.setHeader("cache-control", "no-cache, no-transform");
+    reply.raw.setHeader("connection", "keep-alive");
+    // Defeat proxy buffering (nginx etc.) so events arrive promptly.
+    reply.raw.setHeader("x-accel-buffering", "no");
+    reply.raw.flushHeaders?.();
 
-      const auditId = req.params.id;
-      let closed = false;
+    const auditId = req.params.id;
+    let closed = false;
 
-      const write = (ev: AuditProgressEvent | { __heartbeat: true }): void => {
-        if (closed) return;
-        if ("__heartbeat" in ev) {
-          reply.raw.write(`: heartbeat ${Date.now()}\n\n`);
-          return;
-        }
-        const payload = JSON.stringify(ev);
-        reply.raw.write(`event: progress\n`);
-        reply.raw.write(`data: ${payload}\n\n`);
-      };
-
-      // Always send a synthetic 'snapshot' event with the current record
-      // shape so clients have a usable baseline before any live event.
-      write({
-        auditId,
-        ts: new Date().toISOString(),
-        status: rec.status,
-        ...(rec.error !== undefined ? { message: rec.error } : {}),
-      });
-
-      // If the audit is already terminal, close immediately.
-      if (isTerminalStatus(rec.status)) {
-        reply.raw.write("event: end\ndata: {}\n\n");
-        reply.raw.end();
+    const write = (ev: AuditProgressEvent | { __heartbeat: true }): void => {
+      if (closed) return;
+      if ("__heartbeat" in ev) {
+        reply.raw.write(`: heartbeat ${Date.now()}\n\n`);
         return;
       }
+      const payload = JSON.stringify(ev);
+      reply.raw.write(`event: progress\n`);
+      reply.raw.write(`data: ${payload}\n\n`);
+    };
 
-      // Heartbeat every 15s so proxies and clients can detect liveness.
-      // Declared first so the subscription callback can clear it.
-      const heartbeatTimer = setInterval(() => {
-        write({ __heartbeat: true });
-      }, 15_000);
-      // Don't keep the event loop alive just for the heartbeat.
-      heartbeatTimer.unref?.();
+    // Always send a synthetic 'snapshot' event with the current record
+    // shape so clients have a usable baseline before any live event.
+    write({
+      auditId,
+      ts: new Date().toISOString(),
+      status: rec.status,
+      ...(rec.error !== undefined ? { message: rec.error } : {}),
+    });
 
-      // Subscribe to live events. Replays buffered history first — the
-      // callback can run synchronously, including for a terminal event, so
-      // we use a forward-declared `let` to avoid a TDZ when the listener
-      // calls unsubscribe() during the initial replay tick.
-      let unsubscribe: () => void = () => {};
-      let terminated = false;
-      unsubscribe = auditProgress.subscribe(auditId, (ev) => {
-        if (terminated) return;
-        write(ev);
-        if (isTerminalStatus(ev.status)) {
-          terminated = true;
-          reply.raw.write("event: end\ndata: {}\n\n");
-          closed = true;
-          unsubscribe();
-          clearInterval(heartbeatTimer);
-          reply.raw.end();
-        }
-      });
+    // If the audit is already terminal, close immediately.
+    if (isTerminalStatus(rec.status)) {
+      reply.raw.write("event: end\ndata: {}\n\n");
+      reply.raw.end();
+      return;
+    }
 
-      // Cleanup when the client disconnects.
-      req.raw.on("close", () => {
+    // Heartbeat every 15s so proxies and clients can detect liveness.
+    // Declared first so the subscription callback can clear it.
+    const heartbeatTimer = setInterval(() => {
+      write({ __heartbeat: true });
+    }, 15_000);
+    // Don't keep the event loop alive just for the heartbeat.
+    heartbeatTimer.unref?.();
+
+    // Subscribe to live events. Replays buffered history first — the
+    // callback can run synchronously, including for a terminal event, so
+    // we use a forward-declared `let` to avoid a TDZ when the listener
+    // calls unsubscribe() during the initial replay tick.
+    let unsubscribe: () => void = () => {};
+    let terminated = false;
+    unsubscribe = auditProgress.subscribe(auditId, (ev) => {
+      if (terminated) return;
+      write(ev);
+      if (isTerminalStatus(ev.status)) {
+        terminated = true;
+        reply.raw.write("event: end\ndata: {}\n\n");
         closed = true;
         unsubscribe();
         clearInterval(heartbeatTimer);
-      });
+        reply.raw.end();
+      }
+    });
 
-      // We've hijacked the reply; nothing to return.
-      return;
-    },
-  );
+    // Cleanup when the client disconnects.
+    req.raw.on("close", () => {
+      closed = true;
+      unsubscribe();
+      clearInterval(heartbeatTimer);
+    });
+
+    // We've hijacked the reply; nothing to return.
+    return;
+  });
 
   // GET /audits/:id — we can't resolve the tenant until we've fetched the
   // record, so we apply auth at the handler level. Principals must either be
@@ -416,22 +382,18 @@ export async function auditRoutes(
   app.get<{ Params: { id: string } }>("/audits/:id", async (req, reply) => {
     const rec = await auditStore.get(req.params.id);
     if (!rec) {
-      return reply
-        .code(404)
-        .send({ error: "audit_not_found", id: req.params.id });
+      return reply.code(404).send({ error: "audit_not_found", id: req.params.id });
     }
     const principal = req.principal;
     if (principal) {
-      const isSuper = principal.tenants.some((t) =>
-        t.roles.includes("system:superadmin"),
-      );
+      const isSuper = principal.tenants.some((t) => t.roles.includes("system:superadmin"));
       if (!isSuper) {
         const membership = principal.tenants.find((t) => t.tenantId === rec.tenantId);
         const allowedRoles = ["audit:viewer", "data:viewer", "data:steward"];
         const ok =
           membership !== undefined &&
           allowedRoles.some((r) =>
-            membership.roles.includes(r as (typeof membership.roles)[number]),
+            membership.roles.includes(r as (typeof membership.roles)[number])
           );
         if (!ok) {
           return reply.code(403).send({

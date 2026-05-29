@@ -167,7 +167,7 @@ describe("TechOneFinanceOneAdapter — live HTTP path (via injected client)", ()
         }).client,
     });
     await expect(
-      adapter404.getRecordById(makeLiveCtx(), { resource: "Invoices", id: "missing" }),
+      adapter404.getRecordById(makeLiveCtx(), { resource: "Invoices", id: "missing" })
     ).resolves.toBeNull();
 
     const adapter500 = new TechOneFinanceOneAdapter(CONFIG, {
@@ -179,7 +179,7 @@ describe("TechOneFinanceOneAdapter — live HTTP path (via injected client)", ()
         }).client,
     });
     await expect(
-      adapter500.getRecordById(makeLiveCtx(), { resource: "Invoices", id: "x" }),
+      adapter500.getRecordById(makeLiveCtx(), { resource: "Invoices", id: "x" })
     ).rejects.toThrow(/kaboom/);
   });
 

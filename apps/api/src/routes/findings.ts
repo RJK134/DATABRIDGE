@@ -16,15 +16,8 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 import type { AuditFinding, RuleSeverity } from "@databridge/rule-core";
-import {
-  FindingWaiverStore,
-  WaiverError,
-  applyWaiver,
-} from "@databridge/finding-waivers";
-import {
-  computeFindingDelta,
-  summariseDeltaMd,
-} from "@databridge/finding-delta";
+import { FindingWaiverStore, WaiverError, applyWaiver } from "@databridge/finding-waivers";
+import { computeFindingDelta, summariseDeltaMd } from "@databridge/finding-delta";
 import {
   aggregateSeverityBySurface,
   reportToMd,

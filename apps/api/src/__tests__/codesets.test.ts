@@ -44,7 +44,10 @@ describe("apps/api /codesets (Phase H)", () => {
   it("GET /codesets/HESA.SEXID returns the full CodeList", async () => {
     const res = await app.inject({ method: "GET", url: "/codesets/HESA.SEXID" });
     expect(res.statusCode).toBe(200);
-    const body = res.json() as { id: string; entries: Array<{ code: string; description: string }> };
+    const body = res.json() as {
+      id: string;
+      entries: Array<{ code: string; description: string }>;
+    };
     expect(body.id).toBe("HESA.SEXID");
     expect(body.entries.find((e) => e.code === "1")?.description).toBe("Female");
   });

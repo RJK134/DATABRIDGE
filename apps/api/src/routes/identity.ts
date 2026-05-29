@@ -10,11 +10,7 @@
  */
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
-import {
-  reconcile,
-  type MatchPolicy,
-  type PersonRecord,
-} from "@databridge/identity-reconciler";
+import { reconcile, type MatchPolicy, type PersonRecord } from "@databridge/identity-reconciler";
 
 // PersonRecord under exactOptionalPropertyTypes does not accept explicit
 // `undefined` values produced by `z.optional()`; the type below is
@@ -25,7 +21,14 @@ type PersonRecordInput = {
 };
 
 const SourceSystemTagZ = z.enum([
-  "sits", "banner", "workday", "techone", "sjms5", "hesa", "ucas", "other",
+  "sits",
+  "banner",
+  "workday",
+  "techone",
+  "sjms5",
+  "hesa",
+  "ucas",
+  "other",
 ]);
 
 const AltIdZ = z.object({
@@ -73,8 +76,15 @@ export async function identityRoutes(app: FastifyInstance): Promise<void> {
     const candidates = reconcile(
       incoming as readonly PersonRecord[],
       existing as readonly PersonRecord[],
-      policy as MatchPolicy,
+      policy as MatchPolicy
     );
-    return { candidates, counts: { generated: candidates.length, incoming: incoming.length, existing: existing.length } };
+    return {
+      candidates,
+      counts: {
+        generated: candidates.length,
+        incoming: incoming.length,
+        existing: existing.length,
+      },
+    };
   });
 }

@@ -32,15 +32,11 @@ import type {
 interface PgBossLike {
   start(): Promise<void>;
   stop(opts?: { graceful?: boolean; timeout?: number }): Promise<void>;
-  send(
-    name: string,
-    data: object,
-    options?: Record<string, unknown>,
-  ): Promise<string | null>;
+  send(name: string, data: object, options?: Record<string, unknown>): Promise<string | null>;
   work<T>(
     name: string,
     options: Record<string, unknown>,
-    handler: (job: { id: string; name: string; data: T }) => Promise<void>,
+    handler: (job: { id: string; name: string; data: T }) => Promise<void>
   ): Promise<string>;
   cancel(id: string): Promise<void>;
   getJobById(id: string): Promise<PgBossJob | null>;
@@ -85,9 +81,7 @@ export class PgBossQueueAdapter implements QueueAdapter {
 
   constructor(options: PgBossOptions) {
     if (!options.connectionString && !options.host) {
-      throw new Error(
-        "PgBossQueueAdapter: must provide connectionString or host in options",
-      );
+      throw new Error("PgBossQueueAdapter: must provide connectionString or host in options");
     }
     this.options = options;
   }
@@ -103,7 +97,7 @@ export class PgBossQueueAdapter implements QueueAdapter {
       throw new Error(
         "PgBossQueueAdapter requires the 'pg-boss' package as a peer dependency. " +
           "Install with: pnpm add pg-boss\n" +
-          `Underlying error: ${(err as Error).message}`,
+          `Underlying error: ${(err as Error).message}`
       );
     }
     const PgBoss = mod.default;
@@ -112,24 +106,19 @@ export class PgBossQueueAdapter implements QueueAdapter {
     this.started = true;
   }
 
-  async enqueue<T extends object>(
-    queue: string,
-    data: T,
-    opts?: EnqueueOptions,
-  ): Promise<string> {
+  async enqueue<T extends object>(queue: string, data: T, opts?: EnqueueOptions): Promise<string> {
     await this.start();
     const bossOpts: Record<string, unknown> = {};
     if (opts?.delaySeconds !== undefined) bossOpts["startAfter"] = opts.delaySeconds;
     if (opts?.retryLimit !== undefined) bossOpts["retryLimit"] = opts.retryLimit;
     if (opts?.retryDelay !== undefined) bossOpts["retryDelay"] = opts.retryDelay;
-    if (opts?.expireInSeconds !== undefined)
-      bossOpts["expireInSeconds"] = opts.expireInSeconds;
+    if (opts?.expireInSeconds !== undefined) bossOpts["expireInSeconds"] = opts.expireInSeconds;
     if (opts?.singletonKey !== undefined) bossOpts["singletonKey"] = opts.singletonKey;
 
     const id = await this.boss!.send(queue, data, bossOpts);
     if (!id) {
       throw new Error(
-        `PgBossQueueAdapter.enqueue: pg-boss returned null id for queue '${queue}' (job may have been deduplicated by singletonKey)`,
+        `PgBossQueueAdapter.enqueue: pg-boss returned null id for queue '${queue}' (job may have been deduplicated by singletonKey)`
       );
     }
     return id;
@@ -138,16 +127,14 @@ export class PgBossQueueAdapter implements QueueAdapter {
   async work<T extends object>(
     queue: string,
     handler: JobHandler<T>,
-    opts?: WorkOptions,
+    opts?: WorkOptions
   ): Promise<void> {
     await this.start();
     const bossOpts: Record<string, unknown> = {};
     if (opts?.teamSize !== undefined) bossOpts["teamSize"] = opts.teamSize;
-    if (opts?.teamConcurrency !== undefined)
-      bossOpts["teamConcurrency"] = opts.teamConcurrency;
+    if (opts?.teamConcurrency !== undefined) bossOpts["teamConcurrency"] = opts.teamConcurrency;
     if (opts?.batchSize !== undefined) bossOpts["batchSize"] = opts.batchSize;
-    if (opts?.includeMetadata !== undefined)
-      bossOpts["includeMetadata"] = opts.includeMetadata;
+    if (opts?.includeMetadata !== undefined) bossOpts["includeMetadata"] = opts.includeMetadata;
 
     await this.boss!.work<T>(queue, bossOpts, async (raw) => {
       const job: Job<T> = {

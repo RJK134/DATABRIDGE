@@ -22,10 +22,7 @@ import {
   type FieldStats,
   type AuditReport,
 } from "@databridge/rule-core";
-import type {
-  SourceAdapter,
-  AdapterContext,
-} from "@databridge/adapter-spec";
+import type { SourceAdapter, AdapterContext } from "@databridge/adapter-spec";
 
 import { findProfile } from "./profile-registry.js";
 import { findAdapter } from "./adapter-registry.js";
@@ -114,7 +111,7 @@ function makeAdapterContext(
   tenantId: string,
   connectionId: string,
   signal: AbortSignal,
-  log: AuditRunnerLogger,
+  log: AuditRunnerLogger
 ): AdapterContext {
   return {
     tenantId,
@@ -138,7 +135,7 @@ function makeAdapterContext(
 
 function instantiateAdapter(
   id: string,
-  config: Record<string, unknown> | undefined,
+  config: Record<string, unknown> | undefined
 ): SourceAdapter | { error: string } {
   const entry = findAdapter(id);
   if (!entry) return { error: `adapter '${id}' not registered` };
@@ -168,7 +165,7 @@ function getRulesFromProfile(profile: unknown): (AuditRule | FnAuditRule)[] {
  */
 export async function runAuditJob(
   input: AuditJobInput,
-  log: AuditRunnerLogger,
+  log: AuditRunnerLogger
 ): Promise<AuditJobOutcome> {
   // 1. Resolve the profile.
   const profileEntry = findProfile(input.profileId);
@@ -225,7 +222,7 @@ export async function runAuditJob(
         input.tenantId,
         `audit:${input.auditId}`,
         abort.signal,
-        child,
+        child
       );
     }
 
@@ -234,9 +231,7 @@ export async function runAuditJob(
       ...(input.maxFindingsPerRule !== undefined
         ? { maxFindingsPerRule: input.maxFindingsPerRule }
         : {}),
-      ...(input.maxFindingsTotal !== undefined
-        ? { maxFindingsTotal: input.maxFindingsTotal }
-        : {}),
+      ...(input.maxFindingsTotal !== undefined ? { maxFindingsTotal: input.maxFindingsTotal } : {}),
       ...(input.pageSize !== undefined ? { pageSize: input.pageSize } : {}),
     };
     const engine = new AuditEngine(makeExecutor(), engineOpts);
@@ -254,9 +249,7 @@ export async function runAuditJob(
         tenantId: input.tenantId,
         rules,
         resourceMap: input.resourceMap ?? {},
-        ...(input.primaryKeyMap !== undefined
-          ? { primaryKeyMap: input.primaryKeyMap }
-          : {}),
+        ...(input.primaryKeyMap !== undefined ? { primaryKeyMap: input.primaryKeyMap } : {}),
         ...(source !== undefined ? { source } : {}),
         ...(adapterCtx !== undefined ? { adapterCtx } : {}),
         ctx,

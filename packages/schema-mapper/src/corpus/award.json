@@ -3,14 +3,49 @@
   "section": "§10",
   "summary": "Banner SHRDGMR (degree management) vs SITS INS_SAW. UK classification on SHRDGMR.INST_HONOR / saw_clss.",
   "fields": [
-    { "canonical": "personId", "banner": "SHRDGMR.PIDM (resolve)", "sits": "INS_SAW.saw_stuc (resolve)", "notes": "" },
-    { "canonical": "programmeEnrolmentId", "banner": "derive from PIDM + degree code + dates", "sits": "INS_SAW → SCJ", "notes": "" },
-    { "canonical": "awardCode", "banner": "SHRDGMR.DEGC_CODE", "sits": "INS_SAW.saw_awdc", "notes": "STVDEGC vs INS_AWD vocabulary differs" },
+    {
+      "canonical": "personId",
+      "banner": "SHRDGMR.PIDM (resolve)",
+      "sits": "INS_SAW.saw_stuc (resolve)",
+      "notes": ""
+    },
+    {
+      "canonical": "programmeEnrolmentId",
+      "banner": "derive from PIDM + degree code + dates",
+      "sits": "INS_SAW → SCJ",
+      "notes": ""
+    },
+    {
+      "canonical": "awardCode",
+      "banner": "SHRDGMR.DEGC_CODE",
+      "sits": "INS_SAW.saw_awdc",
+      "notes": "STVDEGC vs INS_AWD vocabulary differs"
+    },
     { "canonical": "awardName", "banner": "STVDEGC.DESC", "sits": "INS_AWD.awd_name", "notes": "" },
-    { "canonical": "status", "banner": "SHRDGMR.DEGS_CODE (AW/PN/SO)", "sits": "INS_SAW.saw_stat (A/P/I)", "notes": "Map AW↔A, PN↔P, SO↔(no direct)" },
-    { "canonical": "conferralDate", "banner": "SHRDGMR.GRAD_DATE", "sits": "INS_SAW.saw_grdd", "notes": "" },
-    { "canonical": "classification", "banner": "SHRDGMR.INST_HONOR", "sits": "INS_SAW.saw_clss", "notes": "UK 1/2:1/2:2/3/Distinction/Merit/Pass" },
+    {
+      "canonical": "status",
+      "banner": "SHRDGMR.DEGS_CODE (AW/PN/SO)",
+      "sits": "INS_SAW.saw_stat (A/P/I)",
+      "notes": "Map AW↔A, PN↔P, SO↔(no direct)"
+    },
+    {
+      "canonical": "conferralDate",
+      "banner": "SHRDGMR.GRAD_DATE",
+      "sits": "INS_SAW.saw_grdd",
+      "notes": ""
+    },
+    {
+      "canonical": "classification",
+      "banner": "SHRDGMR.INST_HONOR",
+      "sits": "INS_SAW.saw_clss",
+      "notes": "UK 1/2:1/2:2/3/Distinction/Merit/Pass"
+    },
     { "canonical": "gpa", "banner": "SHRDGMR.DEGREE_GPA", "sits": "INS_SAW.saw_gpa", "notes": "" },
-    { "canonical": "interimFlag", "banner": "derived (Banner has no first-class interim)", "sits": "INS_SAW.saw_intg", "notes": "Banner gap" }
+    {
+      "canonical": "interimFlag",
+      "banner": "derived (Banner has no first-class interim)",
+      "sits": "INS_SAW.saw_intg",
+      "notes": "Banner gap"
+    }
   ]
 }

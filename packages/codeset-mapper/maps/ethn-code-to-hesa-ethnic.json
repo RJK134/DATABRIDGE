@@ -6,13 +6,29 @@
   "version": "1.0.0",
   "description": "Banner US IPEDS ethnicity to HESA Coding Manual ETHNIC code. Approximation — UK ethnic categories have no exact US equivalent for many groups.",
   "entries": [
-    { "sourceCode": "1",  "targetCode": "10", "notes": "White → White" },
-    { "sourceCode": "2",  "targetCode": "21", "notes": "Black or African American → Black or Black British – Caribbean (approximation)" },
-    { "sourceCode": "3",  "targetCode": "31", "notes": "Asian → Asian or Asian British – Indian (approximation)" },
-    { "sourceCode": "4",  "targetCode": "34", "notes": "Asian Pacific Islander → Other Asian" },
-    { "sourceCode": "5",  "targetCode": "50", "notes": "American Indian/Alaska Native → Other ethnic group" },
-    { "sourceCode": "6",  "targetCode": "41", "notes": "Two or more races → Mixed – White & Black Caribbean (approximation)" },
-    { "sourceCode": "7",  "targetCode": "98", "notes": "Not reported → Information refused" },
-    { "sourceCode": "9",  "targetCode": "99", "notes": "Unknown → Not known" }
+    { "sourceCode": "1", "targetCode": "10", "notes": "White → White" },
+    {
+      "sourceCode": "2",
+      "targetCode": "21",
+      "notes": "Black or African American → Black or Black British – Caribbean (approximation)"
+    },
+    {
+      "sourceCode": "3",
+      "targetCode": "31",
+      "notes": "Asian → Asian or Asian British – Indian (approximation)"
+    },
+    { "sourceCode": "4", "targetCode": "34", "notes": "Asian Pacific Islander → Other Asian" },
+    {
+      "sourceCode": "5",
+      "targetCode": "50",
+      "notes": "American Indian/Alaska Native → Other ethnic group"
+    },
+    {
+      "sourceCode": "6",
+      "targetCode": "41",
+      "notes": "Two or more races → Mixed – White & Black Caribbean (approximation)"
+    },
+    { "sourceCode": "7", "targetCode": "98", "notes": "Not reported → Information refused" },
+    { "sourceCode": "9", "targetCode": "99", "notes": "Unknown → Not known" }
   ]
 }

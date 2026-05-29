@@ -39,7 +39,7 @@ direct database to query; integrators interact through:
 - **SOAP web services** (`Student_Records_Service`,
   `Student_Recruiting_Service`, `Academic_Foundation_Service`, etc.)
 - **REST APIs** (newer surface, smaller coverage as of 2024.x)
-- **Reports-as-a-Service (RaaS)** — *the* mechanism DataBridge uses
+- **Reports-as-a-Service (RaaS)** — _the_ mechanism DataBridge uses
   most. Authors build a Workday report in the tenant, mark it
   "Web Service Enabled", and call it as a parametrised endpoint.
 - **EIB (Enterprise Interface Builder)** — bulk inbound/outbound flat
@@ -52,23 +52,23 @@ direct database to query; integrators interact through:
 - Versionable (the report XML lives in the tenant; we just call it)
 - Predictable (fixed columns, named parameters)
 
-The trade-off is that the *adapter cannot read raw fields outside of a
-configured report*. This is why the DataBridge profile catalogue ships
+The trade-off is that the _adapter cannot read raw fields outside of a
+configured report_. This is why the DataBridge profile catalogue ships
 report-XML templates the institution imports into Workday before the
 adapter can fetch anything.
 
 ## 2. Object model and naming
 
-| Layer | Workday name | DataBridge canonical |
-| --- | --- | --- |
-| Person container | `Worker` (employees) + `Student` (learners; sub-type of Person) | `Person` |
-| Programme | `Program of Study` | `ProgrammeEnrolment` |
-| Course catalog item | `Course Definition` | `Module` (catalog) |
-| Course offering for a term | `Course Section` | `ModuleInstance` |
-| Enrolment in a section | `Course Registration` | `ModuleEnrolment` |
-| Mark | `Grade` (final) + `Grade Component` (component) | `ModuleResult` + `AssessmentResult` |
-| Award | `Credential` | `Award` |
-| Admissions record | `Application` (with `Application Source`, `Stage`) | `Application` |
+| Layer                      | Workday name                                                    | DataBridge canonical                |
+| -------------------------- | --------------------------------------------------------------- | ----------------------------------- |
+| Person container           | `Worker` (employees) + `Student` (learners; sub-type of Person) | `Person`                            |
+| Programme                  | `Program of Study`                                              | `ProgrammeEnrolment`                |
+| Course catalog item        | `Course Definition`                                             | `Module` (catalog)                  |
+| Course offering for a term | `Course Section`                                                | `ModuleInstance`                    |
+| Enrolment in a section     | `Course Registration`                                           | `ModuleEnrolment`                   |
+| Mark                       | `Grade` (final) + `Grade Component` (component)                 | `ModuleResult` + `AssessmentResult` |
+| Award                      | `Credential`                                                    | `Award`                             |
+| Admissions record          | `Application` (with `Application Source`, `Stage`)              | `Application`                       |
 
 Workday IDs use **WID** (32-char GUID) as the absolute object reference
 and a human-readable **Reference ID** the customer configures. The
@@ -116,27 +116,27 @@ care than the SITS one does.
 
 ## 5. Person / Worker / Student
 
-| Canonical field | Workday object / field | Notes |
-| --- | --- | --- |
-| `id` | `WID` (Student object) | Stable, opaque |
-| `publicId` | `Universal_Identifier` (Reference ID) | Human-readable |
-| `husid` | `Custom_Field`: `HESA_HUSID` (institution-installed) | UK-only |
-| `surname` | `Person_Name_Detail_Data → Last_Name` | Latest active row |
-| `firstName` | `Person_Name_Detail_Data → First_Name` | — |
-| `middleName` | `Person_Name_Detail_Data → Middle_Name` | — |
-| `title` | `Person_Name_Detail_Data → Title` | — |
-| `dateOfBirth` | `Personal_Information_Data → Date_Of_Birth` | — |
-| `legalSex` | `Personal_Information_Data → Gender` | Workday emits Reference ID values |
-| `genderIdentity` | `Custom_Field`: `Gender_Identity` | Institution-installed |
-| `nationality` | `Citizenship` collection (primary) | Multi-valued |
-| `domicile` | derived from `Home_Address.Country` | — |
-| `ethnicity` | `Ethnicity` (US schema) + `Custom_Field`: `HESA_ETHNICITY` (UK) | — |
-| `disability` | `Self_Identified_Disability` | — |
-| `primaryEmail` | `Email_Address_Data` where `Usage_Type = Home` | — |
-| `currentMailingAddress` | `Address_Data` where `Usage = Mailing, Current = true` | — |
-| `permanentHomeAddress` | `Address_Data` where `Usage = Home` | — |
-| `mobilePhone` | `Phone_Data` where `Type = Mobile` | — |
-| `dateOfDeath` | not native — custom field if needed | — |
+| Canonical field         | Workday object / field                                          | Notes                             |
+| ----------------------- | --------------------------------------------------------------- | --------------------------------- |
+| `id`                    | `WID` (Student object)                                          | Stable, opaque                    |
+| `publicId`              | `Universal_Identifier` (Reference ID)                           | Human-readable                    |
+| `husid`                 | `Custom_Field`: `HESA_HUSID` (institution-installed)            | UK-only                           |
+| `surname`               | `Person_Name_Detail_Data → Last_Name`                           | Latest active row                 |
+| `firstName`             | `Person_Name_Detail_Data → First_Name`                          | —                                 |
+| `middleName`            | `Person_Name_Detail_Data → Middle_Name`                         | —                                 |
+| `title`                 | `Person_Name_Detail_Data → Title`                               | —                                 |
+| `dateOfBirth`           | `Personal_Information_Data → Date_Of_Birth`                     | —                                 |
+| `legalSex`              | `Personal_Information_Data → Gender`                            | Workday emits Reference ID values |
+| `genderIdentity`        | `Custom_Field`: `Gender_Identity`                               | Institution-installed             |
+| `nationality`           | `Citizenship` collection (primary)                              | Multi-valued                      |
+| `domicile`              | derived from `Home_Address.Country`                             | —                                 |
+| `ethnicity`             | `Ethnicity` (US schema) + `Custom_Field`: `HESA_ETHNICITY` (UK) | —                                 |
+| `disability`            | `Self_Identified_Disability`                                    | —                                 |
+| `primaryEmail`          | `Email_Address_Data` where `Usage_Type = Home`                  | —                                 |
+| `currentMailingAddress` | `Address_Data` where `Usage = Mailing, Current = true`          | —                                 |
+| `permanentHomeAddress`  | `Address_Data` where `Usage = Home`                             | —                                 |
+| `mobilePhone`           | `Phone_Data` where `Type = Mobile`                              | —                                 |
+| `dateOfDeath`           | not native — custom field if needed                             | —                                 |
 
 **Gotcha:** Workday returns multi-value collections as repeating XML
 elements. The adapter must select the "current" element either by
@@ -149,19 +149,19 @@ for this.
 Admissions in Workday Student is the `Application` business object
 managed by `Student_Recruiting_Service`.
 
-| Canonical field | Workday | Notes |
-| --- | --- | --- |
-| `applicationNumber` | `Application_Reference_ID` | — |
-| `entryTerm` | `Academic_Period_Reference` | — |
-| `entryYear` | derived from Academic Period | — |
-| `programmeApplied` | `Program_of_Study_Reference` | — |
-| `applicationType` | `Application_Source_Reference` | "UCAS" must be a configured value |
-| `applicationStatus` | `Application_Stage` | Workday stage machine |
-| `decision` | `Application_Decision` | — |
-| `decisionDate` | `Application_Decision_Date` | — |
-| `applicantResponse` | `Response` (custom in UK tenants) | — |
-| `applicationDate` | `Submitted_Date` | — |
-| `feeStatusDeclared` | `Custom_Field`: `Declared_Fee_Status` | UK extension |
+| Canonical field     | Workday                               | Notes                             |
+| ------------------- | ------------------------------------- | --------------------------------- |
+| `applicationNumber` | `Application_Reference_ID`            | —                                 |
+| `entryTerm`         | `Academic_Period_Reference`           | —                                 |
+| `entryYear`         | derived from Academic Period          | —                                 |
+| `programmeApplied`  | `Program_of_Study_Reference`          | —                                 |
+| `applicationType`   | `Application_Source_Reference`        | "UCAS" must be a configured value |
+| `applicationStatus` | `Application_Stage`                   | Workday stage machine             |
+| `decision`          | `Application_Decision`                | —                                 |
+| `decisionDate`      | `Application_Decision_Date`           | —                                 |
+| `applicantResponse` | `Response` (custom in UK tenants)     | —                                 |
+| `applicationDate`   | `Submitted_Date`                      | —                                 |
+| `feeStatusDeclared` | `Custom_Field`: `Declared_Fee_Status` | UK extension                      |
 
 **Workflow integration**: Admissions decisions in Workday move via a
 **Business Process** (BP). The adapter sees only the final state; the
@@ -173,76 +173,76 @@ to reconstruct timing.
 The Workday catalog: `Course Definition`, `Program of Study`,
 `Academic Unit`, `Academic Period`.
 
-| Canonical | Workday | Notes |
-| --- | --- | --- |
-| `programmeCode` | `Program_of_Study_Reference_ID` | — |
-| `programmeName` | `Program_of_Study_Name` | — |
-| `programmeLevel` | `Program_of_Study_Type` | UG/PGT/PGR |
-| `moduleCode` | `Course_Definition_Reference_ID` | — |
-| `moduleTitle` | `Course_Title` | — |
-| `credits` | `Course_Definition → Units` | "Units" = Workday's term for credits |
-| `creditsScheme` | `Units_of_Measure` | "CATS" for UK tenants |
-| `academicYear` | `Academic_Year` | — |
-| `term` | `Academic_Period_Reference_ID` | Hierarchy: Year > Session > Term |
+| Canonical        | Workday                          | Notes                                |
+| ---------------- | -------------------------------- | ------------------------------------ |
+| `programmeCode`  | `Program_of_Study_Reference_ID`  | —                                    |
+| `programmeName`  | `Program_of_Study_Name`          | —                                    |
+| `programmeLevel` | `Program_of_Study_Type`          | UG/PGT/PGR                           |
+| `moduleCode`     | `Course_Definition_Reference_ID` | —                                    |
+| `moduleTitle`    | `Course_Title`                   | —                                    |
+| `credits`        | `Course_Definition → Units`      | "Units" = Workday's term for credits |
+| `creditsScheme`  | `Units_of_Measure`               | "CATS" for UK tenants                |
+| `academicYear`   | `Academic_Year`                  | —                                    |
+| `term`           | `Academic_Period_Reference_ID`   | Hierarchy: Year > Session > Term     |
 
 ## 8. Student Records — programmes & enrolment
 
 The `Program of Study_in_Progress` object models active enrolment.
 
-| Canonical | Workday | Notes |
-| --- | --- | --- |
-| `programmeEnrolmentId` | derived (WID of `Program_of_Study_in_Progress`) | — |
-| `personId` | `Student_Reference` → WID | — |
-| `programmeId` | `Program_of_Study_Reference` | — |
-| `startDate` | `Started_On` | — |
-| `expectedEndDate` | `Expected_Completion_Date` | — |
-| `actualEndDate` | `Completed_On` (when status = Completed) | — |
-| `status` | `Program_of_Study_in_Progress_Status` | Active / Withdrawn / Completed / Leave |
-| `mode` | `Attendance_Type` | Full-time / Part-time |
-| `entryQualification` | `Custom_Field`: `HESA_QUAL_ON_ENTRY` | — |
-| `award` (intended) | `Credential_Reference` | — |
+| Canonical              | Workday                                         | Notes                                  |
+| ---------------------- | ----------------------------------------------- | -------------------------------------- |
+| `programmeEnrolmentId` | derived (WID of `Program_of_Study_in_Progress`) | —                                      |
+| `personId`             | `Student_Reference` → WID                       | —                                      |
+| `programmeId`          | `Program_of_Study_Reference`                    | —                                      |
+| `startDate`            | `Started_On`                                    | —                                      |
+| `expectedEndDate`      | `Expected_Completion_Date`                      | —                                      |
+| `actualEndDate`        | `Completed_On` (when status = Completed)        | —                                      |
+| `status`               | `Program_of_Study_in_Progress_Status`           | Active / Withdrawn / Completed / Leave |
+| `mode`                 | `Attendance_Type`                               | Full-time / Part-time                  |
+| `entryQualification`   | `Custom_Field`: `HESA_QUAL_ON_ENTRY`            | —                                      |
+| `award` (intended)     | `Credential_Reference`                          | —                                      |
 
 ## 9. Course offering & section enrolment
 
-| Canonical | Workday | Notes |
-| --- | --- | --- |
-| `moduleInstanceId` | `Course_Section_Reference` (WID) | — |
-| `academicYear` | `Academic_Period.Academic_Year` | — |
-| `term` | `Academic_Period_Reference` | — |
-| `enrolmentStatus` | `Registration_Status` | Registered / Dropped / Withdrew |
-| `creditsAttempted` | `Course_Section.Units` | Workday "Units" |
-| `gradeMode` | `Grading_Scheme_Reference` | — |
-| `registrationDate` | `Registered_On` | — |
+| Canonical          | Workday                          | Notes                           |
+| ------------------ | -------------------------------- | ------------------------------- |
+| `moduleInstanceId` | `Course_Section_Reference` (WID) | —                               |
+| `academicYear`     | `Academic_Period.Academic_Year`  | —                               |
+| `term`             | `Academic_Period_Reference`      | —                               |
+| `enrolmentStatus`  | `Registration_Status`            | Registered / Dropped / Withdrew |
+| `creditsAttempted` | `Course_Section.Units`           | Workday "Units"                 |
+| `gradeMode`        | `Grading_Scheme_Reference`       | —                               |
+| `registrationDate` | `Registered_On`                  | —                               |
 
 ## 10. Marks, grades, & academic progress
 
 Workday's grade model has **Final Grade** + optional
 **Grade Components**. The adapter exposes both.
 
-| Canonical | Workday | Notes |
-| --- | --- | --- |
-| `finalMark` | `Final_Grade.Numeric_Grade` or `Grade_Reference.Grade_ID` | Numeric when scheme allows |
-| `gradeDisplay` | `Grade_Reference.Grade_Display` | — |
-| `pass` | derived from `Grade_Reference.Pass_Indicator` | — |
-| `creditsAwarded` | `Final_Grade.Earned_Units` | — |
-| `attempt` | `Repeat_Indicator` | — |
-| `gradedDate` | `Grade_Posted_Date` | — |
-| `componentCode` | `Grade_Component.Grade_Component_Reference_ID` | — |
-| `componentName` | `Grade_Component.Grade_Component_Name` | — |
-| `weight` | `Grade_Component.Weight` | — |
-| `mark` (component) | `Grade_Component.Grade` | — |
+| Canonical          | Workday                                                   | Notes                      |
+| ------------------ | --------------------------------------------------------- | -------------------------- |
+| `finalMark`        | `Final_Grade.Numeric_Grade` or `Grade_Reference.Grade_ID` | Numeric when scheme allows |
+| `gradeDisplay`     | `Grade_Reference.Grade_Display`                           | —                          |
+| `pass`             | derived from `Grade_Reference.Pass_Indicator`             | —                          |
+| `creditsAwarded`   | `Final_Grade.Earned_Units`                                | —                          |
+| `attempt`          | `Repeat_Indicator`                                        | —                          |
+| `gradedDate`       | `Grade_Posted_Date`                                       | —                          |
+| `componentCode`    | `Grade_Component.Grade_Component_Reference_ID`            | —                          |
+| `componentName`    | `Grade_Component.Grade_Component_Name`                    | —                          |
+| `weight`           | `Grade_Component.Weight`                                  | —                          |
+| `mark` (component) | `Grade_Component.Grade`                                   | —                          |
 
 ## 11. Awards & credentials
 
-| Canonical | Workday | Notes |
-| --- | --- | --- |
-| `awardCode` | `Credential_Reference_ID` | — |
-| `awardName` | `Credential_Name` | — |
-| `status` | `Credential_Status` | Awarded / Anticipated / Withdrawn |
-| `conferralDate` | `Date_Earned` | — |
-| `classification` (UK) | `Custom_Field`: `HESA_Classification` | UK extension |
-| `gpa` (US) | `Cumulative_GPA` (snapshot) | — |
-| `interimFlag` | derived from `Credential_Status = Anticipated` | — |
+| Canonical             | Workday                                        | Notes                             |
+| --------------------- | ---------------------------------------------- | --------------------------------- |
+| `awardCode`           | `Credential_Reference_ID`                      | —                                 |
+| `awardName`           | `Credential_Name`                              | —                                 |
+| `status`              | `Credential_Status`                            | Awarded / Anticipated / Withdrawn |
+| `conferralDate`       | `Date_Earned`                                  | —                                 |
+| `classification` (UK) | `Custom_Field`: `HESA_Classification`          | UK extension                      |
+| `gpa` (US)            | `Cumulative_GPA` (snapshot)                    | —                                 |
+| `interimFlag`         | derived from `Credential_Status = Anticipated` | —                                 |
 
 ## 12. Research students
 
@@ -267,14 +267,14 @@ fetches via the `Student_Charge_Adjustment_Service` and related
 endpoints. Most UK institutions integrate Workday Student with TechOne
 for fees rather than using Workday's native fee module — see L3 doc.
 
-| Canonical | Workday | Notes |
-| --- | --- | --- |
-| `feeAssessmentId` | `Tuition_Charge_Reference` (WID) | — |
-| `academicYear` | linked Academic Period | — |
-| `feeBand` | `Tuition_Schedule_Reference` | — |
-| `currency` | `Currency_Reference` | — |
-| `amountAssessed` | `Tuition_Amount` | — |
-| `sponsor` | `Sponsor_Reference` | — |
+| Canonical         | Workday                          | Notes |
+| ----------------- | -------------------------------- | ----- |
+| `feeAssessmentId` | `Tuition_Charge_Reference` (WID) | —     |
+| `academicYear`    | linked Academic Period           | —     |
+| `feeBand`         | `Tuition_Schedule_Reference`     | —     |
+| `currency`        | `Currency_Reference`             | —     |
+| `amountAssessed`  | `Tuition_Amount`                 | —     |
+| `sponsor`         | `Sponsor_Reference`              | —     |
 
 ## 14. Business processes (workflow)
 
@@ -357,7 +357,7 @@ checks below; the profile bundles them per regulatory regime.
   `Student_Status = Active` has at least one
   `Program_of_Study_in_Progress` with status `In Progress`.
 - `wd.programme.expected-end-in-past` — `Expected_Completion_Date <
-  today` and status still `In Progress`.
+today` and status still `In Progress`.
 
 ### 19.3 Registration consistency
 
@@ -378,7 +378,7 @@ checks below; the profile bundles them per regulatory regime.
 ### 19.5 Awards integrity
 
 - `wd.award.no-credential-on-completion` — `Program_of_Study_in_Progress
-  .status = Completed` but no `Credential` row for that programme.
+.status = Completed` but no `Credential` row for that programme.
 - `wd.award.hesa-classification-missing` — UK tenant, undergraduate
   programme completed, `Custom_Field HESA_Classification` empty.
 

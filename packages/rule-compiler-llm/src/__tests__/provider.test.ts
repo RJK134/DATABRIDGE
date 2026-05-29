@@ -6,7 +6,11 @@ import {
   AnthropicProvider,
   AzureOpenAiProvider,
 } from "../provider.js";
-import { CostCeiling, CostCeilingExceededError, InMemoryLlmCallSink } from "@databridge/provenance-core";
+import {
+  CostCeiling,
+  CostCeilingExceededError,
+  InMemoryLlmCallSink,
+} from "@databridge/provenance-core";
 
 describe("DeterministicMockProvider", () => {
   it("returns a canned output for a matching substring", async () => {
@@ -17,7 +21,7 @@ describe("DeterministicMockProvider", () => {
       "engagements with missing programme code",
       { name: "Test", description: "", jsonSchema: {} },
       (raw) => raw as { hit: boolean },
-      "rule-compiler-llm",
+      "rule-compiler-llm"
     );
     expect(output.hit).toBe(true);
     expect(provenance.provider).toBe("deterministic-mock");
@@ -35,7 +39,7 @@ describe("DeterministicMockProvider", () => {
       "students missing husid",
       { name: "Test", description: "", jsonSchema: {} },
       (raw) => raw as { hit: boolean },
-      "rule-compiler-llm",
+      "rule-compiler-llm"
     );
     expect(output.hit).toBe(true);
   });
@@ -48,7 +52,7 @@ describe("DeterministicMockProvider", () => {
       "no match",
       { name: "Test", description: "", jsonSchema: {} },
       (raw) => raw as { fallback: boolean },
-      "rule-compiler-llm",
+      "rule-compiler-llm"
     );
     expect(output.fallback).toBe(true);
   });
@@ -60,8 +64,8 @@ describe("DeterministicMockProvider", () => {
         "no match",
         { name: "Test", description: "", jsonSchema: {} },
         (raw) => raw,
-        "rule-compiler-llm",
-      ),
+        "rule-compiler-llm"
+      )
     ).rejects.toThrow(/no canned response matched/);
   });
 
@@ -79,8 +83,8 @@ describe("DeterministicMockProvider", () => {
           }
           return raw as { hit: boolean };
         },
-        "rule-compiler-llm",
-      ),
+        "rule-compiler-llm"
+      )
     ).rejects.toThrow(/canned response did not parse/);
   });
 
@@ -94,7 +98,7 @@ describe("DeterministicMockProvider", () => {
       { name: "Test", description: "", jsonSchema: {} },
       (raw) => raw,
       "rule-compiler-llm",
-      { costCeiling: ceiling },
+      { costCeiling: ceiling }
     );
     expect(ceiling.spentUsd).toBe(0);
   });
@@ -107,7 +111,7 @@ describe("DeterministicMockProvider", () => {
       "Jane Smith DOB 1990-01-01 husid 1234567890123",
       { name: "Test", description: "", jsonSchema: {} },
       (raw) => raw,
-      "rule-compiler-llm",
+      "rule-compiler-llm"
     );
     expect(JSON.stringify(provenance)).not.toContain("Jane Smith");
     expect(JSON.stringify(provenance)).not.toContain("1234567890123");
@@ -121,13 +125,13 @@ describe("DeterministicMockProvider", () => {
       "x",
       { name: "T", description: "", jsonSchema: {} },
       (raw) => raw,
-      "test",
+      "test"
     );
     const { provenance: p2 } = await provider.complete(
       "x",
       { name: "T", description: "", jsonSchema: {} },
       (raw) => raw,
-      "test",
+      "test"
     );
     expect(p1.promptHash).toBe(p2.promptHash);
     expect(p1.responseHash).toBe(p2.responseHash);
@@ -198,7 +202,7 @@ describe("CostCeiling integration", () => {
       { name: "T", description: "", jsonSchema: {} },
       (raw) => raw,
       "test",
-      { costCeiling: ceiling },
+      { costCeiling: ceiling }
     );
     expect(ceiling.spentUsd).toBeCloseTo(0.1);
     expect(() => ceiling.charge(0.01)).toThrow(CostCeilingExceededError);
@@ -215,7 +219,7 @@ describe("Provenance sink integration", () => {
       "x",
       { name: "T", description: "", jsonSchema: {} },
       (raw) => raw,
-      "rule-compiler-llm",
+      "rule-compiler-llm"
     );
     sink.record(provenance);
     expect(sink.byCaller("rule-compiler-llm")).toHaveLength(1);

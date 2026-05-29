@@ -1,9 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  LlmRuleZ,
-  collectFieldRefs,
-  staticSafetyCheck,
-} from "../rule-grammar.js";
+import { LlmRuleZ, collectFieldRefs, staticSafetyCheck } from "../rule-grammar.js";
 
 const baseRule = {
   id: "test-1",
@@ -44,7 +40,7 @@ describe("LlmRuleZ grammar", () => {
       LlmRuleZ.parse({
         ...baseRule,
         where: { ...baseRule.where, op: "fancy" },
-      }),
+      })
     ).toThrow();
   });
 
@@ -58,7 +54,7 @@ describe("LlmRuleZ grammar", () => {
           field: { kind: "field", entity: "Student", field: "lastName" },
           operands: [{ kind: "literal", value: "x".repeat(201) }],
         },
-      }),
+      })
     ).toThrow();
   });
 
@@ -101,10 +97,7 @@ describe("LlmRuleZ grammar", () => {
         ],
       },
     });
-    expect(collectFieldRefs(parsed.where).map((r) => r.field)).toEqual([
-      "lastName",
-      "feeStatus",
-    ]);
+    expect(collectFieldRefs(parsed.where).map((r) => r.field)).toEqual(["lastName", "feeStatus"]);
   });
 
   it("collectFieldRefs surfaces field-typed operands too", () => {
@@ -117,10 +110,7 @@ describe("LlmRuleZ grammar", () => {
         operands: [{ kind: "field", entity: "Student", field: "lastName" }],
       },
     });
-    expect(collectFieldRefs(parsed.where).map((r) => r.field)).toEqual([
-      "firstName",
-      "lastName",
-    ]);
+    expect(collectFieldRefs(parsed.where).map((r) => r.field)).toEqual(["firstName", "lastName"]);
   });
 
   it("staticSafetyCheck rejects SQL keywords smuggled into the message template", () => {

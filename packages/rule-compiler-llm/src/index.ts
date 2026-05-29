@@ -24,10 +24,7 @@ import {
   type CompileOptions,
   RuleCompilerError,
 } from "./compiler.js";
-import {
-  type LlmProvider,
-  type LlmCallOptions,
-} from "./provider.js";
+import { type LlmProvider, type LlmCallOptions } from "./provider.js";
 import { DEMO_DICTIONARY, type RuleDictionary } from "./dictionary.js";
 import type { LlmCallProvenance } from "@databridge/provenance-core";
 
@@ -117,12 +114,18 @@ export const RULE_GRAMMAR_SCHEMA = {
       And: {
         type: "object",
         required: ["kind", "clauses"],
-        properties: { kind: { const: "and" }, clauses: { type: "array", items: { $ref: "#/$defs/Clause" } } },
+        properties: {
+          kind: { const: "and" },
+          clauses: { type: "array", items: { $ref: "#/$defs/Clause" } },
+        },
       },
       Or: {
         type: "object",
         required: ["kind", "clauses"],
-        properties: { kind: { const: "or" }, clauses: { type: "array", items: { $ref: "#/$defs/Clause" } } },
+        properties: {
+          kind: { const: "or" },
+          clauses: { type: "array", items: { $ref: "#/$defs/Clause" } },
+        },
       },
       Not: {
         type: "object",
@@ -162,7 +165,7 @@ export interface CompileNlResult {
 
 export async function compileNlToRule(
   nl: string,
-  options: CompileNlOptions,
+  options: CompileNlOptions
 ): Promise<CompileNlResult> {
   const dict = options.dictionary ?? DEMO_DICTIONARY;
   const prompt = (options.buildPrompt ?? defaultBuildPrompt)(nl, dict);
@@ -171,7 +174,7 @@ export async function compileNlToRule(
     RULE_GRAMMAR_SCHEMA,
     (raw) => LlmRuleZ.parse(raw),
     CALLER_SURFACE,
-    options.llmOptions,
+    options.llmOptions
   );
   const compileOpts: CompileOptions = {
     dictionary: dict,

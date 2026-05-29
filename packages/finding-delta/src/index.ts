@@ -20,11 +20,7 @@
  */
 import type { AuditFinding, RuleSeverity } from "@databridge/rule-core";
 
-export type FindingDeltaKind =
-  | "new"
-  | "resolved"
-  | "persistent"
-  | "changed";
+export type FindingDeltaKind = "new" | "resolved" | "persistent" | "changed";
 
 export interface DeltaEntry {
   kind: FindingDeltaKind;
@@ -82,10 +78,7 @@ export function defaultIssueKey(f: AuditFinding): string {
  * Returns the list of reasons the two findings are considered "changed"
  * — empty array when they are equivalent enough to be "persistent".
  */
-export function diffPayload(
-  prev: AuditFinding,
-  curr: AuditFinding,
-): readonly string[] {
+export function diffPayload(prev: AuditFinding, curr: AuditFinding): readonly string[] {
   const reasons: string[] = [];
   if (prev.severity !== curr.severity) {
     reasons.push(`severity ${prev.severity} → ${curr.severity}`);
@@ -102,10 +95,7 @@ export function diffPayload(
   return reasons;
 }
 
-function evidenceEquivalent(
-  a: Record<string, unknown>,
-  b: Record<string, unknown>,
-): boolean {
+function evidenceEquivalent(a: Record<string, unknown>, b: Record<string, unknown>): boolean {
   const ak = Object.keys(a).sort();
   const bk = Object.keys(b).sort();
   if (ak.length !== bk.length) return false;
@@ -120,7 +110,7 @@ function evidenceEquivalent(
 export function computeFindingDelta(
   previous: readonly AuditFinding[],
   current: readonly AuditFinding[],
-  options: DeltaOptions = {},
+  options: DeltaOptions = {}
 ): FindingDelta {
   const keyFn = options.keyFn ?? defaultIssueKey;
   const clock = options.clock ?? (() => new Date().toISOString());
@@ -191,10 +181,7 @@ export function computeFindingDelta(
 }
 
 /** Helper: filter the delta to a single kind. */
-export function filterDelta(
-  delta: FindingDelta,
-  kind: FindingDeltaKind,
-): DeltaEntry[] {
+export function filterDelta(delta: FindingDelta, kind: FindingDeltaKind): DeltaEntry[] {
   return delta.entries.filter((e) => e.kind === kind);
 }
 

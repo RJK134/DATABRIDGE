@@ -8,16 +8,24 @@ describe("runFixtureAudit", () => {
     const report = runFixtureAudit(
       {
         rows: [
-          { Id: "001a", Email: "shared@x.test", hed__Account__c: "acc1", hed__Course_Offering__c: "co1" },
-          { Id: "001b", Email: "shared@x.test", hed__Account__c: "acc1", hed__Course_Offering__c: "co1" },
+          {
+            Id: "001a",
+            Email: "shared@x.test",
+            hed__Account__c: "acc1",
+            hed__Course_Offering__c: "co1",
+          },
+          {
+            Id: "001b",
+            Email: "shared@x.test",
+            hed__Account__c: "acc1",
+            hed__Course_Offering__c: "co1",
+          },
         ],
       },
-      SALESFORCE_EDU_NATIVE_RULES,
+      SALESFORCE_EDU_NATIVE_RULES
     );
     expect(report.findingsTotal).toBeGreaterThan(0);
-    expect(
-      report.findings.some((f) => f.ruleId === "SALESFORCE-EDU-01"),
-    ).toBe(true);
+    expect(report.findings.some((f) => f.ruleId === "SALESFORCE-EDU-01")).toBe(true);
   });
 
   it("evaluates the Dynamics rules and surfaces orphan studentprogram", () => {
@@ -28,24 +36,20 @@ describe("runFixtureAudit", () => {
           { msdyn_studentprogramid: "sp2", msdyn_program: "p1" },
         ],
       },
-      DYNAMICS365_EDU_NATIVE_RULES,
+      DYNAMICS365_EDU_NATIVE_RULES
     );
-    expect(
-      report.findings.some((f) => f.ruleId === "DYNAMICS365-EDU-02"),
-    ).toBe(true);
+    expect(report.findings.some((f) => f.ruleId === "DYNAMICS365-EDU-02")).toBe(true);
   });
 
   it("aggregates findings by severity", () => {
     const report = runFixtureAudit(
       {
-        rows: [
-          { Id: "x", Email: "a@x", hed__Account__c: null, hed__Course_Offering__c: null },
-        ],
+        rows: [{ Id: "x", Email: "a@x", hed__Account__c: null, hed__Course_Offering__c: null }],
       },
-      SALESFORCE_EDU_NATIVE_RULES,
+      SALESFORCE_EDU_NATIVE_RULES
     );
     expect(Object.values(report.bySeverity).reduce((a, b) => (a ?? 0) + (b ?? 0), 0)).toBe(
-      report.findingsTotal,
+      report.findingsTotal
     );
   });
 

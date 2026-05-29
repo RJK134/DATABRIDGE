@@ -18,7 +18,14 @@ import type { SchemaDescriptor, CodeList, DictionaryEntry } from "@databridge/ad
 
 import { BannerEthosConfigSchema, type BannerEthosConfig } from "./config.js";
 
-export const SUPPORTED_RESOURCES = ["persons", "students", "academic-credentials", "sections", "courses", "student-academic-programs"] as const;
+export const SUPPORTED_RESOURCES = [
+  "persons",
+  "students",
+  "academic-credentials",
+  "sections",
+  "courses",
+  "student-academic-programs",
+] as const;
 export type SupportedResource = (typeof SUPPORTED_RESOURCES)[number];
 
 export class BannerEthosAdapter implements SourceAdapter {
@@ -78,10 +85,7 @@ export class BannerEthosAdapter implements SourceAdapter {
     return [];
   }
 
-  async *streamRows(
-    ctx: AdapterContext,
-    args: StreamRowsArgs,
-  ): AsyncIterable<StreamRowsPage> {
+  async *streamRows(ctx: AdapterContext, args: StreamRowsArgs): AsyncIterable<StreamRowsPage> {
     ctx.logger.debug("banner-ethos: streamRows", { resource: args.resource });
     if (!SUPPORTED_RESOURCES.includes(args.resource as SupportedResource)) {
       throw new Error(`banner-ethos: resource "${args.resource}" not supported`);
@@ -100,10 +104,7 @@ export class BannerEthosAdapter implements SourceAdapter {
     return [];
   }
 
-  async getRecordById(
-    ctx: AdapterContext,
-    args: GetRecordByIdArgs,
-  ): Promise<SampledRow | null> {
+  async getRecordById(ctx: AdapterContext, args: GetRecordByIdArgs): Promise<SampledRow | null> {
     ctx.logger.debug("banner-ethos: getRecordById", { resource: args.resource, id: args.id });
     if (!SUPPORTED_RESOURCES.includes(args.resource as SupportedResource)) {
       throw new Error(`banner-ethos: resource "${args.resource}" not supported`);

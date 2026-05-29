@@ -12,4 +12,4 @@
  *     ↓ profile packs map FROM canonical
  *   profile-hesa-tdp, profile-sits (target shapes)
  */
-export * from './entities/index.js';
+export * from "./entities/index.js";

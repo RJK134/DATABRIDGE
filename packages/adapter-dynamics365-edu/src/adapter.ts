@@ -20,15 +20,8 @@ import type {
   DictionaryEntry,
 } from "@databridge/adapter-spec";
 
-import {
-  Dynamics365EduConfigSchema,
-  type Dynamics365EduConfig,
-} from "./config.js";
-import {
-  DataverseClient,
-  type DataverseClientOptions,
-  type EntityDefinition,
-} from "./http.js";
+import { Dynamics365EduConfigSchema, type Dynamics365EduConfig } from "./config.js";
+import { DataverseClient, type DataverseClientOptions, type EntityDefinition } from "./http.js";
 import {
   RESOURCE_TO_SET,
   RESOURCE_TO_PK,
@@ -42,7 +35,7 @@ import { buildDictionary, describeToDictionary } from "./dictionary.js";
 
 export interface Dynamics365EduAdapterOptions {
   httpClientFactory?: (
-    args: Pick<DataverseClientOptions, "config" | "clientSecret" | "logger" | "signal">,
+    args: Pick<DataverseClientOptions, "config" | "clientSecret" | "logger" | "signal">
   ) => DataverseClient;
 }
 
@@ -195,7 +188,10 @@ export class Dynamics365EduAdapter implements SourceAdapter {
     if (args.sinceTimestamp) {
       options.filter = `modifiedon ge ${args.sinceTimestamp}`;
     }
-    for await (const page of client.queryAll<Record<string, unknown>>(RESOURCE_TO_SET[r], options)) {
+    for await (const page of client.queryAll<Record<string, unknown>>(
+      RESOURCE_TO_SET[r],
+      options
+    )) {
       const totalRows = typeof page["@odata.count"] === "number" ? page["@odata.count"] : undefined;
       yield totalRows !== undefined
         ? { rows: page.value.map(toSampledRow), totalRows }
@@ -246,10 +242,7 @@ export class Dynamics365EduAdapter implements SourceAdapter {
     return buildDictionary(client, SUPPORTED_RESOURCES, this.describeCache);
   }
 
-  async getRecordById(
-    ctx: AdapterContext,
-    args: GetRecordByIdArgs,
-  ): Promise<SampledRow | null> {
+  async getRecordById(ctx: AdapterContext, args: GetRecordByIdArgs): Promise<SampledRow | null> {
     this.requireSupported(args.resource);
     const client = await this.tryBuildClient(ctx);
     if (!client) return null;
@@ -257,7 +250,7 @@ export class Dynamics365EduAdapter implements SourceAdapter {
     const row = await client.getRecord<Record<string, unknown>>(
       RESOURCE_TO_SET[r],
       args.id,
-      RESOURCE_TO_SELECT[r],
+      RESOURCE_TO_SELECT[r]
     );
     return row ? toSampledRow(row) : null;
   }

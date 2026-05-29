@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * SES — Socio-Economic Status (HESA Data Futures SES entity). Captures the
@@ -11,7 +11,10 @@ export const SesZ = z.object({
   /** Foreign key to canonical Engagement.id. */
   engagementId: z.string().uuid(),
   /** HESA SOC2020 — Standard Occupational Classification (4-digit). */
-  soc2020: z.string().regex(/^\d{4}$/).optional(),
+  soc2020: z
+    .string()
+    .regex(/^\d{4}$/)
+    .optional(),
   /** HESA NSSEC — derived National Statistics Socio-economic Classification. */
   nssec: z.string().optional(),
   /** HESA PARED — highest qualification of parents. */

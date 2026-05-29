@@ -9,14 +9,25 @@
       "description": "Tribal SITS nationality codeset — mapped to HESA NATN field.",
       "source": "sits",
       "entries": [
-        { "code": "GB", "description": "United Kingdom", "shortDescription": "UK", "isActive": true, "sortOrder": 1 },
+        {
+          "code": "GB",
+          "description": "United Kingdom",
+          "shortDescription": "UK",
+          "isActive": true,
+          "sortOrder": 1
+        },
         { "code": "FR", "description": "France", "isActive": true, "sortOrder": 2 },
         { "code": "DE", "description": "Germany", "isActive": true, "sortOrder": 3 },
         { "code": "US", "description": "United States", "isActive": true, "sortOrder": 4 },
         { "code": "IE", "description": "Ireland", "isActive": true, "sortOrder": 5 },
         { "code": "CN", "description": "China", "isActive": true, "sortOrder": 6 },
         { "code": "IN", "description": "India", "isActive": true, "sortOrder": 7 },
-        { "code": "ZZ", "description": "Unknown / not specified", "isActive": true, "sortOrder": 999 }
+        {
+          "code": "ZZ",
+          "description": "Unknown / not specified",
+          "isActive": true,
+          "sortOrder": 999
+        }
       ]
     },
     {
@@ -46,13 +57,48 @@
       "description": "scj_stac values — drives Phase I status-driven currentness resolver.",
       "source": "sits",
       "entries": [
-        { "code": "C", "description": "Current / enrolled", "isActive": true, "attributes": { "currentness": "active" } },
-        { "code": "P", "description": "Prospective", "isActive": true, "attributes": { "currentness": "prospective" } },
-        { "code": "S", "description": "Suspended", "isActive": true, "attributes": { "currentness": "suspended" } },
-        { "code": "T", "description": "Transferred out", "isActive": true, "attributes": { "currentness": "terminal" } },
-        { "code": "W", "description": "Withdrawn", "isActive": true, "attributes": { "currentness": "terminal" } },
-        { "code": "CC", "description": "Course completed", "isActive": true, "attributes": { "currentness": "terminal" } },
-        { "code": "D", "description": "Deceased", "isActive": true, "attributes": { "currentness": "terminal" } }
+        {
+          "code": "C",
+          "description": "Current / enrolled",
+          "isActive": true,
+          "attributes": { "currentness": "active" }
+        },
+        {
+          "code": "P",
+          "description": "Prospective",
+          "isActive": true,
+          "attributes": { "currentness": "prospective" }
+        },
+        {
+          "code": "S",
+          "description": "Suspended",
+          "isActive": true,
+          "attributes": { "currentness": "suspended" }
+        },
+        {
+          "code": "T",
+          "description": "Transferred out",
+          "isActive": true,
+          "attributes": { "currentness": "terminal" }
+        },
+        {
+          "code": "W",
+          "description": "Withdrawn",
+          "isActive": true,
+          "attributes": { "currentness": "terminal" }
+        },
+        {
+          "code": "CC",
+          "description": "Course completed",
+          "isActive": true,
+          "attributes": { "currentness": "terminal" }
+        },
+        {
+          "code": "D",
+          "description": "Deceased",
+          "isActive": true,
+          "attributes": { "currentness": "terminal" }
+        }
       ]
     },
     {
@@ -61,11 +107,36 @@
       "description": "sce_stac values per enrolment year.",
       "source": "sits",
       "entries": [
-        { "code": "R", "description": "Registered for the year", "isActive": true, "attributes": { "currentness": "active" } },
-        { "code": "C", "description": "Confirmed", "isActive": true, "attributes": { "currentness": "active" } },
-        { "code": "I", "description": "Intercalating", "isActive": true, "attributes": { "currentness": "suspended" } },
-        { "code": "P", "description": "Pending registration", "isActive": true, "attributes": { "currentness": "prospective" } },
-        { "code": "W", "description": "Withdrawn from year", "isActive": true, "attributes": { "currentness": "terminal" } }
+        {
+          "code": "R",
+          "description": "Registered for the year",
+          "isActive": true,
+          "attributes": { "currentness": "active" }
+        },
+        {
+          "code": "C",
+          "description": "Confirmed",
+          "isActive": true,
+          "attributes": { "currentness": "active" }
+        },
+        {
+          "code": "I",
+          "description": "Intercalating",
+          "isActive": true,
+          "attributes": { "currentness": "suspended" }
+        },
+        {
+          "code": "P",
+          "description": "Pending registration",
+          "isActive": true,
+          "attributes": { "currentness": "prospective" }
+        },
+        {
+          "code": "W",
+          "description": "Withdrawn from year",
+          "isActive": true,
+          "attributes": { "currentness": "terminal" }
+        }
       ]
     },
     {
@@ -74,11 +145,36 @@
       "description": "smr_actc — outcome action on a module result row.",
       "source": "sits",
       "entries": [
-        { "code": "P", "description": "Pass", "isActive": true, "attributes": { "outcome": "pass" } },
-        { "code": "F", "description": "Fail", "isActive": true, "attributes": { "outcome": "fail" } },
-        { "code": "C", "description": "Compensated pass", "isActive": true, "attributes": { "outcome": "pass" } },
-        { "code": "R", "description": "Refer", "isActive": true, "attributes": { "outcome": "refer" } },
-        { "code": "X", "description": "Excluded / non-submission", "isActive": true, "attributes": { "outcome": "fail" } }
+        {
+          "code": "P",
+          "description": "Pass",
+          "isActive": true,
+          "attributes": { "outcome": "pass" }
+        },
+        {
+          "code": "F",
+          "description": "Fail",
+          "isActive": true,
+          "attributes": { "outcome": "fail" }
+        },
+        {
+          "code": "C",
+          "description": "Compensated pass",
+          "isActive": true,
+          "attributes": { "outcome": "pass" }
+        },
+        {
+          "code": "R",
+          "description": "Refer",
+          "isActive": true,
+          "attributes": { "outcome": "refer" }
+        },
+        {
+          "code": "X",
+          "description": "Excluded / non-submission",
+          "isActive": true,
+          "attributes": { "outcome": "fail" }
+        }
       ]
     },
     {
@@ -87,10 +183,30 @@
       "description": "SITS fee-status codes mapped to HESA FEESTATUS.",
       "source": "sits",
       "entries": [
-        { "code": "H", "description": "Home / UK fee status", "isActive": true, "attributes": { "hesa.feestatus": "1" } },
-        { "code": "I", "description": "International / overseas fee status", "isActive": true, "attributes": { "hesa.feestatus": "2" } },
-        { "code": "E", "description": "EU fee status (pre-2021)", "isActive": true, "attributes": { "hesa.feestatus": "3" } },
-        { "code": "C", "description": "Channel Islands / Isle of Man", "isActive": true, "attributes": { "hesa.feestatus": "5" } }
+        {
+          "code": "H",
+          "description": "Home / UK fee status",
+          "isActive": true,
+          "attributes": { "hesa.feestatus": "1" }
+        },
+        {
+          "code": "I",
+          "description": "International / overseas fee status",
+          "isActive": true,
+          "attributes": { "hesa.feestatus": "2" }
+        },
+        {
+          "code": "E",
+          "description": "EU fee status (pre-2021)",
+          "isActive": true,
+          "attributes": { "hesa.feestatus": "3" }
+        },
+        {
+          "code": "C",
+          "description": "Channel Islands / Isle of Man",
+          "isActive": true,
+          "attributes": { "hesa.feestatus": "5" }
+        }
       ]
     },
     {
@@ -99,10 +215,30 @@
       "description": "mst_stat — overall person state.",
       "source": "sits",
       "entries": [
-        { "code": "A", "description": "Active", "isActive": true, "attributes": { "currentness": "active" } },
-        { "code": "I", "description": "Inactive", "isActive": true, "attributes": { "currentness": "suspended" } },
-        { "code": "D", "description": "Deceased", "isActive": true, "attributes": { "currentness": "terminal" } },
-        { "code": "M", "description": "Merged into another MST", "isActive": true, "attributes": { "currentness": "merged" } }
+        {
+          "code": "A",
+          "description": "Active",
+          "isActive": true,
+          "attributes": { "currentness": "active" }
+        },
+        {
+          "code": "I",
+          "description": "Inactive",
+          "isActive": true,
+          "attributes": { "currentness": "suspended" }
+        },
+        {
+          "code": "D",
+          "description": "Deceased",
+          "isActive": true,
+          "attributes": { "currentness": "terminal" }
+        },
+        {
+          "code": "M",
+          "description": "Merged into another MST",
+          "isActive": true,
+          "attributes": { "currentness": "merged" }
+        }
       ]
     },
     {

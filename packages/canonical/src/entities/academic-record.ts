@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { ProvenanceFieldsZ } from './provenance.js';
+import { z } from "zod";
+import { ProvenanceFieldsZ } from "./provenance.js";
 
 /**
  * Hold — an account hold preventing service (registration, transcript, etc.).
@@ -11,8 +11,14 @@ export const HoldZ = z
     personId: z.string().uuid(),
     holdType: z.string(),
     reason: z.string().optional(),
-    appliedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-    releasedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    appliedAt: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
+    releasedAt: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
     appliedBy: z.string().optional(),
     attributes: z.record(z.unknown()).optional(),
   })
@@ -33,8 +39,14 @@ export const AdvisorZ = z
     advisorEmail: z.string().email().optional(),
     role: z.string().optional(),
     primaryAdvisor: z.boolean().optional(),
-    fromDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-    toDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    fromDate: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
+    toDate: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
     attributes: z.record(z.unknown()).optional(),
   })
   .merge(ProvenanceFieldsZ);
@@ -55,7 +67,10 @@ export const TransferCreditZ = z
     creditUnit: z.string().optional(),
     grade: z.string().optional(),
     awardedFor: z.string().uuid().optional(),
-    awardedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    awardedAt: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
     attributes: z.record(z.unknown()).optional(),
   })
   .merge(ProvenanceFieldsZ);
@@ -75,7 +90,10 @@ export const RecognisedPriorLearningZ = z
     creditUnit: z.string().optional(),
     rplType: z.string().optional(),
     evidenceRef: z.string().optional(),
-    grantedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    grantedAt: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
     grantedBy: z.string().optional(),
     attributes: z.record(z.unknown()).optional(),
   })
@@ -111,8 +129,14 @@ export const TestScoreZ = z
     personId: z.string().uuid(),
     testCode: z.string(),
     score: z.string(),
-    takenAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-    expiresAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    takenAt: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
+    expiresAt: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
     attributes: z.record(z.unknown()).optional(),
   })
   .merge(ProvenanceFieldsZ);
@@ -128,7 +152,10 @@ export const StatutoryReturnZ = z
     id: z.string().uuid(),
     body: z.string(),
     collection: z.string(),
-    collectionYear: z.string().regex(/^\d{4}\/\d{2}$/).optional(),
+    collectionYear: z
+      .string()
+      .regex(/^\d{4}\/\d{2}$/)
+      .optional(),
     submittedAt: z.string().datetime(),
     submittedBy: z.string().optional(),
     status: z.string().optional(),

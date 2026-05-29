@@ -72,9 +72,9 @@ describe("parseAuditArgs", () => {
   });
 
   it("throws on unknown flag", () => {
-    expect(() =>
-      parseAuditArgs(["--profile", "sits", "--tenant", "t1", "--frobnicate"]),
-    ).toThrow(/unknown flag/);
+    expect(() => parseAuditArgs(["--profile", "sits", "--tenant", "t1", "--frobnicate"])).toThrow(
+      /unknown flag/
+    );
   });
 
   it("parses --adapter and JSON --adapter-config / --resource-map", () => {
@@ -96,40 +96,19 @@ describe("parseAuditArgs", () => {
   });
 
   it("supports short -a for --adapter", () => {
-    const a = parseAuditArgs([
-      "-p",
-      "hesa-tdp",
-      "-t",
-      "t1",
-      "-a",
-      "sits-file",
-    ]);
+    const a = parseAuditArgs(["-p", "hesa-tdp", "-t", "t1", "-a", "sits-file"]);
     expect(a.adapterId).toBe("sits-file");
   });
 
   it("throws helpfully on invalid --adapter-config JSON", () => {
     expect(() =>
-      parseAuditArgs([
-        "-p",
-        "hesa-tdp",
-        "-t",
-        "t1",
-        "--adapter-config",
-        "{not json}",
-      ]),
+      parseAuditArgs(["-p", "hesa-tdp", "-t", "t1", "--adapter-config", "{not json}"])
     ).toThrow(/--adapter-config: invalid JSON/);
   });
 
   it("throws helpfully on invalid --resource-map JSON", () => {
     expect(() =>
-      parseAuditArgs([
-        "-p",
-        "hesa-tdp",
-        "-t",
-        "t1",
-        "--resource-map",
-        "not-json",
-      ]),
+      parseAuditArgs(["-p", "hesa-tdp", "-t", "t1", "--resource-map", "not-json"])
     ).toThrow(/--resource-map: invalid JSON/);
   });
 });
@@ -137,10 +116,7 @@ describe("parseAuditArgs", () => {
 describe("runAuditCmd", () => {
   it("returns exitCode 0 and prints JSON for sits profile", async () => {
     const h = makeIo();
-    const { report, exitCode } = await runAuditCmd(
-      { profileId: "sits", tenantId: "t1" },
-      h.io,
-    );
+    const { report, exitCode } = await runAuditCmd({ profileId: "sits", tenantId: "t1" }, h.io);
     expect(exitCode).toBe(0);
     expect(report.tenantId).toBe("t1");
     expect(report.findingsTotal).toBe(0);
@@ -155,7 +131,7 @@ describe("runAuditCmd", () => {
     const h = makeIo();
     const { exitCode } = await runAuditCmd(
       { profileId: "sits", tenantId: "t1", out: outPath },
-      h.io,
+      h.io
     );
     expect(exitCode).toBe(0);
     const written = await readFile(outPath, "utf8");
@@ -166,10 +142,7 @@ describe("runAuditCmd", () => {
 
   it("emits warnings when running hesa-tdp without a source", async () => {
     const h = makeIo();
-    const { report, exitCode } = await runAuditCmd(
-      { profileId: "hesa-tdp", tenantId: "t2" },
-      h.io,
-    );
+    const { report, exitCode } = await runAuditCmd({ profileId: "hesa-tdp", tenantId: "t2" }, h.io);
     expect(exitCode).toBe(0); // no ERRORs because Fn rules were skipped
     expect(report.rulesFn).toBeGreaterThan(0);
     expect(report.warnings.length).toBeGreaterThan(0);
@@ -177,10 +150,7 @@ describe("runAuditCmd", () => {
 
   it("returns exitCode 2 on unknown profile and prints to stderr", async () => {
     const h = makeIo();
-    const { exitCode } = await runAuditCmd(
-      { profileId: "totally-fake", tenantId: "t1" },
-      h.io,
-    );
+    const { exitCode } = await runAuditCmd({ profileId: "totally-fake", tenantId: "t1" }, h.io);
     expect(exitCode).toBe(2);
     expect(h.getErr()).toContain("unknown profile");
   });
@@ -193,7 +163,7 @@ describe("runAuditCmd", () => {
         tenantId: "t1",
         adapterId: "made-up-adapter",
       },
-      h.io,
+      h.io
     );
     expect(exitCode).toBe(2);
     expect(h.getErr()).toMatch(/adapter 'made-up-adapter' failed to init/);
@@ -209,15 +179,13 @@ describe("runAuditCmd", () => {
         adapterConfig: { rootPath: "/tmp/databridge-cli-test" },
         resourceMap: { STU: "Student" },
       },
-      h.io,
+      h.io
     );
     expect(exitCode).toBe(0);
     expect(report.rulesFn).toBeGreaterThan(0);
     // Sanity: with a source wired, the engine should not emit the "no source"
     // warning that hesa-tdp normally produces in the unwired case.
-    const noSourceWarnings = report.warnings.filter((w) =>
-      /no source/i.test(w),
-    );
+    const noSourceWarnings = report.warnings.filter((w) => /no source/i.test(w));
     expect(noSourceWarnings).toHaveLength(0);
   });
 });

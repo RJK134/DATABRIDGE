@@ -13,7 +13,12 @@
         "severity": "ERROR",
         "tags": ["identity"],
         "messageTemplate": "Student {{sourceId}} is missing lastName",
-        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "Student", "field": "lastName" }, "operands": [] }
+        "where": {
+          "kind": "predicate",
+          "op": "isNull",
+          "field": { "kind": "field", "entity": "Student", "field": "lastName" },
+          "operands": []
+        }
       }
     },
     {
@@ -27,7 +32,12 @@
         "severity": "WARN",
         "tags": ["identity", "hesa"],
         "messageTemplate": "Student {{sourceId}} is missing HUSID",
-        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "Student", "field": "husid" }, "operands": [] }
+        "where": {
+          "kind": "predicate",
+          "op": "isNull",
+          "field": { "kind": "field", "entity": "Student", "field": "husid" },
+          "operands": []
+        }
       }
     },
     {
@@ -41,7 +51,12 @@
         "severity": "WARN",
         "tags": ["identity"],
         "messageTemplate": "Student {{sourceId}} has placeholder email {{email}}",
-        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Student", "field": "email" }, "operands": [{ "kind": "literal", "value": "shared@uni.example" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "eq",
+          "field": { "kind": "field", "entity": "Student", "field": "email" },
+          "operands": [{ "kind": "literal", "value": "shared@uni.example" }]
+        }
       }
     },
     {
@@ -58,8 +73,18 @@
         "where": {
           "kind": "and",
           "clauses": [
-            { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Engagement", "field": "collectionYear" }, "operands": [{ "kind": "literal", "value": "2024/25" }] },
-            { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "Engagement", "field": "programmeCode" }, "operands": [] }
+            {
+              "kind": "predicate",
+              "op": "eq",
+              "field": { "kind": "field", "entity": "Engagement", "field": "collectionYear" },
+              "operands": [{ "kind": "literal", "value": "2024/25" }]
+            },
+            {
+              "kind": "predicate",
+              "op": "isNull",
+              "field": { "kind": "field", "entity": "Engagement", "field": "programmeCode" },
+              "operands": []
+            }
           ]
         }
       }
@@ -78,9 +103,24 @@
         "where": {
           "kind": "and",
           "clauses": [
-            { "kind": "predicate", "op": "isNotNull", "field": { "kind": "field", "entity": "Engagement", "field": "endDate" }, "operands": [] },
-            { "kind": "predicate", "op": "isNotNull", "field": { "kind": "field", "entity": "Engagement", "field": "startDate" }, "operands": [] },
-            { "kind": "predicate", "op": "lt", "field": { "kind": "field", "entity": "Engagement", "field": "endDate" }, "operands": [{ "kind": "field", "entity": "Engagement", "field": "startDate" }] }
+            {
+              "kind": "predicate",
+              "op": "isNotNull",
+              "field": { "kind": "field", "entity": "Engagement", "field": "endDate" },
+              "operands": []
+            },
+            {
+              "kind": "predicate",
+              "op": "isNotNull",
+              "field": { "kind": "field", "entity": "Engagement", "field": "startDate" },
+              "operands": []
+            },
+            {
+              "kind": "predicate",
+              "op": "lt",
+              "field": { "kind": "field", "entity": "Engagement", "field": "endDate" },
+              "operands": [{ "kind": "field", "entity": "Engagement", "field": "startDate" }]
+            }
           ]
         }
       }
@@ -96,7 +136,12 @@
         "severity": "INFO",
         "tags": ["mode"],
         "messageTemplate": "Engagement {{id}} is distance-learning",
-        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Engagement", "field": "modeOfStudy" }, "operands": [{ "kind": "literal", "value": "DL" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "eq",
+          "field": { "kind": "field", "entity": "Engagement", "field": "modeOfStudy" },
+          "operands": [{ "kind": "literal", "value": "DL" }]
+        }
       }
     },
     {
@@ -113,8 +158,18 @@
         "where": {
           "kind": "or",
           "clauses": [
-            { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "Module", "field": "credits" }, "operands": [] },
-            { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Module", "field": "credits" }, "operands": [{ "kind": "literal", "value": 0 }] }
+            {
+              "kind": "predicate",
+              "op": "isNull",
+              "field": { "kind": "field", "entity": "Module", "field": "credits" },
+              "operands": []
+            },
+            {
+              "kind": "predicate",
+              "op": "eq",
+              "field": { "kind": "field", "entity": "Module", "field": "credits" },
+              "operands": [{ "kind": "literal", "value": 0 }]
+            }
           ]
         }
       }
@@ -130,7 +185,12 @@
         "severity": "ERROR",
         "tags": ["crm", "identity"],
         "messageTemplate": "Contact {{Id}} has shared placeholder email",
-        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Contact", "field": "Email" }, "operands": [{ "kind": "literal", "value": "shared.contact@uni.example" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "eq",
+          "field": { "kind": "field", "entity": "Contact", "field": "Email" },
+          "operands": [{ "kind": "literal", "value": "shared.contact@uni.example" }]
+        }
       }
     },
     {
@@ -147,8 +207,18 @@
         "where": {
           "kind": "and",
           "clauses": [
-            { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Contact", "field": "hed__FERPA__c" }, "operands": [{ "kind": "literal", "value": "Withheld" }] },
-            { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Contact", "field": "HasOptedOutOfEmail" }, "operands": [{ "kind": "literal", "value": false }] }
+            {
+              "kind": "predicate",
+              "op": "eq",
+              "field": { "kind": "field", "entity": "Contact", "field": "hed__FERPA__c" },
+              "operands": [{ "kind": "literal", "value": "Withheld" }]
+            },
+            {
+              "kind": "predicate",
+              "op": "eq",
+              "field": { "kind": "field", "entity": "Contact", "field": "HasOptedOutOfEmail" },
+              "operands": [{ "kind": "literal", "value": false }]
+            }
           ]
         }
       }
@@ -164,7 +234,12 @@
         "severity": "ERROR",
         "tags": ["crm", "identity"],
         "messageTemplate": "Contact {{contactid}} has shared placeholder emailaddress1",
-        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "DataverseContact", "field": "emailaddress1" }, "operands": [{ "kind": "literal", "value": "shared.contact@uni.example" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "eq",
+          "field": { "kind": "field", "entity": "DataverseContact", "field": "emailaddress1" },
+          "operands": [{ "kind": "literal", "value": "shared.contact@uni.example" }]
+        }
       }
     },
     {
@@ -178,7 +253,12 @@
         "severity": "INFO",
         "tags": ["crm", "privacy"],
         "messageTemplate": "Contact {{contactid}} is opted out of bulk email",
-        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "DataverseContact", "field": "donotbulkemail" }, "operands": [{ "kind": "literal", "value": true }] }
+        "where": {
+          "kind": "predicate",
+          "op": "eq",
+          "field": { "kind": "field", "entity": "DataverseContact", "field": "donotbulkemail" },
+          "operands": [{ "kind": "literal", "value": true }]
+        }
       }
     },
     {
@@ -192,7 +272,12 @@
         "severity": "ERROR",
         "tags": ["banner", "identity"],
         "messageTemplate": "Banner student {{SPRIDEN_PIDM}} is missing SPRIDEN_LAST_NAME",
-        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "BannerStudent", "field": "SPRIDEN_LAST_NAME" }, "operands": [] }
+        "where": {
+          "kind": "predicate",
+          "op": "isNull",
+          "field": { "kind": "field", "entity": "BannerStudent", "field": "SPRIDEN_LAST_NAME" },
+          "operands": []
+        }
       }
     },
     {
@@ -206,7 +291,12 @@
         "severity": "WARN",
         "tags": ["banner", "codeset-drift"],
         "messageTemplate": "Banner student {{SPRIDEN_PIDM}} has legacy major XX_LEGACY",
-        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "BannerStudent", "field": "SGBSTDN_MAJR_CODE_1" }, "operands": [{ "kind": "literal", "value": "XX_LEGACY" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "eq",
+          "field": { "kind": "field", "entity": "BannerStudent", "field": "SGBSTDN_MAJR_CODE_1" },
+          "operands": [{ "kind": "literal", "value": "XX_LEGACY" }]
+        }
       }
     },
     {
@@ -220,7 +310,12 @@
         "severity": "WARN",
         "tags": ["sits", "identity"],
         "messageTemplate": "SITS student {{STU_CODE}} is missing STU_HUSID",
-        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "SitsStudent", "field": "STU_HUSID" }, "operands": [] }
+        "where": {
+          "kind": "predicate",
+          "op": "isNull",
+          "field": { "kind": "field", "entity": "SitsStudent", "field": "STU_HUSID" },
+          "operands": []
+        }
       }
     },
     {
@@ -237,8 +332,18 @@
         "where": {
           "kind": "and",
           "clauses": [
-            { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "SitsStudent", "field": "SCE_AYR" }, "operands": [{ "kind": "literal", "value": "2024/25" }] },
-            { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "SitsStudent", "field": "SCE_POS" }, "operands": [{ "kind": "literal", "value": "ZZ" }] }
+            {
+              "kind": "predicate",
+              "op": "eq",
+              "field": { "kind": "field", "entity": "SitsStudent", "field": "SCE_AYR" },
+              "operands": [{ "kind": "literal", "value": "2024/25" }]
+            },
+            {
+              "kind": "predicate",
+              "op": "eq",
+              "field": { "kind": "field", "entity": "SitsStudent", "field": "SCE_POS" },
+              "operands": [{ "kind": "literal", "value": "ZZ" }]
+            }
           ]
         }
       }
@@ -254,7 +359,12 @@
         "severity": "INFO",
         "tags": ["workday"],
         "messageTemplate": "Workday student {{Student_ID}} is inactive",
-        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "WorkdayStudent", "field": "Active_Status" }, "operands": [{ "kind": "literal", "value": "Inactive" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "eq",
+          "field": { "kind": "field", "entity": "WorkdayStudent", "field": "Active_Status" },
+          "operands": [{ "kind": "literal", "value": "Inactive" }]
+        }
       }
     },
     {
@@ -268,7 +378,12 @@
         "severity": "INFO",
         "tags": ["finance"],
         "messageTemplate": "TechOne invoice {{InvoiceId}} exceeds £50,000",
-        "where": { "kind": "predicate", "op": "gt", "field": { "kind": "field", "entity": "TechOneInvoice", "field": "Amount" }, "operands": [{ "kind": "literal", "value": 50000 }] }
+        "where": {
+          "kind": "predicate",
+          "op": "gt",
+          "field": { "kind": "field", "entity": "TechOneInvoice", "field": "Amount" },
+          "operands": [{ "kind": "literal", "value": 50000 }]
+        }
       }
     },
     {
@@ -282,7 +397,15 @@
         "severity": "WARN",
         "tags": ["finance"],
         "messageTemplate": "TechOne invoice {{InvoiceId}} has status {{Status}}",
-        "where": { "kind": "predicate", "op": "notIn", "field": { "kind": "field", "entity": "TechOneInvoice", "field": "Status" }, "operands": [{ "kind": "literal", "value": "Paid" }, { "kind": "literal", "value": "Approved" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "notIn",
+          "field": { "kind": "field", "entity": "TechOneInvoice", "field": "Status" },
+          "operands": [
+            { "kind": "literal", "value": "Paid" },
+            { "kind": "literal", "value": "Approved" }
+          ]
+        }
       }
     },
     {
@@ -296,7 +419,12 @@
         "severity": "WARN",
         "tags": ["data-quality"],
         "messageTemplate": "Student {{sourceId}} has implausible DOB {{dateOfBirth}}",
-        "where": { "kind": "predicate", "op": "gt", "field": { "kind": "field", "entity": "Student", "field": "dateOfBirth" }, "operands": [{ "kind": "literal", "value": "2010-01-01" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "gt",
+          "field": { "kind": "field", "entity": "Student", "field": "dateOfBirth" },
+          "operands": [{ "kind": "literal", "value": "2010-01-01" }]
+        }
       }
     },
     {
@@ -310,7 +438,12 @@
         "severity": "WARN",
         "tags": ["hesa"],
         "messageTemplate": "Student {{sourceId}} is missing feeStatus",
-        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "Student", "field": "feeStatus" }, "operands": [] }
+        "where": {
+          "kind": "predicate",
+          "op": "isNull",
+          "field": { "kind": "field", "entity": "Student", "field": "feeStatus" },
+          "operands": []
+        }
       }
     },
     {
@@ -324,7 +457,12 @@
         "severity": "INFO",
         "tags": ["hesa"],
         "messageTemplate": "Student {{sourceId}} did not declare ethnicity",
-        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Student", "field": "ethnicity" }, "operands": [{ "kind": "literal", "value": "98" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "eq",
+          "field": { "kind": "field", "entity": "Student", "field": "ethnicity" },
+          "operands": [{ "kind": "literal", "value": "98" }]
+        }
       }
     },
     {
@@ -338,7 +476,12 @@
         "severity": "INFO",
         "tags": ["modules"],
         "messageTemplate": "Module {{code}} is below level 4",
-        "where": { "kind": "predicate", "op": "lt", "field": { "kind": "field", "entity": "Module", "field": "level" }, "operands": [{ "kind": "literal", "value": "L4" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "lt",
+          "field": { "kind": "field", "entity": "Module", "field": "level" },
+          "operands": [{ "kind": "literal", "value": "L4" }]
+        }
       }
     },
     {
@@ -352,7 +495,15 @@
         "severity": "INFO",
         "tags": ["engagement"],
         "messageTemplate": "Engagement {{id}} active in 2024/25",
-        "where": { "kind": "predicate", "op": "between", "field": { "kind": "field", "entity": "Engagement", "field": "startDate" }, "operands": [{ "kind": "literal", "value": "2024-09-01" }, { "kind": "literal", "value": "2025-08-31" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "between",
+          "field": { "kind": "field", "entity": "Engagement", "field": "startDate" },
+          "operands": [
+            { "kind": "literal", "value": "2024-09-01" },
+            { "kind": "literal", "value": "2025-08-31" }
+          ]
+        }
       }
     },
     {
@@ -366,7 +517,19 @@
         "severity": "WARN",
         "tags": ["campus", "codeset-drift"],
         "messageTemplate": "Engagement {{id}} has unknown campus {{campusCode}}",
-        "where": { "kind": "predicate", "op": "notIn", "field": { "kind": "field", "entity": "Engagement", "field": "campusCode" }, "operands": [{ "kind": "literal", "value": "MAIN" }, { "kind": "literal", "value": "NORTH" }, { "kind": "literal", "value": "WEST" }, { "kind": "literal", "value": "BUSINESS" }, { "kind": "literal", "value": "DISTANCE" }, { "kind": "literal", "value": "OVS" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "notIn",
+          "field": { "kind": "field", "entity": "Engagement", "field": "campusCode" },
+          "operands": [
+            { "kind": "literal", "value": "MAIN" },
+            { "kind": "literal", "value": "NORTH" },
+            { "kind": "literal", "value": "WEST" },
+            { "kind": "literal", "value": "BUSINESS" },
+            { "kind": "literal", "value": "DISTANCE" },
+            { "kind": "literal", "value": "OVS" }
+          ]
+        }
       }
     },
     {
@@ -383,8 +546,21 @@
         "where": {
           "kind": "and",
           "clauses": [
-            { "kind": "predicate", "op": "isNotNull", "field": { "kind": "field", "entity": "Contact", "field": "Email" }, "operands": [] },
-            { "kind": "not", "clause": { "kind": "predicate", "op": "matches", "field": { "kind": "field", "entity": "Contact", "field": "Email" }, "operands": [{ "kind": "literal", "value": "@" }] } }
+            {
+              "kind": "predicate",
+              "op": "isNotNull",
+              "field": { "kind": "field", "entity": "Contact", "field": "Email" },
+              "operands": []
+            },
+            {
+              "kind": "not",
+              "clause": {
+                "kind": "predicate",
+                "op": "matches",
+                "field": { "kind": "field", "entity": "Contact", "field": "Email" },
+                "operands": [{ "kind": "literal", "value": "@" }]
+              }
+            }
           ]
         }
       }
@@ -403,8 +579,21 @@
         "where": {
           "kind": "and",
           "clauses": [
-            { "kind": "predicate", "op": "isNotNull", "field": { "kind": "field", "entity": "Student", "field": "husid" }, "operands": [] },
-            { "kind": "not", "clause": { "kind": "predicate", "op": "matches", "field": { "kind": "field", "entity": "Student", "field": "husid" }, "operands": [{ "kind": "literal", "value": "^[0-9]{13}$" }] } }
+            {
+              "kind": "predicate",
+              "op": "isNotNull",
+              "field": { "kind": "field", "entity": "Student", "field": "husid" },
+              "operands": []
+            },
+            {
+              "kind": "not",
+              "clause": {
+                "kind": "predicate",
+                "op": "matches",
+                "field": { "kind": "field", "entity": "Student", "field": "husid" },
+                "operands": [{ "kind": "literal", "value": "^[0-9]{13}$" }]
+              }
+            }
           ]
         }
       }
@@ -420,7 +609,12 @@
         "severity": "INFO",
         "tags": ["engagement"],
         "messageTemplate": "Engagement {{id}} ends in 2026 or later ({{endDate}})",
-        "where": { "kind": "predicate", "op": "gte", "field": { "kind": "field", "entity": "Engagement", "field": "endDate" }, "operands": [{ "kind": "literal", "value": "2026-01-01" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "gte",
+          "field": { "kind": "field", "entity": "Engagement", "field": "endDate" },
+          "operands": [{ "kind": "literal", "value": "2026-01-01" }]
+        }
       }
     },
     {
@@ -434,7 +628,15 @@
         "severity": "INFO",
         "tags": ["modules"],
         "messageTemplate": "Module {{code}} carries {{credits}} credits",
-        "where": { "kind": "predicate", "op": "between", "field": { "kind": "field", "entity": "Module", "field": "credits" }, "operands": [{ "kind": "literal", "value": 10 }, { "kind": "literal", "value": 30 }] }
+        "where": {
+          "kind": "predicate",
+          "op": "between",
+          "field": { "kind": "field", "entity": "Module", "field": "credits" },
+          "operands": [
+            { "kind": "literal", "value": 10 },
+            { "kind": "literal", "value": 30 }
+          ]
+        }
       }
     },
     {
@@ -448,7 +650,12 @@
         "severity": "WARN",
         "tags": ["banner", "programme"],
         "messageTemplate": "Banner student {{SPRIDEN_PIDM}} has no SGBSTDN_MAJR_CODE_1",
-        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "BannerStudent", "field": "SGBSTDN_MAJR_CODE_1" }, "operands": [] }
+        "where": {
+          "kind": "predicate",
+          "op": "isNull",
+          "field": { "kind": "field", "entity": "BannerStudent", "field": "SGBSTDN_MAJR_CODE_1" },
+          "operands": []
+        }
       }
     },
     {
@@ -462,7 +669,12 @@
         "severity": "INFO",
         "tags": ["sits"],
         "messageTemplate": "SITS student {{STU_CODE}} active in 2024/25",
-        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "SitsStudent", "field": "SCE_AYR" }, "operands": [{ "kind": "literal", "value": "2024/25" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "eq",
+          "field": { "kind": "field", "entity": "SitsStudent", "field": "SCE_AYR" },
+          "operands": [{ "kind": "literal", "value": "2024/25" }]
+        }
       }
     },
     {
@@ -476,7 +688,15 @@
         "severity": "INFO",
         "tags": ["mode"],
         "messageTemplate": "Engagement {{id}} is FT or PT",
-        "where": { "kind": "predicate", "op": "in", "field": { "kind": "field", "entity": "Engagement", "field": "modeOfStudy" }, "operands": [{ "kind": "literal", "value": "FT" }, { "kind": "literal", "value": "PT" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "in",
+          "field": { "kind": "field", "entity": "Engagement", "field": "modeOfStudy" },
+          "operands": [
+            { "kind": "literal", "value": "FT" },
+            { "kind": "literal", "value": "PT" }
+          ]
+        }
       }
     },
     {
@@ -493,8 +713,22 @@
         "where": {
           "kind": "and",
           "clauses": [
-            { "kind": "predicate", "op": "isNotNull", "field": { "kind": "field", "entity": "Student", "field": "sexId" }, "operands": [] },
-            { "kind": "predicate", "op": "notIn", "field": { "kind": "field", "entity": "Student", "field": "sexId" }, "operands": [{ "kind": "literal", "value": "M" }, { "kind": "literal", "value": "F" }, { "kind": "literal", "value": "X" }] }
+            {
+              "kind": "predicate",
+              "op": "isNotNull",
+              "field": { "kind": "field", "entity": "Student", "field": "sexId" },
+              "operands": []
+            },
+            {
+              "kind": "predicate",
+              "op": "notIn",
+              "field": { "kind": "field", "entity": "Student", "field": "sexId" },
+              "operands": [
+                { "kind": "literal", "value": "M" },
+                { "kind": "literal", "value": "F" },
+                { "kind": "literal", "value": "X" }
+              ]
+            }
           ]
         }
       }
@@ -510,7 +744,12 @@
         "severity": "WARN",
         "tags": ["crm", "identity"],
         "messageTemplate": "Contact {{contactid}} has no msdyn_studentid",
-        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "DataverseContact", "field": "msdyn_studentid" }, "operands": [] }
+        "where": {
+          "kind": "predicate",
+          "op": "isNull",
+          "field": { "kind": "field", "entity": "DataverseContact", "field": "msdyn_studentid" },
+          "operands": []
+        }
       }
     },
     {
@@ -524,7 +763,12 @@
         "severity": "INFO",
         "tags": ["finance"],
         "messageTemplate": "TechOne invoice {{InvoiceId}} is Voided",
-        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "TechOneInvoice", "field": "Status" }, "operands": [{ "kind": "literal", "value": "Voided" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "eq",
+          "field": { "kind": "field", "entity": "TechOneInvoice", "field": "Status" },
+          "operands": [{ "kind": "literal", "value": "Voided" }]
+        }
       }
     },
     {
@@ -538,7 +782,12 @@
         "severity": "INFO",
         "tags": ["identity"],
         "messageTemplate": "Student {{sourceId}} has Z-initial first name {{firstName}}",
-        "where": { "kind": "predicate", "op": "matches", "field": { "kind": "field", "entity": "Student", "field": "firstName" }, "operands": [{ "kind": "literal", "value": "^Z" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "matches",
+          "field": { "kind": "field", "entity": "Student", "field": "firstName" },
+          "operands": [{ "kind": "literal", "value": "^Z" }]
+        }
       }
     },
     {
@@ -552,7 +801,12 @@
         "severity": "INFO",
         "tags": ["engagement"],
         "messageTemplate": "Engagement {{id}} active in term 202410",
-        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Engagement", "field": "termCode" }, "operands": [{ "kind": "literal", "value": "202410" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "eq",
+          "field": { "kind": "field", "entity": "Engagement", "field": "termCode" },
+          "operands": [{ "kind": "literal", "value": "202410" }]
+        }
       }
     },
     {
@@ -566,7 +820,12 @@
         "severity": "INFO",
         "tags": ["crm"],
         "messageTemplate": "Contact {{Id}} is still in marketing",
-        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Contact", "field": "HasOptedOutOfEmail" }, "operands": [{ "kind": "literal", "value": false }] }
+        "where": {
+          "kind": "predicate",
+          "op": "eq",
+          "field": { "kind": "field", "entity": "Contact", "field": "HasOptedOutOfEmail" },
+          "operands": [{ "kind": "literal", "value": false }]
+        }
       }
     },
     {
@@ -580,7 +839,12 @@
         "severity": "INFO",
         "tags": ["crm", "privacy"],
         "messageTemplate": "Contact {{contactid}} has matching email flags",
-        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "DataverseContact", "field": "donotemail" }, "operands": [{ "kind": "field", "entity": "DataverseContact", "field": "donotbulkemail" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "eq",
+          "field": { "kind": "field", "entity": "DataverseContact", "field": "donotemail" },
+          "operands": [{ "kind": "field", "entity": "DataverseContact", "field": "donotbulkemail" }]
+        }
       }
     },
     {
@@ -594,7 +858,12 @@
         "severity": "ERROR",
         "tags": ["identity"],
         "messageTemplate": "Student {{sourceId}} has empty lastName",
-        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "Student", "field": "lastName" }, "operands": [] }
+        "where": {
+          "kind": "predicate",
+          "op": "isNull",
+          "field": { "kind": "field", "entity": "Student", "field": "lastName" },
+          "operands": []
+        }
       }
     },
     {
@@ -608,7 +877,18 @@
         "severity": "WARN",
         "tags": ["banner", "codeset-drift"],
         "messageTemplate": "Banner student {{SPRIDEN_PIDM}} has non-active major {{SGBSTDN_MAJR_CODE_1}}",
-        "where": { "kind": "predicate", "op": "notIn", "field": { "kind": "field", "entity": "BannerStudent", "field": "SGBSTDN_MAJR_CODE_1" }, "operands": [{ "kind": "literal", "value": "CS" }, { "kind": "literal", "value": "EE" }, { "kind": "literal", "value": "BUS" }, { "kind": "literal", "value": "HIST" }, { "kind": "literal", "value": "MATH" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "notIn",
+          "field": { "kind": "field", "entity": "BannerStudent", "field": "SGBSTDN_MAJR_CODE_1" },
+          "operands": [
+            { "kind": "literal", "value": "CS" },
+            { "kind": "literal", "value": "EE" },
+            { "kind": "literal", "value": "BUS" },
+            { "kind": "literal", "value": "HIST" },
+            { "kind": "literal", "value": "MATH" }
+          ]
+        }
       }
     },
     {
@@ -622,7 +902,12 @@
         "severity": "ERROR",
         "tags": ["sits", "identity"],
         "messageTemplate": "SITS student {{STU_CODE}} is missing surname",
-        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "SitsStudent", "field": "STU_SURN" }, "operands": [] }
+        "where": {
+          "kind": "predicate",
+          "op": "isNull",
+          "field": { "kind": "field", "entity": "SitsStudent", "field": "STU_SURN" },
+          "operands": []
+        }
       }
     },
     {
@@ -636,7 +921,12 @@
         "severity": "INFO",
         "tags": ["workday"],
         "messageTemplate": "Workday student {{Student_ID}} is in the 2024 cohort",
-        "where": { "kind": "predicate", "op": "matches", "field": { "kind": "field", "entity": "WorkdayStudent", "field": "Student_ID" }, "operands": [{ "kind": "literal", "value": "^W2024" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "matches",
+          "field": { "kind": "field", "entity": "WorkdayStudent", "field": "Student_ID" },
+          "operands": [{ "kind": "literal", "value": "^W2024" }]
+        }
       }
     },
     {
@@ -650,7 +940,12 @@
         "severity": "INFO",
         "tags": ["modules"],
         "messageTemplate": "Module {{code}} matches MODxxx",
-        "where": { "kind": "predicate", "op": "matches", "field": { "kind": "field", "entity": "Module", "field": "code" }, "operands": [{ "kind": "literal", "value": "^MOD\\d{3}$" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "matches",
+          "field": { "kind": "field", "entity": "Module", "field": "code" },
+          "operands": [{ "kind": "literal", "value": "^MOD\\d{3}$" }]
+        }
       }
     },
     {
@@ -664,7 +959,12 @@
         "severity": "ERROR",
         "tags": ["hesa"],
         "messageTemplate": "Engagement {{id}} is missing collectionYear",
-        "where": { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "Engagement", "field": "collectionYear" }, "operands": [] }
+        "where": {
+          "kind": "predicate",
+          "op": "isNull",
+          "field": { "kind": "field", "entity": "Engagement", "field": "collectionYear" },
+          "operands": []
+        }
       }
     },
     {
@@ -678,7 +978,12 @@
         "severity": "INFO",
         "tags": ["hesa"],
         "messageTemplate": "Student {{sourceId}} is overseas",
-        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Student", "field": "feeStatus" }, "operands": [{ "kind": "literal", "value": "03" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "eq",
+          "field": { "kind": "field", "entity": "Student", "field": "feeStatus" },
+          "operands": [{ "kind": "literal", "value": "03" }]
+        }
       }
     },
     {
@@ -692,7 +997,15 @@
         "severity": "INFO",
         "tags": ["finance"],
         "messageTemplate": "TechOne invoice {{InvoiceId}} is pending or rejected",
-        "where": { "kind": "predicate", "op": "in", "field": { "kind": "field", "entity": "TechOneInvoice", "field": "Status" }, "operands": [{ "kind": "literal", "value": "Pending" }, { "kind": "literal", "value": "Rejected" }] }
+        "where": {
+          "kind": "predicate",
+          "op": "in",
+          "field": { "kind": "field", "entity": "TechOneInvoice", "field": "Status" },
+          "operands": [
+            { "kind": "literal", "value": "Pending" },
+            { "kind": "literal", "value": "Rejected" }
+          ]
+        }
       }
     },
     {
@@ -706,7 +1019,12 @@
         "severity": "INFO",
         "tags": ["crm"],
         "messageTemplate": "Contact {{contactid}} allows bulk email",
-        "where": { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "DataverseContact", "field": "donotbulkemail" }, "operands": [{ "kind": "literal", "value": false }] }
+        "where": {
+          "kind": "predicate",
+          "op": "eq",
+          "field": { "kind": "field", "entity": "DataverseContact", "field": "donotbulkemail" },
+          "operands": [{ "kind": "literal", "value": false }]
+        }
       }
     },
     {
@@ -723,8 +1041,18 @@
         "where": {
           "kind": "and",
           "clauses": [
-            { "kind": "predicate", "op": "isNull", "field": { "kind": "field", "entity": "Engagement", "field": "programmeCode" }, "operands": [] },
-            { "kind": "predicate", "op": "eq", "field": { "kind": "field", "entity": "Engagement", "field": "modeOfStudy" }, "operands": [{ "kind": "literal", "value": "FT" }] }
+            {
+              "kind": "predicate",
+              "op": "isNull",
+              "field": { "kind": "field", "entity": "Engagement", "field": "programmeCode" },
+              "operands": []
+            },
+            {
+              "kind": "predicate",
+              "op": "eq",
+              "field": { "kind": "field", "entity": "Engagement", "field": "modeOfStudy" },
+              "operands": [{ "kind": "literal", "value": "FT" }]
+            }
           ]
         }
       }
@@ -740,7 +1068,12 @@
         "severity": "INFO",
         "tags": ["crm"],
         "messageTemplate": "Contact {{Id}} has a FERPA value set",
-        "where": { "kind": "predicate", "op": "isNotNull", "field": { "kind": "field", "entity": "Contact", "field": "hed__FERPA__c" }, "operands": [] }
+        "where": {
+          "kind": "predicate",
+          "op": "isNotNull",
+          "field": { "kind": "field", "entity": "Contact", "field": "hed__FERPA__c" },
+          "operands": []
+        }
       }
     },
     {
@@ -757,8 +1090,22 @@
         "where": {
           "kind": "and",
           "clauses": [
-            { "kind": "predicate", "op": "isNotNull", "field": { "kind": "field", "entity": "Student", "field": "feeStatus" }, "operands": [] },
-            { "kind": "predicate", "op": "notIn", "field": { "kind": "field", "entity": "Student", "field": "feeStatus" }, "operands": [{ "kind": "literal", "value": "01" }, { "kind": "literal", "value": "02" }, { "kind": "literal", "value": "03" }] }
+            {
+              "kind": "predicate",
+              "op": "isNotNull",
+              "field": { "kind": "field", "entity": "Student", "field": "feeStatus" },
+              "operands": []
+            },
+            {
+              "kind": "predicate",
+              "op": "notIn",
+              "field": { "kind": "field", "entity": "Student", "field": "feeStatus" },
+              "operands": [
+                { "kind": "literal", "value": "01" },
+                { "kind": "literal", "value": "02" },
+                { "kind": "literal", "value": "03" }
+              ]
+            }
           ]
         }
       }

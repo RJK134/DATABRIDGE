@@ -30,9 +30,7 @@ describe("OperationalInputQueue", () => {
     const q = new OperationalInputQueue();
     const item = q.enqueue({ entity: "scj", field: "scj_hiqp", reason: "gap" });
     q.resolve({ id: item.id, value: "Y", resolvedBy: "u" });
-    expect(() => q.resolve({ id: item.id, value: "N", resolvedBy: "u" })).toThrow(
-      /not open/,
-    );
+    expect(() => q.resolve({ id: item.id, value: "N", resolvedBy: "u" })).toThrow(/not open/);
   });
 
   it("skip marks an item without a value", () => {
@@ -78,9 +76,7 @@ describe("OperationalInputQueue", () => {
 
   it("throws for unknown id on resolve/skip", () => {
     const q = new OperationalInputQueue();
-    expect(() => q.resolve({ id: "nope", value: "", resolvedBy: "u" })).toThrow(
-      /no such item/,
-    );
+    expect(() => q.resolve({ id: "nope", value: "", resolvedBy: "u" })).toThrow(/no such item/);
     expect(() => q.skip({ id: "nope", resolvedBy: "u" })).toThrow(/no such item/);
   });
 });

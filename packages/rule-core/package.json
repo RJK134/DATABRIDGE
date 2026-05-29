@@ -28,7 +28,9 @@
     "pg": "^8.11.0"
   },
   "peerDependenciesMeta": {
-    "pg": { "optional": true }
+    "pg": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "typescript": "^5.4.5",

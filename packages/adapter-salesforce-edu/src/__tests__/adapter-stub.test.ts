@@ -42,7 +42,7 @@ describe("SalesforceEduAdapter — stub-fallback path", () => {
   it("rejects unsupported resources", async () => {
     const ad = new SalesforceEduAdapter(config);
     await expect(
-      ad.sampleTable(makeCtx(undefined), { resource: "Made_Up__c", limit: 1 }),
+      ad.sampleTable(makeCtx(undefined), { resource: "Made_Up__c", limit: 1 })
     ).rejects.toThrow(/not supported/);
   });
 

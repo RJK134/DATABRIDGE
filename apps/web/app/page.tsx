@@ -3,9 +3,9 @@ export default function HomePage() {
     <div>
       <h1 style={{ marginTop: 0 }}>DataBridge</h1>
       <p style={{ maxWidth: 720, lineHeight: 1.6 }}>
-        Read upstream student record systems (SITS, Banner, Workday, SJMS5),
-        normalise into the HERM-aligned canonical model, validate against
-        statutory profiles (HESA TDP), and stage migrations downstream.
+        Read upstream student record systems (SITS, Banner, Workday, SJMS5), normalise into the
+        HERM-aligned canonical model, validate against statutory profiles (HESA TDP), and stage
+        migrations downstream.
       </p>
       <ul>
         <li>

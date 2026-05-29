@@ -8,7 +8,11 @@
   "provenance": "synthetic-default",
   "entries": [
     { "sourceCode": "UG", "targetCode": "L4", "notes": "Undergraduate level 4 (Cert HE)" },
-    { "sourceCode": "UI", "targetCode": "L5", "notes": "Undergraduate intermediate (Dip HE / Foundation)" },
+    {
+      "sourceCode": "UI",
+      "targetCode": "L5",
+      "notes": "Undergraduate intermediate (Dip HE / Foundation)"
+    },
     { "sourceCode": "UF", "targetCode": "L6", "notes": "Undergraduate final / honours" },
     { "sourceCode": "PG", "targetCode": "L7", "notes": "Postgraduate taught (Masters)" },
     { "sourceCode": "PR", "targetCode": "L8", "notes": "Postgraduate research (PhD)" },

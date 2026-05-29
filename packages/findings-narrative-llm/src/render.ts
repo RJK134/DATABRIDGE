@@ -52,7 +52,7 @@ export function renderMarkdown(slots: NarrativeSlots): string {
 }
 
 function sortActions(
-  actions: NarrativeSlots["recommended_next_actions"],
+  actions: NarrativeSlots["recommended_next_actions"]
 ): NarrativeSlots["recommended_next_actions"] {
   // Sort by priority ascending; unprioritised items go last.
   return [...actions].sort((a, b) => {

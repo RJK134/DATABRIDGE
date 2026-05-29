@@ -15,8 +15,7 @@ import { z } from "zod";
  * newlines. Deliberately excludes `<`, `>`, backticks, asterisks, square /
  * curly brackets, and pipe — all common markdown / HTML / SQL surfaces.
  */
-const NARRATIVE_RE =
-  /^[A-Za-z0-9 .,;:!?'"()/\-_+@%£$€¥&—–‘’“”\n]*$/;
+const NARRATIVE_RE = /^[A-Za-z0-9 .,;:!?'"()/\-_+@%£$€¥&—–‘’“”\n]*$/;
 
 /** Single bullet — short, plain text only. */
 const BulletZ = z.string().min(1).max(180).regex(NARRATIVE_RE);
@@ -24,7 +23,11 @@ const BulletZ = z.string().min(1).max(180).regex(NARRATIVE_RE);
 /** Recommended-next-action item. Each carries an owner role + verb-phrase. */
 export const RecommendedActionZ = z.object({
   /** Short owner role (e.g. "Registry", "CRM admin"). */
-  owner: z.string().min(1).max(40).regex(/^[A-Za-z0-9 .,'\-_/]*$/),
+  owner: z
+    .string()
+    .min(1)
+    .max(40)
+    .regex(/^[A-Za-z0-9 .,'\-_/]*$/),
   /** Action description — imperative sentence. */
   action: z.string().min(3).max(180).regex(NARRATIVE_RE),
   /** Optional priority (1 = highest). */

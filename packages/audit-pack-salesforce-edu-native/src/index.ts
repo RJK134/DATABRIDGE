@@ -154,7 +154,9 @@ const FERPA_MISMATCH: FnAuditRule = {
     const ferpa = String(r["hed__FERPA__c"] ?? "");
     const optedOut = r["HasOptedOutOfEmail"];
     if (ferpa === "Withheld" && optedOut === false) {
-      return fail(`Contact ${String(r["Id"] ?? "")} has FERPA=Withheld but is NOT opted out of email`);
+      return fail(
+        `Contact ${String(r["Id"] ?? "")} has FERPA=Withheld but is NOT opted out of email`
+      );
     }
     return pass();
   },
@@ -199,7 +201,7 @@ const ENROLLMENT_IN_INACTIVE_PROGRAMME: FnAuditRule = {
     const status = context?.programmePlanStatus?.[ppId];
     if (status && status !== "Current") {
       return fail(
-        `Enrollment ${String(r["Id"] ?? "")} references Programme Plan ${ppId} with status "${status}"`,
+        `Enrollment ${String(r["Id"] ?? "")} references Programme Plan ${ppId} with status "${status}"`
       );
     }
     return pass();

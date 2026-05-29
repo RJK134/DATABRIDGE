@@ -56,7 +56,7 @@ describe("apps/api logger PII redaction", () => {
         nhs_number: "123 456 7890",
         nested: { email: "bob@example.com" },
       },
-      "test redaction",
+      "test redaction"
     );
 
     const out = chunks.join("");

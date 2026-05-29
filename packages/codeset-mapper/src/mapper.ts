@@ -6,11 +6,7 @@
  * resolves a tenant-specific override before falling back to the bundled
  * default.
  */
-import type {
-  CodesetMap,
-  CodesetMapCoverage,
-  CodesetMapResult,
-} from "./types.js";
+import type { CodesetMap, CodesetMapCoverage, CodesetMapResult } from "./types.js";
 
 /** Compose the registry lookup key. */
 function key(source: string, target: string, tenantId?: string): string {
@@ -23,10 +19,7 @@ export class CodesetMapRegistry {
   private byId = new Map<string, CodesetMap>();
 
   register(map: CodesetMap): void {
-    this.byKey.set(
-      key(map.sourceCodelist, map.targetCodelist, map.tenantId),
-      map,
-    );
+    this.byKey.set(key(map.sourceCodelist, map.targetCodelist, map.tenantId), map);
     this.byId.set(map.id, map);
   }
 
@@ -48,7 +41,7 @@ export class CodesetMapRegistry {
   resolve(
     sourceCodelist: string,
     targetCodelist: string,
-    tenantId?: string,
+    tenantId?: string
   ): CodesetMap | undefined {
     if (tenantId) {
       const tenantMap = this.byKey.get(key(sourceCodelist, targetCodelist, tenantId));
@@ -74,7 +67,7 @@ export function translateCode(
     tenantId?: string;
     /** Optional observation date; mapping entries with from/to outside this date are skipped. */
     at?: string;
-  },
+  }
 ): CodesetMapResult {
   const map = registry.resolve(args.sourceCodelist, args.targetCodelist, args.tenantId);
   if (!map) {
@@ -124,7 +117,7 @@ export function translateCode(
  */
 export function computeCoverage(
   map: CodesetMap,
-  observedCodes: readonly string[],
+  observedCodes: readonly string[]
 ): CodesetMapCoverage {
   const distinct = Array.from(new Set(observedCodes));
   const mappable = new Set(map.entries.map((e) => e.sourceCode));

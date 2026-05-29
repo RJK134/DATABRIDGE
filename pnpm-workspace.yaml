@@ -1,6 +1,6 @@
 packages:
-  - 'apps/*'
-  - 'packages/*'
-  - 'adapters/*'
-  - 'profiles/*'
-  - 'migrations/*'
+  - "apps/*"
+  - "packages/*"
+  - "adapters/*"
+  - "profiles/*"
+  - "migrations/*"

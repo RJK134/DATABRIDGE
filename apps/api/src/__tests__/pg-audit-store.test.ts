@@ -35,7 +35,7 @@ class FakePool implements PgPoolLike {
 
   async query<T = Record<string, unknown>>(
     sql: string,
-    params?: ReadonlyArray<unknown>,
+    params?: ReadonlyArray<unknown>
   ): Promise<{ rows: T[]; rowCount?: number | null }> {
     this.calls.push({ sql, params });
     return {

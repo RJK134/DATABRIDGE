@@ -1,19 +1,18 @@
-import type { CodingFrame } from '@databridge/platform';
-import { ETHNIC } from './ethnic';
-import { DISABLE } from './disable';
-import { DOMICILE } from './domicile';
-import { MODE } from './mode';
-import { RSNEND } from './rsnend';
-import { QUALENT3 } from './qualent3';
-import { HECOS } from './hecos';
-import { SEXID } from './sexid';
-import { FUNDCOMP } from './fundcomp';
+import type { CodingFrame } from "@databridge/platform";
+import { ETHNIC } from "./ethnic";
+import { DISABLE } from "./disable";
+import { DOMICILE } from "./domicile";
+import { MODE } from "./mode";
+import { RSNEND } from "./rsnend";
+import { QUALENT3 } from "./qualent3";
+import { HECOS } from "./hecos";
+import { SEXID } from "./sexid";
+import { FUNDCOMP } from "./fundcomp";
 
 export { ETHNIC, DISABLE, DOMICILE, MODE, RSNEND, QUALENT3, HECOS, SEXID, FUNDCOMP };
 
 /** Helper: build a Set of valid codes from a CodingFrame. */
-const codes = (frame: CodingFrame): Set<string> =>
-  new Set(frame.values.map((v) => v.code));
+const codes = (frame: CodingFrame): Set<string> => new Set(frame.values.map((v) => v.code));
 
 export const VALID_ETHNIC_CODES = codes(ETHNIC);
 export const VALID_DISABLE_CODES = codes(DISABLE);
@@ -30,13 +29,13 @@ export const VALID_HECOS_CODES = codes(HECOS);
  * Northern Ireland, and the Crown Dependencies covered by the GB cluster.
  */
 export const UK_DOMICILE_CODES = new Set<string>([
-  '826', // United Kingdom
-  '042', // Channel Islands
-  'XF',  // England
-  'XG',  // Northern Ireland
-  'XH',  // Scotland
-  'XI',  // Wales
-  'XK',  // Great Britain not otherwise specified
+  "826", // United Kingdom
+  "042", // Channel Islands
+  "XF", // England
+  "XG", // Northern Ireland
+  "XH", // Scotland
+  "XI", // Wales
+  "XK", // Great Britain not otherwise specified
 ]);
 
 /** Central registry of coding frames keyed by HESA reference. */

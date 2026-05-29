@@ -61,8 +61,7 @@ export const BANNER_ENTITIES: Record<BannerEntityKey, BannerEntity> = {
     key: "StvDegc",
     bannerTables: ["STVDEGC"],
     migrationOrder: 2,
-    description:
-      "Banner degree code validation — feeds SHRDGMR_DEGC_CODE on award.",
+    description: "Banner degree code validation — feeds SHRDGMR_DEGC_CODE on award.",
   },
   StvTerm: {
     key: "StvTerm",
@@ -85,8 +84,7 @@ export const BANNER_ENTITIES: Record<BannerEntityKey, BannerEntity> = {
     bannerTables: ["SORLCUR"],
     sitsCounterpart: "SCE",
     migrationOrder: 4,
-    description:
-      "Student curriculum learner — supports multi-curriculum, priority-numbered.",
+    description: "Student curriculum learner — supports multi-curriculum, priority-numbered.",
   },
   Sorlfos: {
     key: "Sorlfos",
@@ -101,32 +99,28 @@ export const BANNER_ENTITIES: Record<BannerEntityKey, BannerEntity> = {
     bannerTables: ["SHRTGPA"],
     sitsCounterpart: "STA",
     migrationOrder: 6,
-    description:
-      "Term-level GPA summary — one row per PIDM/term, drives transcript projection.",
+    description: "Term-level GPA summary — one row per PIDM/term, drives transcript projection.",
   },
   Shrtckg: {
     key: "Shrtckg",
     bannerTables: ["SHRTCKG"],
     sitsCounterpart: "SAS",
     migrationOrder: 6,
-    description:
-      "Term-level grade-by-class breakdown — feeds component mark capture.",
+    description: "Term-level grade-by-class breakdown — feeds component mark capture.",
   },
   Sfrstcr: {
     key: "Sfrstcr",
     bannerTables: ["SFRSTCR"],
     sitsCounterpart: "SMR",
     migrationOrder: 7,
-    description:
-      "Student course registration — current term enrolment status per CRN.",
+    description: "Student course registration — current term enrolment status per CRN.",
   },
   Ssbsect: {
     key: "Ssbsect",
     bannerTables: ["SSBSECT"],
     sitsCounterpart: "MAV",
     migrationOrder: 7,
-    description:
-      "Section / class — one row per CRN per term.",
+    description: "Section / class — one row per CRN per term.",
   },
   Shrdgmr: {
     key: "Shrdgmr",

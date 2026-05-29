@@ -20,9 +20,9 @@ function makeCtx() {
 describe("BannerOracleAdapter", () => {
   it("declares the correct identity and capabilities", () => {
     const adapter = new BannerOracleAdapter({
-        connectString: "banner.example.ac.uk:1521/BNRPRD",
-        userSecretKey: "banner-user",
-        passwordSecretKey: "banner-pass"
+      connectString: "banner.example.ac.uk:1521/BNRPRD",
+      userSecretKey: "banner-user",
+      passwordSecretKey: "banner-pass",
     });
     expect(adapter.id).toBe("banner-oracle");
     expect(adapter.displayName).toBe("Banner Oracle (native)");
@@ -36,9 +36,9 @@ describe("BannerOracleAdapter", () => {
 
   it("healthCheck returns a stub healthy result", async () => {
     const adapter = new BannerOracleAdapter({
-        connectString: "banner.example.ac.uk:1521/BNRPRD",
-        userSecretKey: "banner-user",
-        passwordSecretKey: "banner-pass"
+      connectString: "banner.example.ac.uk:1521/BNRPRD",
+      userSecretKey: "banner-user",
+      passwordSecretKey: "banner-pass",
     });
     const result = await adapter.healthCheck(makeCtx());
     expect(result.healthy).toBe(true);
@@ -47,33 +47,31 @@ describe("BannerOracleAdapter", () => {
 
   it("discoverSchema includes all supported resources", async () => {
     const adapter = new BannerOracleAdapter({
-        connectString: "banner.example.ac.uk:1521/BNRPRD",
-        userSecretKey: "banner-user",
-        passwordSecretKey: "banner-pass"
+      connectString: "banner.example.ac.uk:1521/BNRPRD",
+      userSecretKey: "banner-user",
+      passwordSecretKey: "banner-pass",
     });
     const schema = await adapter.discoverSchema(makeCtx());
     expect(schema.adapter).toBe("banner-oracle");
-    expect(schema.resources.map((r) => r.name).sort()).toEqual(
-      [...SUPPORTED_RESOURCES].sort(),
-    );
+    expect(schema.resources.map((r) => r.name).sort()).toEqual([...SUPPORTED_RESOURCES].sort());
   });
 
   it("rejects unsupported resources in sampleTable", async () => {
     const adapter = new BannerOracleAdapter({
-        connectString: "banner.example.ac.uk:1521/BNRPRD",
-        userSecretKey: "banner-user",
-        passwordSecretKey: "banner-pass"
+      connectString: "banner.example.ac.uk:1521/BNRPRD",
+      userSecretKey: "banner-user",
+      passwordSecretKey: "banner-pass",
     });
     await expect(
-      adapter.sampleTable(makeCtx(), { resource: "DOES_NOT_EXIST", limit: 5 }),
+      adapter.sampleTable(makeCtx(), { resource: "DOES_NOT_EXIST", limit: 5 })
     ).rejects.toThrow(/not supported/);
   });
 
   it("streamRows yields at least one page for a supported resource", async () => {
     const adapter = new BannerOracleAdapter({
-        connectString: "banner.example.ac.uk:1521/BNRPRD",
-        userSecretKey: "banner-user",
-        passwordSecretKey: "banner-pass"
+      connectString: "banner.example.ac.uk:1521/BNRPRD",
+      userSecretKey: "banner-user",
+      passwordSecretKey: "banner-pass",
     });
     const pages: unknown[] = [];
     for await (const page of adapter.streamRows(makeCtx(), { resource: SUPPORTED_RESOURCES[0] })) {

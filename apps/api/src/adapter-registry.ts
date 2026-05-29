@@ -37,7 +37,7 @@ function describe(
   // grab the static fields from a single sample instance constructed with a
   // throwaway config — but since constructors validate, we collect statics by
   // hand for now (no need to instantiate).
-  meta: Omit<AdapterRegistryEntry, "Adapter">,
+  meta: Omit<AdapterRegistryEntry, "Adapter">
 ): AdapterRegistryEntry {
   return { Adapter, ...meta };
 }

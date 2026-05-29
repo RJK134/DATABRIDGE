@@ -1,17 +1,9 @@
 import { describe, expect, it } from "vitest";
-import {
-  SchemaSuggester,
-  isFieldSuggestion,
-  jaccard,
-  suggestionsToMd,
-  tokens,
-} from "../index.js";
+import { SchemaSuggester, isFieldSuggestion, jaccard, suggestionsToMd, tokens } from "../index.js";
 
 describe("tokens", () => {
   it("splits snake_case", () => {
-    expect(tokens("SPRIDEN_LAST_NAME")).toEqual(
-      new Set(["spriden", "last", "name"]),
-    );
+    expect(tokens("SPRIDEN_LAST_NAME")).toEqual(new Set(["spriden", "last", "name"]));
   });
   it("splits camelCase", () => {
     expect(tokens("dateOfBirth")).toEqual(new Set(["date", "of", "birth"]));
@@ -119,9 +111,7 @@ describe("SchemaSuggester — SITS side", () => {
       expect(["decision", "applicationStatus"]).toContain(r.canonical);
       expect(r.entity).toBe("Application");
       const alts = r.alternatives.map((a) => a.canonical);
-      expect([...alts, r.canonical]).toEqual(
-        expect.arrayContaining(["decision"]),
-      );
+      expect([...alts, r.canonical]).toEqual(expect.arrayContaining(["decision"]));
     } else {
       throw new Error("expected a suggestion");
     }
@@ -154,9 +144,7 @@ describe("SchemaSuggester — alternatives + rationale", () => {
       expect(r.alternatives.length).toBeLessThanOrEqual(3);
       // Scores monotonically decreasing
       for (let i = 1; i < r.alternatives.length; i++) {
-        expect(r.alternatives[i]!.score).toBeLessThanOrEqual(
-          r.alternatives[i - 1]!.score,
-        );
+        expect(r.alternatives[i]!.score).toBeLessThanOrEqual(r.alternatives[i - 1]!.score);
       }
     }
   });

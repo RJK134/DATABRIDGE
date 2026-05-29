@@ -93,16 +93,14 @@ export class SchemaSuggester {
   suggest(req: SuggestRequest): readonly SuggestionResult[] {
     const minScore = req.minScore ?? 0.35;
     const scope = new Set(req.entityScope ?? this.entities());
-    return req.columns.map((col) =>
-      this.suggestForColumn(col, req.system, scope, minScore),
-    );
+    return req.columns.map((col) => this.suggestForColumn(col, req.system, scope, minScore));
   }
 
   private suggestForColumn(
     column: string,
     system: CrosswalkSystem,
     scope: Set<string>,
-    minScore: number,
+    minScore: number
   ): SuggestionResult {
     const normCol = normaliseToken(column);
     const colTokens = tokens(column);

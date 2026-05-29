@@ -27,7 +27,7 @@ Net delta: **+206 tests**.
 - **`packages/rule-compiler-llm`** — the headline package.
   - `src/rule-grammar.ts` — zod grammar for `LlmRule`. Predicates limited
     to `eq, neq, in, notIn, isNull, isNotNull, gt, lt, gte, lte, between,
-    matches`. Clauses are `and / or / not` nesting. NO SQL, NO joins, NO
+matches`. Clauses are `and / or / not` nesting. NO SQL, NO joins, NO
     raw strings beyond 200-char literals. `staticSafetyCheck` rejects
     SQL keywords smuggled into `messageTemplate` and injection-looking
     literals.
@@ -116,9 +116,9 @@ Net delta: **+206 tests**.
     - `top_cluster_root_cause` (≤ 420 chars)
     - `recommended_next_actions` (1–6 items, owner + verb-phrase,
       optional priority 1–5)
-    Every slot's character set is enforced by `NARRATIVE_RE` — no
-    markdown, no HTML, no SQL keywords, no backticks / asterisks /
-    brackets / pipes.
+      Every slot's character set is enforced by `NARRATIVE_RE` — no
+      markdown, no HTML, no SQL keywords, no backticks / asterisks /
+      brackets / pipes.
   - `src/render.ts` — `renderText()` and `renderMarkdown()` are pure.
     Actions sorted by priority asc, unprioritised last.
   - `src/narrator.ts` — `narrate()` short-circuits when `findings` is
@@ -149,7 +149,7 @@ Net delta: **+206 tests**.
     selected fixture's sample rows in the request body.
   - Renders the compiled rule (id, entity, severity, fields read) plus
     the **provenance pane** (provider, model, latency, truncated prompt
-    + response sha256, cost) in a two-column layout.
+    - response sha256, cost) in a two-column layout.
   - "Demo prompts" row offers 5 one-click shortcuts that load the
     canned NL into the input.
   - `data-testid` attributes on every interactive element so the
@@ -173,7 +173,7 @@ Net delta: **+206 tests**.
     `llm.prompts[]` array. Output also lists the new
     `http://localhost:3000/query` URL.
 - **`docs/DEMO_SCRIPT.md`** retitled `55-Minute Demo Script (Phase A +
-  Phase B, v1.4)` with a new **Block 2B — LLM data review** (10 min)
+Phase B, v1.4)` with a new **Block 2B — LLM data review** (10 min)
   inserted between the audit walkthrough and the CRM integration-prep
   section. Includes the five exact NL prompts to type, expected
   finding counts, talking points around safety / provenance / cost
@@ -189,7 +189,7 @@ Net delta: **+206 tests**.
   story.
 - **Auto-launch of the web app from the demo orchestrator** — the
   orchestrator prints the query-bar URL but does not spawn `next
-  start` itself. Same trade-off as Phase A's docker-compose: keeps the
+start` itself. Same trade-off as Phase A's docker-compose: keeps the
   orchestrator hermetic in CI. The DEMO_SCRIPT shows the exact
   `pnpm --filter @databridge/web run dev` command.
 
@@ -197,13 +197,13 @@ Net delta: **+206 tests**.
 
 ## Provider configuration table
 
-| Provider                | Env var(s)                                                          | Cost ceiling default |
-| ----------------------- | ------------------------------------------------------------------- | -------------------- |
-| DeterministicMock       | *(none — default)*                                                  | $0.50                |
-| OpenAI                  | `OPENAI_API_KEY`, `OPENAI_MODEL` (default `gpt-4o-mini`)            | $0.50                |
-| Anthropic               | `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL` (default `claude-3-5-haiku`) | $0.50                |
-| Azure OpenAI            | `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_DEPLOYMENT` | $0.50          |
-| Force mock              | `DATABRIDGE_LLM_FORCE_MOCK=1`                                       | $0.50                |
+| Provider          | Env var(s)                                                                 | Cost ceiling default |
+| ----------------- | -------------------------------------------------------------------------- | -------------------- |
+| DeterministicMock | _(none — default)_                                                         | $0.50                |
+| OpenAI            | `OPENAI_API_KEY`, `OPENAI_MODEL` (default `gpt-4o-mini`)                   | $0.50                |
+| Anthropic         | `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL` (default `claude-3-5-haiku`)        | $0.50                |
+| Azure OpenAI      | `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_DEPLOYMENT` | $0.50                |
+| Force mock        | `DATABRIDGE_LLM_FORCE_MOCK=1`                                              | $0.50                |
 
 ## Safety statement
 

@@ -42,9 +42,7 @@ export interface FlatIndexEntry {
   notes: string | undefined;
 }
 
-export function buildFlatIndex(
-  corpus: CorpusBundle,
-): readonly FlatIndexEntry[] {
+export function buildFlatIndex(corpus: CorpusBundle): readonly FlatIndexEntry[] {
   const out: FlatIndexEntry[] = [];
   for (const section of corpus.sections) {
     for (const field of section.fields) {
