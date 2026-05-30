@@ -59,7 +59,7 @@ export abstract class BaseTargetAdapter implements TargetAdapter {
   protected validateRow(
     entity: string,
     row: SampledRow,
-    rowIndex: number,
+    rowIndex: number
   ): TargetValidationError[] {
     const errors: TargetValidationError[] = [];
     for (const field of this.requiredFields(entity)) {
@@ -76,10 +76,7 @@ export abstract class BaseTargetAdapter implements TargetAdapter {
     return errors;
   }
 
-  async validate(
-    _ctx: AdapterContext,
-    args: TargetValidateArgs,
-  ): Promise<TargetValidationResult> {
+  async validate(_ctx: AdapterContext, args: TargetValidateArgs): Promise<TargetValidationResult> {
     let valid = 0;
     let invalid = 0;
     const errors: TargetValidationError[] = [];
@@ -95,15 +92,10 @@ export abstract class BaseTargetAdapter implements TargetAdapter {
     return { valid, invalid, errors };
   }
 
-  async stage(
-    _ctx: AdapterContext,
-    args: TargetStageArgs,
-  ): Promise<TargetStageResult> {
+  async stage(_ctx: AdapterContext, args: TargetStageArgs): Promise<TargetStageResult> {
     const limit = this.capabilities.batchSizeLimit;
     if (args.rows.length > limit) {
-      throw new Error(
-        `batch size ${args.rows.length} exceeds adapter limit ${limit}`,
-      );
+      throw new Error(`batch size ${args.rows.length} exceeds adapter limit ${limit}`);
     }
     const batchId = `${this.id}-${args.migrationRunId}-${this.batchSeq++}`;
     this.batches.set(batchId, {
@@ -120,10 +112,7 @@ export abstract class BaseTargetAdapter implements TargetAdapter {
     };
   }
 
-  async commit(
-    _ctx: AdapterContext,
-    args: TargetCommitArgs,
-  ): Promise<TargetCommitResult> {
+  async commit(_ctx: AdapterContext, args: TargetCommitArgs): Promise<TargetCommitResult> {
     const batch = this.batches.get(args.batchId);
     if (!batch) {
       throw new Error(`unknown batchId: ${args.batchId}`);
@@ -168,10 +157,7 @@ export abstract class BaseTargetAdapter implements TargetAdapter {
     return { committed, failed, outcomes };
   }
 
-  async rollback(
-    _ctx: AdapterContext,
-    args: TargetRollbackArgs,
-  ): Promise<void> {
+  async rollback(_ctx: AdapterContext, args: TargetRollbackArgs): Promise<void> {
     if (!this.capabilities.supportsRollback) {
       throw new Error(`${this.id} does not support rollback`);
     }

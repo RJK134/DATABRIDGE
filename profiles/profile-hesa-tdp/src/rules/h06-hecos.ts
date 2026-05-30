@@ -1,4 +1,4 @@
-import type { RuleDefinition } from '@databridge/rule-core';
+import type { RuleDefinition } from "@databridge/rule-core";
 
 /**
  * H06 — HECoS subject code validation.
@@ -7,21 +7,21 @@ import type { RuleDefinition } from '@databridge/rule-core';
  */
 
 function isValidHecosCode(code: unknown): boolean {
-  if (typeof code !== 'string') return false;
+  if (typeof code !== "string") return false;
   return /^\d{6}$/.test(code);
 }
 
 export const H06_RULES: RuleDefinition[] = [
   {
-    id: 'H06-001',
-    family: 'H06',
-    entity: 'StudentCourseSession',
-    field: 'hecosSubject1',
-    severity: 'ERROR',
-    ucisa_benchmark_ref: 'HESA-SCS-HECOS1-FORMAT',
-    description: 'HECOS1 must be a 6-digit numeric code',
+    id: "H06-001",
+    family: "H06",
+    entity: "StudentCourseSession",
+    field: "hecosSubject1",
+    severity: "ERROR",
+    ucisa_benchmark_ref: "HESA-SCS-HECOS1-FORMAT",
+    description: "HECOS1 must be a 6-digit numeric code",
     evaluate: (record) => {
-      const code = record['hecosSubject1'];
+      const code = record["hecosSubject1"];
       if (!code) return { pass: true }; // H03-006 covers missing
       if (!isValidHecosCode(code)) {
         return {
@@ -33,15 +33,15 @@ export const H06_RULES: RuleDefinition[] = [
     },
   },
   {
-    id: 'H06-002',
-    family: 'H06',
-    entity: 'StudentCourseSession',
-    field: 'hecosSubject2',
-    severity: 'ERROR',
-    ucisa_benchmark_ref: 'HESA-SCS-HECOS2-FORMAT',
-    description: 'HECOS2, when provided, must be a 6-digit numeric code',
+    id: "H06-002",
+    family: "H06",
+    entity: "StudentCourseSession",
+    field: "hecosSubject2",
+    severity: "ERROR",
+    ucisa_benchmark_ref: "HESA-SCS-HECOS2-FORMAT",
+    description: "HECOS2, when provided, must be a 6-digit numeric code",
     evaluate: (record) => {
-      const code = record['hecosSubject2'];
+      const code = record["hecosSubject2"];
       if (!code) return { pass: true };
       if (!isValidHecosCode(code)) {
         return {
@@ -53,15 +53,15 @@ export const H06_RULES: RuleDefinition[] = [
     },
   },
   {
-    id: 'H06-003',
-    family: 'H06',
-    entity: 'StudentCourseSession',
-    field: 'hecosSubject3',
-    severity: 'ERROR',
-    ucisa_benchmark_ref: 'HESA-SCS-HECOS3-FORMAT',
-    description: 'HECOS3, when provided, must be a 6-digit numeric code',
+    id: "H06-003",
+    family: "H06",
+    entity: "StudentCourseSession",
+    field: "hecosSubject3",
+    severity: "ERROR",
+    ucisa_benchmark_ref: "HESA-SCS-HECOS3-FORMAT",
+    description: "HECOS3, when provided, must be a 6-digit numeric code",
     evaluate: (record) => {
-      const code = record['hecosSubject3'];
+      const code = record["hecosSubject3"];
       if (!code) return { pass: true };
       if (!isValidHecosCode(code)) {
         return {
@@ -73,15 +73,15 @@ export const H06_RULES: RuleDefinition[] = [
     },
   },
   {
-    id: 'H06-004',
-    family: 'H06',
-    entity: 'Module',
-    field: 'hecosSubject',
-    severity: 'ERROR',
-    ucisa_benchmark_ref: 'HESA-MOD-MODHECOS-FORMAT',
-    description: 'MODHECOS must be a 6-digit numeric code',
+    id: "H06-004",
+    family: "H06",
+    entity: "Module",
+    field: "hecosSubject",
+    severity: "ERROR",
+    ucisa_benchmark_ref: "HESA-MOD-MODHECOS-FORMAT",
+    description: "MODHECOS must be a 6-digit numeric code",
     evaluate: (record) => {
-      const code = record['hecosSubject'];
+      const code = record["hecosSubject"];
       if (!code) return { pass: true }; // H03-008 covers missing
       if (!isValidHecosCode(code)) {
         return {
@@ -93,15 +93,16 @@ export const H06_RULES: RuleDefinition[] = [
     },
   },
   {
-    id: 'H06-005',
-    family: 'H06',
-    entity: 'StudentCourseSession',
-    field: 'hecosSubject1',
-    severity: 'WARNING',
-    ucisa_benchmark_ref: 'HESA-SCS-HECOS-JACS-WARN',
-    description: 'JACS3 codes (letter + 3 digits) are no longer valid — must use 6-digit HECoS codes',
+    id: "H06-005",
+    family: "H06",
+    entity: "StudentCourseSession",
+    field: "hecosSubject1",
+    severity: "WARNING",
+    ucisa_benchmark_ref: "HESA-SCS-HECOS-JACS-WARN",
+    description:
+      "JACS3 codes (letter + 3 digits) are no longer valid — must use 6-digit HECoS codes",
     evaluate: (record) => {
-      const fields = ['hecosSubject1', 'hecosSubject2', 'hecosSubject3'];
+      const fields = ["hecosSubject1", "hecosSubject2", "hecosSubject3"];
       for (const field of fields) {
         const code = record[field] as string | undefined;
         if (code && /^[A-Z]\d{3}$/.test(code)) {

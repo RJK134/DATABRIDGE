@@ -3,15 +3,8 @@
  *
  * Symmetric counterpart of BannerToSitsOrchestrator.
  */
-import type {
-  AdapterContext,
-  SampledRow,
-  SourceAdapter,
-} from "@databridge/adapter-spec";
-import {
-  SitsToBannerConfigSchema,
-  type SitsToBannerConfig,
-} from "./config.js";
+import type { AdapterContext, SampledRow, SourceAdapter } from "@databridge/adapter-spec";
+import { SitsToBannerConfigSchema, type SitsToBannerConfig } from "./config.js";
 import { BannerLoadPlanWriter } from "./banner-load-plan-writer.js";
 import { translateCode, type CodesetMapRegistry } from "@databridge/codeset-mapper";
 
@@ -58,12 +51,12 @@ export class SitsToBannerOrchestrator {
   constructor(
     rawConfig: unknown,
     private readonly sourceAdapter: SourceAdapter,
-    private readonly codesetRegistry?: CodesetMapRegistry,
+    private readonly codesetRegistry?: CodesetMapRegistry
   ) {
     this.config = SitsToBannerConfigSchema.parse(rawConfig);
     if (!this.sourceAdapter.id.startsWith("sits-")) {
       throw new Error(
-        `SitsToBannerOrchestrator: expected a SITS source adapter, got "${this.sourceAdapter.id}"`,
+        `SitsToBannerOrchestrator: expected a SITS source adapter, got "${this.sourceAdapter.id}"`
       );
     }
   }
@@ -121,9 +114,7 @@ export class SitsToBannerOrchestrator {
         ctx.logger.warn("sits-to-banner: skipping entity without mapping", { entity });
         continue;
       }
-      outcomes.push(
-        await this.runEntity(ctx, entity, resource, table, writer),
-      );
+      outcomes.push(await this.runEntity(ctx, entity, resource, table, writer));
     }
 
     const completedAt = new Date().toISOString();
@@ -134,13 +125,14 @@ export class SitsToBannerOrchestrator {
         acc.invalid += o.rowsInvalid;
         return acc;
       },
-      { read: 0, valid: 0, invalid: 0 },
+      { read: 0, valid: 0, invalid: 0 }
     );
 
     const plan = writer.build();
-    const loadPlan: LoadPlanEntry[] = [...plan.byTable.entries()].map(
-      ([t, rows]) => ({ table: t, rows: rows.length }),
-    );
+    const loadPlan: LoadPlanEntry[] = [...plan.byTable.entries()].map(([t, rows]) => ({
+      table: t,
+      rows: rows.length,
+    }));
 
     return {
       runId,
@@ -161,7 +153,7 @@ export class SitsToBannerOrchestrator {
     entity: string,
     sitsResource: string,
     bannerTable: string,
-    writer: BannerLoadPlanWriter,
+    writer: BannerLoadPlanWriter
   ): Promise<EntityOutcome> {
     let rowsRead = 0;
     let rowsValid = 0;
@@ -205,19 +197,39 @@ export class SitsToBannerOrchestrator {
   private projectRow(entity: string, row: SampledRow): SampledRow {
     const out: SampledRow = { ...row };
     if (this.codesetRegistry) {
-      tryTranslate(out, "STU_FESC", "SGBSTDN_RESD_CODE", "FEESTATUS", "BANNER.STVRESD", this.codesetRegistry, this.config.tenantId);
-      tryTranslate(out, "SCE_CAM", "SGBSTDN_CAMP_CODE", "SITS.CAM", "BANNER.STVCAMP", this.codesetRegistry, this.config.tenantId);
-      tryTranslate(out, "SCE_STYP", "SGBSTDN_STYP_CODE", "SITS.STYP", "BANNER.STVSTYP", this.codesetRegistry, this.config.tenantId);
+      tryTranslate(
+        out,
+        "STU_FESC",
+        "SGBSTDN_RESD_CODE",
+        "FEESTATUS",
+        "BANNER.STVRESD",
+        this.codesetRegistry,
+        this.config.tenantId
+      );
+      tryTranslate(
+        out,
+        "SCE_CAM",
+        "SGBSTDN_CAMP_CODE",
+        "SITS.CAM",
+        "BANNER.STVCAMP",
+        this.codesetRegistry,
+        this.config.tenantId
+      );
+      tryTranslate(
+        out,
+        "SCE_STYP",
+        "SGBSTDN_STYP_CODE",
+        "SITS.STYP",
+        "BANNER.STVSTYP",
+        this.codesetRegistry,
+        this.config.tenantId
+      );
     }
     return out;
   }
 }
 
-function validateRow(
-  entity: string,
-  row: SampledRow,
-  rowIndex: number,
-): ValidationError[] {
+function validateRow(entity: string, row: SampledRow, rowIndex: number): ValidationError[] {
   const errors: ValidationError[] = [];
   const requireField = (field: string, ruleId: string): void => {
     const v = row[field];
@@ -265,13 +277,14 @@ function tryTranslate(
   sourceCodelist: string,
   targetCodelist: string,
   registry: CodesetMapRegistry,
-  tenantId: string | undefined,
+  tenantId: string | undefined
 ): void {
   const v = row[sourceField];
   if (typeof v !== "string" || v.length === 0) return;
-  const args = tenantId !== undefined
-    ? { sourceCodelist, targetCodelist, sourceCode: v, tenantId }
-    : { sourceCodelist, targetCodelist, sourceCode: v };
+  const args =
+    tenantId !== undefined
+      ? { sourceCodelist, targetCodelist, sourceCode: v, tenantId }
+      : { sourceCodelist, targetCodelist, sourceCode: v };
   const r = translateCode(registry, args);
   if (r.ok && r.targetCode !== undefined) {
     row[targetField] = r.targetCode;

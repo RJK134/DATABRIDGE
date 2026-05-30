@@ -21,10 +21,7 @@ import {
   type Predicate,
   type ScalarLiteral,
 } from "./rule-grammar.js";
-import {
-  indexDictionary,
-  type RuleDictionary,
-} from "./dictionary.js";
+import { indexDictionary, type RuleDictionary } from "./dictionary.js";
 
 export interface CompiledRule {
   id: string;
@@ -46,7 +43,7 @@ export class RuleCompilerError extends Error {
   constructor(
     message: string,
     readonly code: "GRAMMAR" | "SAFETY" | "DICTIONARY" | "STRUCTURE",
-    readonly details?: Record<string, unknown>,
+    readonly details?: Record<string, unknown>
   ) {
     super(message);
     this.name = "RuleCompilerError";
@@ -73,10 +70,7 @@ export function compileLlmRule(raw: unknown, options: CompileOptions): CompiledR
   try {
     staticSafetyCheck(rule);
   } catch (err) {
-    throw new RuleCompilerError(
-      err instanceof Error ? err.message : String(err),
-      "SAFETY",
-    );
+    throw new RuleCompilerError(err instanceof Error ? err.message : String(err), "SAFETY");
   }
 
   // 3. Dictionary validation.
@@ -85,17 +79,14 @@ export function compileLlmRule(raw: unknown, options: CompileOptions): CompiledR
   // Always include the LHS implicit anchor — the rule's entity must have at
   // least one declared field in the dictionary.
   if (!hasEntity(options.dictionary, rule.entity)) {
-    throw new RuleCompilerError(
-      `entity "${rule.entity}" is not in the dictionary`,
-      "DICTIONARY",
-    );
+    throw new RuleCompilerError(`entity "${rule.entity}" is not in the dictionary`, "DICTIONARY");
   }
   for (const f of fieldRefs) {
     if (!dictIndex.has(`${f.entity}.${f.field}`)) {
       throw new RuleCompilerError(
         `field "${f.entity}.${f.field}" is not in the dictionary`,
         "DICTIONARY",
-        { entity: f.entity, field: f.field },
+        { entity: f.entity, field: f.field }
       );
     }
     if (f.entity !== rule.entity) {
@@ -103,14 +94,13 @@ export function compileLlmRule(raw: unknown, options: CompileOptions): CompiledR
       // explicitly so the LLM cannot smuggle joins through field refs.
       throw new RuleCompilerError(
         `field "${f.entity}.${f.field}" references a different entity than the rule's "${rule.entity}"`,
-        "STRUCTURE",
+        "STRUCTURE"
       );
     }
   }
 
   const id = options.idPrefix ? `${options.idPrefix}-${rule.id}` : rule.id;
-  const evaluate = (row: Record<string, unknown>): boolean =>
-    evalClause(rule.where, row);
+  const evaluate = (row: Record<string, unknown>): boolean => evalClause(rule.where, row);
   const renderMessage = (row: Record<string, unknown>): string =>
     renderTemplate(rule.messageTemplate, row);
 
@@ -191,7 +181,10 @@ function evalPredicate(p: Predicate, row: Record<string, unknown>): boolean {
   }
 }
 
-function valueOf(o: Predicate["operands"][number] | undefined, row: Record<string, unknown>): unknown {
+function valueOf(
+  o: Predicate["operands"][number] | undefined,
+  row: Record<string, unknown>
+): unknown {
   if (o === undefined) return undefined;
   if (o.kind === "literal") return o.value;
   return row[o.field];
@@ -232,10 +225,5 @@ function renderTemplate(tpl: string, row: Record<string, unknown>): string {
 
 /** Convenience: scalar-value type guard used by the parser tests. */
 export function isScalarLiteral(v: unknown): v is ScalarLiteral {
-  return (
-    v === null ||
-    typeof v === "string" ||
-    typeof v === "number" ||
-    typeof v === "boolean"
-  );
+  return v === null || typeof v === "string" || typeof v === "number" || typeof v === "boolean";
 }

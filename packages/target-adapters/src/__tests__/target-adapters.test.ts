@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  BannerTargetAdapter,
-  InMemoryTransport,
-  SitsTargetAdapter,
-} from "../index.js";
+import { BannerTargetAdapter, InMemoryTransport, SitsTargetAdapter } from "../index.js";
 import { makeTestContext } from "./test-context.js";
 
 describe("SitsTargetAdapter — validate", () => {
@@ -100,7 +96,7 @@ describe("SitsTargetAdapter — full commit + rollback", () => {
     });
     await adapter.commit(ctx, { batchId: stage.batchId, approvedBy: "t", approvedAt: new Date() });
     await expect(
-      adapter.commit(ctx, { batchId: stage.batchId, approvedBy: "t", approvedAt: new Date() }),
+      adapter.commit(ctx, { batchId: stage.batchId, approvedBy: "t", approvedAt: new Date() })
     ).rejects.toThrow(/already committed/);
   });
 
@@ -109,10 +105,12 @@ describe("SitsTargetAdapter — full commit + rollback", () => {
     const adapter = new SitsTargetAdapter(transport);
     const ctx = makeTestContext();
     const rows = Array.from({ length: 1001 }, (_, i) => ({
-      stu_code: `S${i}`, stu_surn: "X", stu_fnm1: "Y",
+      stu_code: `S${i}`,
+      stu_surn: "X",
+      stu_fnm1: "Y",
     }));
     await expect(
-      adapter.stage(ctx, { migrationRunId: "rN", entity: "stu", rows, dryRun: true }),
+      adapter.stage(ctx, { migrationRunId: "rN", entity: "stu", rows, dryRun: true })
     ).rejects.toThrow(/batch size/);
   });
 });

@@ -1,4 +1,4 @@
-import type { DhpMetrics } from './types';
+import type { DhpMetrics } from "./types";
 
 /**
  * UCISA Data Benchmarking Survey benchmark scores (2024 edition, anonymised sector medians).
@@ -18,8 +18,8 @@ export interface BenchmarkOverlayResult {
   dimension: string;
   providerScore: number;
   sectorMedian: number;
-  delta: number;          // positive = above median
-  ragStatus: 'GREEN' | 'AMBER' | 'RED';
+  delta: number; // positive = above median
+  ragStatus: "GREEN" | "AMBER" | "RED";
 }
 
 export function ucisaBenchmarkOverlay(metrics: DhpMetrics): BenchmarkOverlayResult[] {
@@ -39,21 +39,27 @@ export function ucisaBenchmarkOverlay(metrics: DhpMetrics): BenchmarkOverlayResu
     const providerScore = scores.reduce((s, v) => s + v, 0) / scores.length;
     const sectorMedian = UCISA_2024_BENCHMARKS[dim] ?? 0.85;
     const delta = parseFloat((providerScore - sectorMedian).toFixed(4));
-    const ragStatus: BenchmarkOverlayResult['ragStatus'] =
-      delta >= 0.02 ? 'GREEN' : delta >= -0.05 ? 'AMBER' : 'RED';
+    const ragStatus: BenchmarkOverlayResult["ragStatus"] =
+      delta >= 0.02 ? "GREEN" : delta >= -0.05 ? "AMBER" : "RED";
 
-    results.push({ dimension: dim, providerScore: parseFloat(providerScore.toFixed(4)), sectorMedian, delta, ragStatus });
+    results.push({
+      dimension: dim,
+      providerScore: parseFloat(providerScore.toFixed(4)),
+      sectorMedian,
+      delta,
+      ragStatus,
+    });
   }
 
   // Overall
-  const overallBenchmark = UCISA_2024_BENCHMARKS['OVERALL'] ?? 0.88;
+  const overallBenchmark = UCISA_2024_BENCHMARKS["OVERALL"] ?? 0.88;
   const overallDelta = parseFloat((metrics.overallScore - overallBenchmark).toFixed(4));
   results.push({
-    dimension: 'OVERALL',
+    dimension: "OVERALL",
     providerScore: metrics.overallScore,
     sectorMedian: overallBenchmark,
     delta: overallDelta,
-    ragStatus: overallDelta >= 0.02 ? 'GREEN' : overallDelta >= -0.05 ? 'AMBER' : 'RED',
+    ragStatus: overallDelta >= 0.02 ? "GREEN" : overallDelta >= -0.05 ? "AMBER" : "RED",
   });
 
   return results;

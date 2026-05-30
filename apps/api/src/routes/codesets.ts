@@ -1,9 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import {
-  describeCodeset,
-  listCodesetBundles,
-  listCodesetSummaries,
-} from "../codeset-registry.js";
+import { describeCodeset, listCodesetBundles, listCodesetSummaries } from "../codeset-registry.js";
 
 /**
  * Codeset routes (Phase H):

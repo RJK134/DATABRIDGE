@@ -13,12 +13,7 @@
  * pair the presenter can show to a customer.
  */
 import { useState } from "react";
-import {
-  DEMO_FIXTURES,
-  PROMPT_LIBRARY,
-  type DemoFixtureId,
-  type PromptDef,
-} from "./fixtures";
+import { DEMO_FIXTURES, PROMPT_LIBRARY, type DemoFixtureId, type PromptDef } from "./fixtures";
 
 interface FieldRefShape {
   entity: string;
@@ -56,8 +51,7 @@ interface CompileError {
   message?: string;
 }
 
-const API_URL =
-  process.env["NEXT_PUBLIC_API_URL"] ?? "http://localhost:3001";
+const API_URL = process.env["NEXT_PUBLIC_API_URL"] ?? "http://localhost:3001";
 
 export default function QueryBarPage(): JSX.Element {
   const [nl, setNl] = useState<string>(PROMPT_LIBRARY[0]?.nl ?? "");
@@ -106,10 +100,9 @@ export default function QueryBarPage(): JSX.Element {
     <div data-testid="query-page">
       <h2 style={{ marginTop: 0 }}>NL → Rule → Findings query bar</h2>
       <p style={{ maxWidth: 720, lineHeight: 1.5 }}>
-        Type a natural-language question against one of the demo fixtures.
-        DataBridge compiles a grammar-validated rule (no free SQL) and dry-runs
-        it. The provenance hash pair on the response is what you show a
-        customer to prove the call is auditable.
+        Type a natural-language question against one of the demo fixtures. DataBridge compiles a
+        grammar-validated rule (no free SQL) and dry-runs it. The provenance hash pair on the
+        response is what you show a customer to prove the call is auditable.
       </p>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 240px", gap: 12, marginBottom: 16 }}>
@@ -180,11 +173,7 @@ export default function QueryBarPage(): JSX.Element {
   );
 }
 
-function PromptShortcuts({
-  onPick,
-}: {
-  onPick: (p: PromptDef) => void;
-}): JSX.Element {
+function PromptShortcuts({ onPick }: { onPick: (p: PromptDef) => void }): JSX.Element {
   return (
     <div style={{ marginBottom: 24 }}>
       <div style={{ fontSize: 12, color: "#8b949e", marginBottom: 6 }}>
@@ -215,7 +204,10 @@ function PromptShortcuts({
 
 function ResultBox({ result }: { result: RuleCompileResponse }): JSX.Element {
   return (
-    <div data-testid="result-box" style={{ border: "1px solid #30363d", borderRadius: 6, padding: 16 }}>
+    <div
+      data-testid="result-box"
+      style={{ border: "1px solid #30363d", borderRadius: 6, padding: 16 }}
+    >
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
         <section>
           <h3 style={{ marginTop: 0 }}>Compiled rule</h3>
@@ -223,7 +215,10 @@ function ResultBox({ result }: { result: RuleCompileResponse }): JSX.Element {
             <Row k="id" v={result.rule.id} />
             <Row k="entity" v={result.rule.entity} />
             <Row k="severity" v={result.rule.severity} />
-            <Row k="fields read" v={result.rule.fieldsRead.map((f) => `${f.entity}.${f.field}`).join(", ")} />
+            <Row
+              k="fields read"
+              v={result.rule.fieldsRead.map((f) => `${f.entity}.${f.field}`).join(", ")}
+            />
             <Row k="dry-run findings" v={String(result.dryRunFindings ?? 0)} highlight />
           </dl>
         </section>
@@ -237,9 +232,11 @@ function ResultBox({ result }: { result: RuleCompileResponse }): JSX.Element {
             <Row k="response sha256" v={result.provenance.responseHash.slice(0, 16) + "…"} mono />
             <Row
               k="cost"
-              v={result.provenance.costUsd === undefined
-                ? "–"
-                : `$${result.provenance.costUsd.toFixed(4)}`}
+              v={
+                result.provenance.costUsd === undefined
+                  ? "–"
+                  : `$${result.provenance.costUsd.toFixed(4)}`
+              }
             />
           </dl>
         </section>
@@ -248,9 +245,26 @@ function ResultBox({ result }: { result: RuleCompileResponse }): JSX.Element {
   );
 }
 
-function Row({ k, v, mono, highlight }: { k: string; v: string; mono?: boolean; highlight?: boolean }): JSX.Element {
+function Row({
+  k,
+  v,
+  mono,
+  highlight,
+}: {
+  k: string;
+  v: string;
+  mono?: boolean;
+  highlight?: boolean;
+}): JSX.Element {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", padding: "2px 0", borderBottom: "1px solid #21262d" }}>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "120px 1fr",
+        padding: "2px 0",
+        borderBottom: "1px solid #21262d",
+      }}
+    >
       <dt style={{ color: "#8b949e" }}>{k}</dt>
       <dd
         style={{

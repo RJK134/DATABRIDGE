@@ -1,4 +1,4 @@
-import type { AltId, SourceSystem, AltIdType } from '@databridge/canonical';
+import type { AltId, SourceSystem, AltIdType } from "@databridge/canonical";
 
 /** Stable key for deduplication: system|type|value, all lower-cased. */
 export function altIdKey(a: AltId): string {
@@ -67,7 +67,7 @@ function pickCurrent(a?: boolean, b?: boolean): boolean | undefined {
 export function findAltId(
   ids: AltId[] | undefined,
   system: SourceSystem,
-  type: AltIdType,
+  type: AltIdType
 ): AltId | undefined {
   return (ids ?? []).find((id) => id.system === system && id.type === type);
 }
@@ -77,12 +77,10 @@ export function hasAltId(
   ids: AltId[] | undefined,
   system: SourceSystem,
   type: AltIdType,
-  value: string,
+  value: string
 ): boolean {
   return (ids ?? []).some(
     (id) =>
-      id.system === system &&
-      id.type === type &&
-      id.value.toLowerCase() === value.toLowerCase(),
+      id.system === system && id.type === type && id.value.toLowerCase() === value.toLowerCase()
   );
 }

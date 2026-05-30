@@ -37,10 +37,7 @@ interface FakeCallLog {
 }
 
 function makeFakeClient(scripts: {
-  get?: (
-    reportName: string,
-    query?: Record<string, unknown>,
-  ) => RaasReportResponse | unknown[];
+  get?: (reportName: string, query?: Record<string, unknown>) => RaasReportResponse | unknown[];
   pages?: Array<{ rows: unknown[]; total: number }>;
 }): { client: WorkdayRaasClient; calls: FakeCallLog } {
   const calls: FakeCallLog = { get: [] };
@@ -92,11 +89,7 @@ describe("WorkdayRaasAdapter — live HTTP path (via injected client)", () => {
   it("sampleTable maps Students → INT_DataBridge_Students and trims to limit", async () => {
     const { client, calls } = makeFakeClient({
       get: () => ({
-        Report_Entry: [
-          { Student_ID: "S001" },
-          { Student_ID: "S002" },
-          { Student_ID: "S003" },
-        ],
+        Report_Entry: [{ Student_ID: "S001" }, { Student_ID: "S002" }, { Student_ID: "S003" }],
       }),
     });
     const adapter = new WorkdayRaasAdapter(CONFIG, {
@@ -199,8 +192,6 @@ describe("WorkdayRaasAdapter — live HTTP path (via injected client)", () => {
 
   it("primaryKeyFor returns the canonical PK name per resource", () => {
     expect(WorkdayRaasAdapter.primaryKeyFor("Students")).toBe("Student_ID");
-    expect(WorkdayRaasAdapter.primaryKeyFor("Academic_Periods")).toBe(
-      "Academic_Period_ID",
-    );
+    expect(WorkdayRaasAdapter.primaryKeyFor("Academic_Periods")).toBe("Academic_Period_ID");
   });
 });

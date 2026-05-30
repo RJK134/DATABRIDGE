@@ -125,7 +125,12 @@ describe("reconcile", () => {
   it("returns descending score and skips self-matches", () => {
     const a = banner({ husid: "1234567890123" });
     const b = sits({ husid: "1234567890123" });
-    const c = sits({ sourceId: "S-2", firstName: "Bob", lastName: "Jones", dateOfBirth: "1985-05-05" });
+    const c = sits({
+      sourceId: "S-2",
+      firstName: "Bob",
+      lastName: "Jones",
+      dateOfBirth: "1985-05-05",
+    });
     const results = reconcile([a], [b, c], { kind: "exact" });
     expect(results).toHaveLength(1);
     expect(results[0]?.b.sourceId).toBe("S-1");
@@ -140,11 +145,9 @@ describe("reconcile", () => {
 
 describe("buildMergeLogEntry", () => {
   it("captures the candidate plus decision metadata", () => {
-    const cand = scorePair(
-      banner({ husid: "1234567890123" }),
-      sits({ husid: "1234567890123" }),
-      { kind: "exact" },
-    );
+    const cand = scorePair(banner({ husid: "1234567890123" }), sits({ husid: "1234567890123" }), {
+      kind: "exact",
+    });
     const entry = buildMergeLogEntry({
       candidate: cand,
       keptCanonicalId: "K",

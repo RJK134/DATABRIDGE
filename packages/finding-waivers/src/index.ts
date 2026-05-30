@@ -104,7 +104,7 @@ export class WaiverError extends Error {
       | "invalid_until"
       | "no_active_waiver"
       | "unknown_finding"
-      | "duplicate_decision",
+      | "duplicate_decision"
   ) {
     super(message);
     this.name = "WaiverError";
@@ -146,7 +146,7 @@ export class FindingWaiverStore implements FindingWaiverStoreLike {
     if (!isFutureIso(args.waivedUntil, now)) {
       throw new WaiverError(
         `waivedUntil (${args.waivedUntil}) must be strictly after ${now}`,
-        "invalid_until",
+        "invalid_until"
       );
     }
     const decision: WaiverDecision = {
@@ -167,14 +167,11 @@ export class FindingWaiverStore implements FindingWaiverStoreLike {
     if (!existing) {
       throw new WaiverError(
         `revoke called on ${args.findingId} which has no waiver/ack history`,
-        "no_active_waiver",
+        "no_active_waiver"
       );
     }
     if (existing.current.kind === "revoke") {
-      throw new WaiverError(
-        `${args.findingId} is already revoked`,
-        "duplicate_decision",
-      );
+      throw new WaiverError(`${args.findingId} is already revoked`, "duplicate_decision");
     }
     const now = args.at ?? this.clock();
     const decision: WaiverDecision = {
@@ -317,7 +314,7 @@ export function isActive(decision: WaiverDecision, at: string): boolean {
 export function applyWaiver(
   finding: AuditFinding,
   record: WaiverRecord | undefined,
-  at: string,
+  at: string
 ): AuditFinding {
   if (!record) return finding;
   const c = record.current;

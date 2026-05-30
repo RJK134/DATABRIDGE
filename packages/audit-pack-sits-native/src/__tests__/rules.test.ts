@@ -49,15 +49,15 @@ describe("SITS native audit pack", () => {
       .join(" \n ")
       .toLowerCase();
     // 10 §19 hooks must be represented somewhere in the rule names/descriptions
-    expect(blob).toMatch(/orphan/);                  // 1. STU with no MST
-    expect(blob).toMatch(/saw award/);               // 2. SCJ CC with no SAW
-    expect(blob).toMatch(/smo module/);              // 3. SCE R with no SMO
-    expect(blob).toMatch(/zero credit/);             // 4. SMR P with smr_crda 0
-    expect(blob).toMatch(/mab/);                     // 5. SAT no MAB
-    expect(blob).toMatch(/highest qualification/);   // 6. scj_hiqp empty
-    expect(blob).toMatch(/cas|visa/);                // 7. VCR expired CAS
-    expect(blob).toMatch(/date of death|stu_dod/);   // 8. stu_dod set
-    expect(blob).toMatch(/graduation date|saw_grdd/);// 9. SAW class no grdd
-    expect(blob).toMatch(/udf|gdpr/);                // 10. UDF unmanaged PII
+    expect(blob).toMatch(/orphan/); // 1. STU with no MST
+    expect(blob).toMatch(/saw award/); // 2. SCJ CC with no SAW
+    expect(blob).toMatch(/smo module/); // 3. SCE R with no SMO
+    expect(blob).toMatch(/zero credit/); // 4. SMR P with smr_crda 0
+    expect(blob).toMatch(/mab/); // 5. SAT no MAB
+    expect(blob).toMatch(/highest qualification/); // 6. scj_hiqp empty
+    expect(blob).toMatch(/cas|visa/); // 7. VCR expired CAS
+    expect(blob).toMatch(/date of death|stu_dod/); // 8. stu_dod set
+    expect(blob).toMatch(/graduation date|saw_grdd/); // 9. SAW class no grdd
+    expect(blob).toMatch(/udf|gdpr/); // 10. UDF unmanaged PII
   });
 });

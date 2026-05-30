@@ -3,19 +3,89 @@
   "section": "§11",
   "summary": "Banner SARADAP vs SITS CAM_CAP. UCAS/Direct/Clearing application types differ.",
   "fields": [
-    { "canonical": "personId", "banner": "SARADAP.PIDM (resolve)", "sits": "CAM_CAP.cap_canc (resolve)", "notes": "" },
-    { "canonical": "applicationNumber", "banner": "SARADAP.APPL_NO", "sits": "CAM_CAP.cap_code", "notes": "" },
-    { "canonical": "entryTerm", "banner": "SARADAP.TERM_CODE_ENTRY", "sits": "derived from CAM_CAP.cap_ayrc + cohort", "notes": "" },
-    { "canonical": "entryYear", "banner": "derived from TERM_CODE_ENTRY", "sits": "CAM_CAP.cap_ayrc", "notes": "" },
-    { "canonical": "programmeApplied", "banner": "SARADAP.PROGRAM_1", "sits": "CAM_CAP.cap_crsc", "notes": "" },
-    { "canonical": "routeApplied", "banner": "derive from major+conc", "sits": "CAM_CAP.cap_rouc", "notes": "" },
-    { "canonical": "applicationType", "banner": "SARADAP.ADMT_CODE", "sits": "CAM_CAP.cap_atyp", "notes": "UCAS/Direct/Clearing" },
-    { "canonical": "applicationStatus", "banner": "SARADAP.APST_CODE", "sits": "derive from cap_dec1 + cap_resp", "notes": "" },
-    { "canonical": "decision", "banner": "SARADAP.APDC_CODE", "sits": "CAM_CAP.cap_dec1", "notes": "" },
-    { "canonical": "decisionDate", "banner": "SARADAP.APDC_DATE", "sits": "CAM_CAP.cap_decd", "notes": "" },
-    { "canonical": "applicantResponse", "banner": "SARADAP.APST_CODE (RE/RD)", "sits": "CAM_CAP.cap_resp", "notes": "UK F/I/D vs Banner RD/RE" },
-    { "canonical": "applicationDate", "banner": "SARADAP.APPL_DATE", "sits": "cap_decd minus offset", "notes": "" },
-    { "canonical": "applicantTransferred", "banner": "derived (subsequent SGBSTDN row exists)", "sits": "CAM_CAP.cap_atrf", "notes": "ATR = Applicant Transfer" },
-    { "canonical": "feeStatusDeclared", "banner": null, "sits": "CAM_CAP.cap_fees", "notes": "Banner extension only" }
+    {
+      "canonical": "personId",
+      "banner": "SARADAP.PIDM (resolve)",
+      "sits": "CAM_CAP.cap_canc (resolve)",
+      "notes": ""
+    },
+    {
+      "canonical": "applicationNumber",
+      "banner": "SARADAP.APPL_NO",
+      "sits": "CAM_CAP.cap_code",
+      "notes": ""
+    },
+    {
+      "canonical": "entryTerm",
+      "banner": "SARADAP.TERM_CODE_ENTRY",
+      "sits": "derived from CAM_CAP.cap_ayrc + cohort",
+      "notes": ""
+    },
+    {
+      "canonical": "entryYear",
+      "banner": "derived from TERM_CODE_ENTRY",
+      "sits": "CAM_CAP.cap_ayrc",
+      "notes": ""
+    },
+    {
+      "canonical": "programmeApplied",
+      "banner": "SARADAP.PROGRAM_1",
+      "sits": "CAM_CAP.cap_crsc",
+      "notes": ""
+    },
+    {
+      "canonical": "routeApplied",
+      "banner": "derive from major+conc",
+      "sits": "CAM_CAP.cap_rouc",
+      "notes": ""
+    },
+    {
+      "canonical": "applicationType",
+      "banner": "SARADAP.ADMT_CODE",
+      "sits": "CAM_CAP.cap_atyp",
+      "notes": "UCAS/Direct/Clearing"
+    },
+    {
+      "canonical": "applicationStatus",
+      "banner": "SARADAP.APST_CODE",
+      "sits": "derive from cap_dec1 + cap_resp",
+      "notes": ""
+    },
+    {
+      "canonical": "decision",
+      "banner": "SARADAP.APDC_CODE",
+      "sits": "CAM_CAP.cap_dec1",
+      "notes": ""
+    },
+    {
+      "canonical": "decisionDate",
+      "banner": "SARADAP.APDC_DATE",
+      "sits": "CAM_CAP.cap_decd",
+      "notes": ""
+    },
+    {
+      "canonical": "applicantResponse",
+      "banner": "SARADAP.APST_CODE (RE/RD)",
+      "sits": "CAM_CAP.cap_resp",
+      "notes": "UK F/I/D vs Banner RD/RE"
+    },
+    {
+      "canonical": "applicationDate",
+      "banner": "SARADAP.APPL_DATE",
+      "sits": "cap_decd minus offset",
+      "notes": ""
+    },
+    {
+      "canonical": "applicantTransferred",
+      "banner": "derived (subsequent SGBSTDN row exists)",
+      "sits": "CAM_CAP.cap_atrf",
+      "notes": "ATR = Applicant Transfer"
+    },
+    {
+      "canonical": "feeStatusDeclared",
+      "banner": null,
+      "sits": "CAM_CAP.cap_fees",
+      "notes": "Banner extension only"
+    }
   ]
 }

@@ -19,20 +19,22 @@ export const F11_disability_equality: AuditRule[] = [
            FROM SDA
           WHERE SDA_STUC NOT IN (SELECT STU_CODE FROM STU WHERE STU_TENT = :tenantId)
             AND SDA_TENT = :tenantId`,
-    messageTemplate: "Disability record {{subject_id}} references non-existent student {{student_id}}"
+    messageTemplate:
+      "Disability record {{subject_id}} references non-existent student {{student_id}}",
   },
   {
     id: "F11-02",
     family: "F11",
     type: "statistical",
     name: "Disability declaration rate anomaly",
-    description: "Disability declaration rate is statistically anomalous vs HESA sector benchmark (expected 10–20%)",
+    description:
+      "Disability declaration rate is statistically anomalous vs HESA sector benchmark (expected 10–20%)",
     severity: "INFO",
     ucisa_benchmark_ref: "UCISA-DM-4.2",
     tags: ["disability", "equality", "statistical", "sits"],
     enabledByDefault: true,
     fieldPath: "Disability.studentId",
     maxNullPct: 80,
-    minCardinality: 1
-  }
+    minCardinality: 1,
+  },
 ];

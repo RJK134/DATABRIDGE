@@ -6,7 +6,7 @@
  * `unknown`. Consumers who want richer typing can install their own
  * `oracledb` types in their app.
  */
-declare module 'oracledb' {
+declare module "oracledb" {
   export const OUT_FORMAT_OBJECT: number;
   export function initOracleClient(opts?: { libDir?: string }): void;
   export function createPool(config: {
@@ -27,7 +27,7 @@ declare module 'oracledb' {
     execute(
       sql: string,
       binds?: Record<string, unknown>,
-      opts?: Record<string, unknown>,
+      opts?: Record<string, unknown>
     ): Promise<{ rows?: unknown[] }>;
     close(): Promise<void>;
   }

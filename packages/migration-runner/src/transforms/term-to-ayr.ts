@@ -8,7 +8,7 @@ export function termToAyr(
   term: string,
   policy: TermToAcademicYearPolicy,
   /** Optional lookup for STVTERM-driven mode. Maps term-code → ayr-code. */
-  stvtermAyr?: Record<string, string>,
+  stvtermAyr?: Record<string, string>
 ): { ayr: string | null; provenance: ProvenanceEntry } {
   if (policy.strategy === "stvterm-driven") {
     const ayr = stvtermAyr?.[term] ?? null;

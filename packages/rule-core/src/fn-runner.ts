@@ -29,12 +29,7 @@
  *   the resulting AuditFinding always carries a clean value.
  */
 import { randomUUID } from "node:crypto";
-import type {
-  FnAuditRule,
-  FnRuleResult,
-  RuleEvalContext,
-  RuleSeverity,
-} from "./types.js";
+import type { FnAuditRule, FnRuleResult, RuleEvalContext, RuleSeverity } from "./types.js";
 import type { AuditFinding } from "./finding.js";
 
 export interface EntityRow {
@@ -77,7 +72,7 @@ export class FnRuleRunner {
     rules: ReadonlyArray<FnAuditRule>,
     rows: AsyncIterable<EntityRow> | Iterable<EntityRow>,
     ctx: RuleEvalContext,
-    onFinding: FindingSink,
+    onFinding: FindingSink
   ): Promise<FnRunnerSummary> {
     const t0 = Date.now();
     const summary: FnRunnerSummary = {
@@ -118,17 +113,13 @@ export class FnRuleRunner {
       for await (const r of rows) materialisedRows.push(r);
       context = this.opts.contextProvider(materialisedRows);
     }
-    const iter: AsyncIterable<EntityRow> | Iterable<EntityRow> =
-      materialisedRows ?? rows;
+    const iter: AsyncIterable<EntityRow> | Iterable<EntityRow> = materialisedRows ?? rows;
 
     outer: for await (const row of iter) {
       if (ctx.signal.aborted) break;
       summary.rowsProcessed++;
 
-      const applicable = [
-        ...(byEntity.get(row.entity) ?? []),
-        ...universal,
-      ];
+      const applicable = [...(byEntity.get(row.entity) ?? []), ...universal];
 
       for (const rule of applicable) {
         if (
@@ -166,10 +157,9 @@ export class FnRuleRunner {
 function invokeRule(
   rule: FnAuditRule,
   row: EntityRow,
-  context: Record<string, unknown>,
+  context: Record<string, unknown>
 ): FnRuleResult {
-  const value =
-    rule.field !== undefined ? row.record[rule.field] : undefined;
+  const value = rule.field !== undefined ? row.record[rule.field] : undefined;
   try {
     const input = { value, record: row.record, context };
     // Some rules in profile-hesa-tdp destructure {value}, others {record} or
@@ -188,11 +178,7 @@ function invokeRule(
   }
 }
 
-function buildFinding(
-  rule: FnAuditRule,
-  row: EntityRow,
-  result: FnRuleResult,
-): AuditFinding {
+function buildFinding(rule: FnAuditRule, row: EntityRow, result: FnRuleResult): AuditFinding {
   const severity = normaliseSeverity(rule.severity);
   const evidence: Record<string, unknown> = { ...(result.detail ?? {}) };
   if (rule.field !== undefined) {

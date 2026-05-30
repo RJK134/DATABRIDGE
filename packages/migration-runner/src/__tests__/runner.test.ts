@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { BannerTargetAdapter, InMemoryTransport, SitsTargetAdapter } from "@databridge/target-adapters";
+import {
+  BannerTargetAdapter,
+  InMemoryTransport,
+  SitsTargetAdapter,
+} from "@databridge/target-adapters";
 import { buildDefaultPolicy, parsePartialPolicy } from "@databridge/migration-policy";
 import { createDefaultRegistry } from "@databridge/codeset-mapper";
 
@@ -63,10 +67,13 @@ describe("convertCreditHoursToCats", () => {
 
 describe("termToAyr", () => {
   it("regex strategy parses Banner-style codes", () => {
-    const r = termToAyr(
-      "202410",
-      { strategy: "regex", pattern: "^(\\d{4})(\\d{2})$", yearGroup: 1, termGroup: 2, ayrFormat: "YYYY/Y" },
-    );
+    const r = termToAyr("202410", {
+      strategy: "regex",
+      pattern: "^(\\d{4})(\\d{2})$",
+      yearGroup: 1,
+      termGroup: 2,
+      ayrFormat: "YYYY/Y",
+    });
     expect(r.ayr).toBe("2024/5");
   });
 
@@ -83,7 +90,7 @@ describe("translateGrade / translateFeeStatus", () => {
     const r = translateGrade(
       registry,
       { mapId: "banner-stvgrde-to-numeric@1.0.0", onMissing: "warn" },
-      "B+",
+      "B+"
     );
     expect(r.value).toBe("78");
   });
@@ -92,7 +99,7 @@ describe("translateGrade / translateFeeStatus", () => {
     const r = translateFeeStatus(
       registry,
       { mapId: "banner-stvresd-to-hesa-feestatus@1.0.0", defaultToUnknown: true },
-      "ZZZ",
+      "ZZZ"
     );
     expect(r.value).toBe("99");
   });

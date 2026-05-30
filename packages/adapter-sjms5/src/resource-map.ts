@@ -91,9 +91,7 @@ export const SJMS5_RESOURCES: Readonly<Record<string, ResourceDescriptor>> = {
   },
 };
 
-export const SJMS5_RESOURCE_NAMES = Object.keys(
-  SJMS5_RESOURCES,
-) as ReadonlyArray<string>;
+export const SJMS5_RESOURCE_NAMES = Object.keys(SJMS5_RESOURCES) as ReadonlyArray<string>;
 
 /** Quote a Postgres identifier (table or column name). */
 export function quoteIdent(name: string): string {

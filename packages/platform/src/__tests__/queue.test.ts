@@ -73,9 +73,7 @@ describe("MemoryQueueAdapter", () => {
 
 describe("PgBossQueueAdapter", () => {
   it("rejects construction with no connectionString or host", () => {
-    expect(() => new PgBossQueueAdapter({})).toThrow(
-      /must provide connectionString or host/,
-    );
+    expect(() => new PgBossQueueAdapter({})).toThrow(/must provide connectionString or host/);
   });
 
   it("accepts construction with connectionString", () => {
@@ -83,7 +81,7 @@ describe("PgBossQueueAdapter", () => {
       () =>
         new PgBossQueueAdapter({
           connectionString: "postgres://user:pass@localhost:5432/db",
-        }),
+        })
     ).not.toThrow();
   });
 
@@ -95,7 +93,7 @@ describe("PgBossQueueAdapter", () => {
           database: "db",
           user: "u",
           password: "p",
-        }),
+        })
     ).not.toThrow();
   });
 

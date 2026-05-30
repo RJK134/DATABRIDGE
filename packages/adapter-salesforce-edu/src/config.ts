@@ -15,7 +15,10 @@ export const SalesforceEduConfigSchema = z.object({
   /** Secrets-vault key for the connected-app consumer secret. */
   clientSecretKey: z.string().min(1),
   /** API version. Default v60.0. */
-  apiVersion: z.string().regex(/^v\d+\.\d+$/).default("v60.0"),
+  apiVersion: z
+    .string()
+    .regex(/^v\d+\.\d+$/)
+    .default("v60.0"),
   /** Request timeout in ms. */
   timeoutMs: z.number().int().positive().default(60_000),
   /** OAuth audience override — needed when the org uses a custom domain. */

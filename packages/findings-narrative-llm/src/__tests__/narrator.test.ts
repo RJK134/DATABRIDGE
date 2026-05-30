@@ -7,9 +7,7 @@ const okSlots = {
   headline_sentence: "We found 3 findings.",
   severity_breakdown_bullets: ["CRITICAL: 1", "ERROR: 2"],
   top_cluster_root_cause: "Codeset drift.",
-  recommended_next_actions: [
-    { owner: "Registry", action: "Refresh the codeset.", priority: 1 },
-  ],
+  recommended_next_actions: [{ owner: "Registry", action: "Refresh the codeset.", priority: 1 }],
 };
 
 function f(over: Partial<AuditFinding>): AuditFinding {

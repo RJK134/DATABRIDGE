@@ -32,9 +32,9 @@ describe("defaultIssueKey", () => {
     expect(defaultIssueKey(f())).toBe("rule-x::Student::s-1::");
   });
   it("includes nativeKeys sorted", () => {
-    expect(
-      defaultIssueKey(f({ nativeKeys: { spr_code: "A1", spr_seq: 2 } })),
-    ).toBe("rule-x::Student::s-1::spr_code=A1|spr_seq=2");
+    expect(defaultIssueKey(f({ nativeKeys: { spr_code: "A1", spr_seq: 2 } }))).toBe(
+      "rule-x::Student::s-1::spr_code=A1|spr_seq=2"
+    );
   });
 });
 
@@ -53,7 +53,7 @@ describe("diffPayload", () => {
   it("flags rule predicate drift", () => {
     const reasons = diffPayload(
       f({ ruleProvenance: { kind: "sql", predicate: "x > 1" } }),
-      f({ ruleProvenance: { kind: "sql", predicate: "x > 2" } }),
+      f({ ruleProvenance: { kind: "sql", predicate: "x > 2" } })
     );
     expect(reasons).toContain("rule predicate changed");
   });
@@ -126,10 +126,7 @@ describe("computeFindingDelta", () => {
 
 describe("filterDelta + summariseDeltaMd", () => {
   it("filters by kind", () => {
-    const delta = computeFindingDelta(
-      [f({ subjectId: "g" })],
-      [f({ subjectId: "n" })],
-    );
+    const delta = computeFindingDelta([f({ subjectId: "g" })], [f({ subjectId: "n" })]);
     expect(filterDelta(delta, "new")).toHaveLength(1);
     expect(filterDelta(delta, "resolved")).toHaveLength(1);
     expect(filterDelta(delta, "persistent")).toHaveLength(0);

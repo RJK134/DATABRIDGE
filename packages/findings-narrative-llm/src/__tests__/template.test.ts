@@ -18,30 +18,24 @@ describe("NarrativeSlotsZ", () => {
   });
 
   it("rejects empty severity_breakdown_bullets", () => {
-    expect(() =>
-      NarrativeSlotsZ.parse({ ...ok, severity_breakdown_bullets: [] }),
-    ).toThrow();
+    expect(() => NarrativeSlotsZ.parse({ ...ok, severity_breakdown_bullets: [] })).toThrow();
   });
 
   it("rejects markdown / HTML in any slot", () => {
+    expect(() => NarrativeSlotsZ.parse({ ...ok, headline_sentence: "**bold**" })).toThrow();
     expect(() =>
-      NarrativeSlotsZ.parse({ ...ok, headline_sentence: "**bold**" }),
-    ).toThrow();
-    expect(() =>
-      NarrativeSlotsZ.parse({ ...ok, top_cluster_root_cause: "<script>alert(1)</script>" }),
+      NarrativeSlotsZ.parse({ ...ok, top_cluster_root_cause: "<script>alert(1)</script>" })
     ).toThrow();
     expect(() =>
       NarrativeSlotsZ.parse({
         ...ok,
         severity_breakdown_bullets: ["normal", "<b>html</b>"],
-      }),
+      })
     ).toThrow();
   });
 
   it("rejects headlines over 220 characters", () => {
-    expect(() =>
-      NarrativeSlotsZ.parse({ ...ok, headline_sentence: "x".repeat(221) }),
-    ).toThrow();
+    expect(() => NarrativeSlotsZ.parse({ ...ok, headline_sentence: "x".repeat(221) })).toThrow();
   });
 
   it("rejects more than 6 bullets", () => {
@@ -49,7 +43,7 @@ describe("NarrativeSlotsZ", () => {
       NarrativeSlotsZ.parse({
         ...ok,
         severity_breakdown_bullets: ["a", "b", "c", "d", "e", "f", "g"],
-      }),
+      })
     ).toThrow();
   });
 
@@ -58,7 +52,7 @@ describe("NarrativeSlotsZ", () => {
       NarrativeSlotsZ.parse({
         ...ok,
         recommended_next_actions: [{ owner: "", action: "x" }],
-      }),
+      })
     ).toThrow();
   });
 
@@ -67,7 +61,7 @@ describe("NarrativeSlotsZ", () => {
       NarrativeSlotsZ.parse({
         ...ok,
         recommended_next_actions: [{ owner: "[Admin](mailto:x)", action: "x" }],
-      }),
+      })
     ).toThrow();
   });
 
@@ -76,13 +70,13 @@ describe("NarrativeSlotsZ", () => {
       NarrativeSlotsZ.parse({
         ...ok,
         recommended_next_actions: [{ owner: "x", action: "y", priority: 0 }],
-      }),
+      })
     ).toThrow();
     expect(() =>
       NarrativeSlotsZ.parse({
         ...ok,
         recommended_next_actions: [{ owner: "x", action: "y", priority: 6 }],
-      }),
+      })
     ).toThrow();
   });
 });
@@ -93,7 +87,7 @@ describe("sanitiseSlots", () => {
       NarrativeSlotsZ.parse({
         ...ok,
         headline_sentence: "  We found things.  ",
-      }),
+      })
     );
     expect(s.headline_sentence).toBe("We found things.");
   });

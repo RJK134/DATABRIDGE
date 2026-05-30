@@ -38,9 +38,7 @@ describe("query bar fixtures", () => {
 
   it("salesforce shared-email prompt finds 2 of 5 contacts", () => {
     const fix = DEMO_FIXTURES["salesforce-edu-westmidlands"];
-    const shared = fix.rows.filter(
-      (r) => r["Email"] === "shared.contact@uni.example",
-    );
+    const shared = fix.rows.filter((r) => r["Email"] === "shared.contact@uni.example");
     expect(shared).toHaveLength(2);
   });
 

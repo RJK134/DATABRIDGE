@@ -23,20 +23,14 @@ import type {
 } from "@databridge/adapter-spec";
 
 import { AuditEngine } from "../audit-engine.js";
-import type {
-  AuditRule,
-  FnAuditRule,
-  RuleEvalContext,
-} from "../types.js";
+import type { AuditRule, FnAuditRule, RuleEvalContext } from "../types.js";
 import type { SqlExecutor, FieldStats } from "../engine.js";
 
 /* ------------------------------ fake SqlExecutor -------------------------- */
 
 class FakeSqlExecutor implements SqlExecutor {
   public sqlCalls: Array<{ sql: string; params: Record<string, unknown> }> = [];
-  constructor(
-    private readonly rows: Record<string, unknown>[] = [],
-  ) {}
+  constructor(private readonly rows: Record<string, unknown>[] = []) {}
   async query(sql: string, params: { tenantId: string } & Record<string, unknown>) {
     this.sqlCalls.push({ sql, params });
     return this.rows;
@@ -75,10 +69,7 @@ function makeFakeSource(byResource: Record<string, SampledRow[]>): SourceAdapter
     async sampleTable() {
       return [];
     },
-    async *streamRows(
-      _ctx: AdapterContext,
-      args: StreamRowsArgs,
-    ): AsyncIterable<StreamRowsPage> {
+    async *streamRows(_ctx: AdapterContext, args: StreamRowsArgs): AsyncIterable<StreamRowsPage> {
       const rows = byResource[args.resource] ?? [];
       yield { rows, totalRows: rows.length };
     },
@@ -137,10 +128,7 @@ describe("AuditEngine — SQL rules only", () => {
       sql: "SELECT subject_id FROM stu WHERE tenant = :tenantId",
       messageTemplate: "row {{subject_id}} missing id",
     };
-    const exec = new FakeSqlExecutor([
-      { subject_id: "s1" },
-      { subject_id: "s2" },
-    ]);
+    const exec = new FakeSqlExecutor([{ subject_id: "s1" }, { subject_id: "s2" }]);
     const engine = new AuditEngine(exec);
 
     const report = await engine.runAudit({
@@ -192,10 +180,7 @@ describe("AuditEngine — Fn rules only", () => {
 
     expect(report.rowsScanned).toBe(3);
     expect(report.findingsTotal).toBe(2);
-    expect(report.findings.map((f) => f.subjectId).sort()).toEqual([
-      "s2",
-      "s3",
-    ]);
+    expect(report.findings.map((f) => f.subjectId).sort()).toEqual(["s2", "s3"]);
     expect(report.findings.every((f) => f.tenantId === "t1")).toBe(true);
     expect(report.fnSummary?.rowsProcessed).toBe(3);
   });
@@ -220,10 +205,7 @@ describe("AuditEngine — Fn rules only", () => {
       adapterCtx: makeAdapterCtx(),
       ctx: makeRuleCtx(),
     });
-    expect(report.findings.map((f) => f.subjectId)).toEqual([
-      "STU:0",
-      "STU:1",
-    ]);
+    expect(report.findings.map((f) => f.subjectId)).toEqual(["STU:0", "STU:1"]);
   });
 });
 
@@ -315,7 +297,7 @@ describe("AuditEngine — report metadata", () => {
       ctx: makeRuleCtx(),
     });
     expect(report.auditId).toMatch(
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
     );
     expect(report.startedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
     expect(report.completedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
@@ -342,7 +324,7 @@ describe("AuditEngine — report metadata", () => {
  */
 function makePagedSource(
   pagesByResource: Record<string, SampledRow[][]>,
-  pageDelayMs = 0,
+  pageDelayMs = 0
 ): SourceAdapter {
   return {
     id: "paged",
@@ -367,15 +349,11 @@ function makePagedSource(
     async sampleTable() {
       return [];
     },
-    async *streamRows(
-      _ctx: AdapterContext,
-      args: StreamRowsArgs,
-    ): AsyncIterable<StreamRowsPage> {
+    async *streamRows(_ctx: AdapterContext, args: StreamRowsArgs): AsyncIterable<StreamRowsPage> {
       const pages = pagesByResource[args.resource] ?? [];
       const idx = args.cursor ? Number(args.cursor) : 0;
       if (idx >= pages.length) return;
-      if (pageDelayMs > 0)
-        await new Promise((r) => setTimeout(r, pageDelayMs));
+      if (pageDelayMs > 0) await new Promise((r) => setTimeout(r, pageDelayMs));
       const next = idx + 1;
       const page: StreamRowsPage = {
         rows: pages[idx] ?? [],
@@ -409,8 +387,14 @@ describe("AuditEngine \u2014 E3 streaming", () => {
     };
     const source = makePagedSource({
       STU: [
-        [{ id: "a", code: "A" }, { id: "b", code: "B" }],
-        [{ id: "c", code: "A" }, { id: "d", code: "B" }],
+        [
+          { id: "a", code: "A" },
+          { id: "b", code: "B" },
+        ],
+        [
+          { id: "c", code: "A" },
+          { id: "d", code: "B" },
+        ],
         [{ id: "e", code: "A" }],
       ],
     });
@@ -451,11 +435,7 @@ describe("AuditEngine \u2014 E3 streaming", () => {
       ctx: makeRuleCtx(),
     });
     expect(report.rowsScanned).toBe(3);
-    expect(report.findings.map((f) => f.subjectId).sort()).toEqual([
-      "e1",
-      "s1",
-      "s2",
-    ]);
+    expect(report.findings.map((f) => f.subjectId).sort()).toEqual(["e1", "s1", "s2"]);
     // findings carry the right entity
     const entities = new Set(report.findings.map((f) => f.entityType));
     expect(entities).toEqual(new Set(["Student", "Engagement"]));
@@ -473,10 +453,7 @@ describe("AuditEngine \u2014 E3 streaming", () => {
     const pages: SampledRow[] = Array.from({ length: 10 }, (_, i) => ({
       id: `r${i}`,
     }));
-    const source = makePagedSource(
-      { A: [pages], B: [pages], C: [pages] },
-      20,
-    );
+    const source = makePagedSource({ A: [pages], B: [pages], C: [pages] }, 20);
     const serialEngine = new AuditEngine(new FakeSqlExecutor());
     const parallelEngine = new AuditEngine(new FakeSqlExecutor(), {
       resourceConcurrency: 3,
@@ -520,13 +497,9 @@ describe("AuditEngine \u2014 E3 streaming", () => {
     // 20ms-per-page source so the abort timer can fire mid-stream.
     const source = makePagedSource(
       {
-        STU: [
-          [{ id: "p1a" }, { id: "p1b" }],
-          [{ id: "p2a" }, { id: "p2b" }],
-          [{ id: "p3a" }],
-        ],
+        STU: [[{ id: "p1a" }, { id: "p1b" }], [{ id: "p2a" }, { id: "p2b" }], [{ id: "p3a" }]],
       },
-      20,
+      20
     );
     const ac = new AbortController();
     const adapterCtx: AdapterContext = {

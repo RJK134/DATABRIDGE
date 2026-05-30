@@ -60,7 +60,10 @@ export class DeterministicHashEmbedding implements EmbeddingBackend {
 }
 
 function normalise(s: string): string {
-  return s.toLowerCase().replace(/[^a-z0-9_]+/g, " ").trim();
+  return s
+    .toLowerCase()
+    .replace(/[^a-z0-9_]+/g, " ")
+    .trim();
 }
 
 function tokenise(s: string): string[] {
@@ -290,7 +293,9 @@ export class OnnxEmbedding implements EmbeddingBackend {
  * deterministic variant.
  */
 export function selectEmbeddingBackendFromEnv(
-  env: { DATABRIDGE_EMBEDDINGS_ONNX_PATH?: string } = process.env as { DATABRIDGE_EMBEDDINGS_ONNX_PATH?: string },
+  env: { DATABRIDGE_EMBEDDINGS_ONNX_PATH?: string } = process.env as {
+    DATABRIDGE_EMBEDDINGS_ONNX_PATH?: string;
+  }
 ): EmbeddingBackend {
   if (env.DATABRIDGE_EMBEDDINGS_ONNX_PATH) {
     return new OnnxEmbedding({ modelPath: env.DATABRIDGE_EMBEDDINGS_ONNX_PATH });

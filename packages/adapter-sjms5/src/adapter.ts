@@ -44,7 +44,7 @@ const DEFAULT_PAGE_SIZE = 500;
  */
 export type PgClientFactory = (
   connectionString: string,
-  meta: { statementTimeoutMs: number; applicationName: string },
+  meta: { statementTimeoutMs: number; applicationName: string }
 ) => Promise<PgClientLike>;
 
 export interface Sjms5AdapterOptions {
@@ -52,10 +52,7 @@ export interface Sjms5AdapterOptions {
   clientFactory?: PgClientFactory;
 }
 
-const defaultClientFactory: PgClientFactory = async (
-  connectionString,
-  meta,
-) => {
+const defaultClientFactory: PgClientFactory = async (connectionString, meta) => {
   const { Client } = await loadPg();
   const client = new Client({
     connectionString,
@@ -102,7 +99,7 @@ export class Sjms5Adapter implements SourceAdapter {
       () => {
         void client.end().catch(() => undefined);
       },
-      { once: true },
+      { once: true }
     );
     return client;
   }
@@ -112,7 +109,7 @@ export class Sjms5Adapter implements SourceAdapter {
     if (!desc) {
       throw new Error(
         `adapter-sjms5: resource '${resource}' not supported. ` +
-          `Known: ${SJMS5_RESOURCE_NAMES.join(", ")}`,
+          `Known: ${SJMS5_RESOURCE_NAMES.join(", ")}`
       );
     }
     return desc;
@@ -171,7 +168,7 @@ export class Sjms5Adapter implements SourceAdapter {
              FROM information_schema.columns
             WHERE table_schema = $1 AND table_name = $2
             ORDER BY ordinal_position`,
-          [this.config.schema, desc.relation],
+          [this.config.schema, desc.relation]
         );
         resources.push({
           name: desc.resource,
@@ -191,22 +188,15 @@ export class Sjms5Adapter implements SourceAdapter {
     }
   }
 
-  async sampleTable(
-    ctx: AdapterContext,
-    args: SampleTableArgs,
-  ): Promise<SampledRow[]> {
+  async sampleTable(ctx: AdapterContext, args: SampleTableArgs): Promise<SampledRow[]> {
     ctx.logger.debug("sjms5: sampleTable", {
       resource: args.resource,
       limit: args.limit,
     });
     const desc = this.resourceOrThrow(args.resource);
-    const limit = Math.min(
-      Math.max(1, args.limit | 0),
-      this.config.sampleDefaultLimit * 10,
-    );
-    const orderBy = args.orderBy && /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(args.orderBy)
-      ? args.orderBy
-      : desc.pkColumn;
+    const limit = Math.min(Math.max(1, args.limit | 0), this.config.sampleDefaultLimit * 10);
+    const orderBy =
+      args.orderBy && /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(args.orderBy) ? args.orderBy : desc.pkColumn;
     const client = await this.openClient(ctx);
     try {
       const result = await client.query<SampledRow>(
@@ -214,7 +204,7 @@ export class Sjms5Adapter implements SourceAdapter {
            FROM ${this.qualified(desc)}
           ORDER BY ${quoteIdent(orderBy)} ASC
           LIMIT $1`,
-        [limit],
+        [limit]
       );
       return result.rows.map(normalizeRow);
     } finally {
@@ -222,10 +212,7 @@ export class Sjms5Adapter implements SourceAdapter {
     }
   }
 
-  async *streamRows(
-    ctx: AdapterContext,
-    args: StreamRowsArgs,
-  ): AsyncIterable<StreamRowsPage> {
+  async *streamRows(ctx: AdapterContext, args: StreamRowsArgs): AsyncIterable<StreamRowsPage> {
     ctx.logger.debug("sjms5: streamRows", { resource: args.resource });
     const desc = this.resourceOrThrow(args.resource);
     const pageSize = Math.min(Math.max(1, args.pageSize ?? DEFAULT_PAGE_SIZE), 10_000);
@@ -234,7 +221,7 @@ export class Sjms5Adapter implements SourceAdapter {
     try {
       // total count is informational; cheap enough on indexed pk.
       const totalRes = await client.query<{ c: string }>(
-        `SELECT COUNT(*)::text AS c FROM ${this.qualified(desc)}`,
+        `SELECT COUNT(*)::text AS c FROM ${this.qualified(desc)}`
       );
       const totalRows = Number(totalRes.rows[0]?.c ?? 0);
 
@@ -244,10 +231,7 @@ export class Sjms5Adapter implements SourceAdapter {
       const whereParts: string[] = [];
 
       // Incremental filter
-      if (
-        args.sinceTimestamp !== undefined &&
-        desc.incrementalColumn !== undefined
-      ) {
+      if (args.sinceTimestamp !== undefined && desc.incrementalColumn !== undefined) {
         params.push(args.sinceTimestamp);
         whereParts.push(`${quoteIdent(desc.incrementalColumn)} >= $${params.length}`);
       }
@@ -300,10 +284,7 @@ export class Sjms5Adapter implements SourceAdapter {
     return [];
   }
 
-  async getRecordById(
-    ctx: AdapterContext,
-    args: GetRecordByIdArgs,
-  ): Promise<SampledRow | null> {
+  async getRecordById(ctx: AdapterContext, args: GetRecordByIdArgs): Promise<SampledRow | null> {
     ctx.logger.debug("sjms5: getRecordById", { resource: args.resource, id: args.id });
     const desc = this.resourceOrThrow(args.resource);
     const client = await this.openClient(ctx);
@@ -313,7 +294,7 @@ export class Sjms5Adapter implements SourceAdapter {
            FROM ${this.qualified(desc)}
           WHERE ${quoteIdent(desc.pkColumn)} = $1
           LIMIT 1`,
-        [args.id],
+        [args.id]
       );
       const row = res.rows[0];
       return row ? normalizeRow(row) : null;
@@ -350,11 +331,7 @@ function normalizeRow(row: Record<string, unknown>): SampledRow {
   for (const [k, v] of Object.entries(row)) {
     if (v === null || v === undefined) {
       out[k] = null;
-    } else if (
-      typeof v === "string" ||
-      typeof v === "number" ||
-      typeof v === "boolean"
-    ) {
+    } else if (typeof v === "string" || typeof v === "number" || typeof v === "boolean") {
       out[k] = v;
     } else if (v instanceof Date) {
       out[k] = v.toISOString();

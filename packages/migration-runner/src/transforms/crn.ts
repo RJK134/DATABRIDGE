@@ -38,12 +38,10 @@ export class CrnGeneratorState {
    * `existingCrn` is provided and policy is preserve-existing, returns
    * it verbatim. Otherwise applies the active strategy.
    */
-  allocate(args: {
-    subject: string;
-    section: string;
-    term: string;
-    existingCrn?: string | null;
-  }): { crn: string; provenance: ProvenanceEntry } {
+  allocate(args: { subject: string; section: string; term: string; existingCrn?: string | null }): {
+    crn: string;
+    provenance: ProvenanceEntry;
+  } {
     if (this.policy.strategy === "preserve-existing" && args.existingCrn) {
       return {
         crn: args.existingCrn,

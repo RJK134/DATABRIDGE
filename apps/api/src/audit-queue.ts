@@ -18,7 +18,7 @@
  * runAuditJob is already designed to be re-entrant per auditId (each run
  * gets its own AbortController in the inflight registry).
  */
-import { runAuditJob, type AuditJobInput, type AuditRunnerLogger } from "./audit-runner.js";
+import type { AuditJobInput, AuditRunnerLogger } from "./audit-runner.js";
 
 export interface AuditQueue {
   /** Enqueue an audit job. Resolves once the job is durably persisted (Pg) */
@@ -82,11 +82,7 @@ export class InProcessAuditQueue implements AuditQueue {
 
   private pump(): void {
     if (!this.handler) return;
-    while (
-      !this.shuttingDown &&
-      this.inFlight < this.concurrency &&
-      this.buffer.length > 0
-    ) {
+    while (!this.shuttingDown && this.inFlight < this.concurrency && this.buffer.length > 0) {
       const job = this.buffer.shift();
       if (!job) break;
       this.inFlight++;
@@ -141,10 +137,7 @@ interface PgBossLike {
   start(): Promise<void>;
   stop(opts?: { graceful?: boolean }): Promise<void>;
   send(name: string, data: unknown): Promise<string | null>;
-  work(
-    name: string,
-    handler: (jobOrJobs: unknown) => Promise<void>,
-  ): Promise<string>;
+  work(name: string, handler: (jobOrJobs: unknown) => Promise<void>): Promise<string>;
 }
 
 /**
@@ -171,7 +164,7 @@ export class PgBossAuditQueue implements AuditQueue {
       throw new Error(
         "apps/api: the optional peer 'pg-boss' is required for AUDIT_QUEUE=pgboss. " +
           "Install with: pnpm add pg-boss\n" +
-          `Underlying error: ${(err as Error).message}`,
+          `Underlying error: ${(err as Error).message}`
       );
     }
     const Ctor = mod.default;
@@ -237,7 +230,7 @@ export function createAuditQueue(opts: CreateAuditQueueOptions): AuditQueue {
   if (mode === "pgboss") {
     if (!databaseUrl) {
       opts.logger.warn(
-        "AUDIT_QUEUE=pgboss requested but DATABASE_URL is unset; falling back to in-process queue",
+        "AUDIT_QUEUE=pgboss requested but DATABASE_URL is unset; falling back to in-process queue"
       );
       return new InProcessAuditQueue({ logger: opts.logger });
     }

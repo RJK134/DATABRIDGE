@@ -1,4 +1,4 @@
-import type { EffectiveDating, EffectiveDatingPattern } from '@databridge/canonical';
+import type { EffectiveDating, EffectiveDatingPattern } from "@databridge/canonical";
 
 /**
  * Resolver input — a row from a source adapter plus the pattern that source
@@ -26,17 +26,17 @@ export interface CurrentnessInput {
  */
 export function resolveCurrentness(input: CurrentnessInput): EffectiveDating | undefined {
   switch (input.pattern) {
-    case 'activity-dated':
+    case "activity-dated":
       return resolveActivityDated(input.signals);
-    case 'term-keyed':
+    case "term-keyed":
       return resolveTermKeyed(input.signals);
-    case 'from-to-dated':
+    case "from-to-dated":
       return resolveFromToDated(input.signals);
-    case 'change-indicator':
+    case "change-indicator":
       return resolveChangeIndicator(input.signals);
-    case 'status-driven':
+    case "status-driven":
       return resolveStatusDriven(input.signals);
-    case 'snapshot':
+    case "snapshot":
       return resolveSnapshot(input.signals);
     default:
       return undefined;
@@ -44,16 +44,16 @@ export function resolveCurrentness(input: CurrentnessInput): EffectiveDating | u
 }
 
 function resolveActivityDated(
-  s: Record<string, string | null | undefined>,
+  s: Record<string, string | null | undefined>
 ): EffectiveDating | undefined {
-  const activity = s['activityDate'];
+  const activity = s["activityDate"];
   if (!activity) return undefined;
-  const latest = s['latestActivityDate'];
+  const latest = s["latestActivityDate"];
   // Banner "most recent wins" — this row is current iff its activity date
   // equals the latest observed activity date for this key.
   const isCurrent = latest !== undefined && latest !== null ? activity === latest : undefined;
   const out: EffectiveDating = {
-    pattern: 'activity-dated',
+    pattern: "activity-dated",
     currentFrom: activity,
   };
   if (isCurrent !== undefined) out.isCurrent = isCurrent;
@@ -61,15 +61,15 @@ function resolveActivityDated(
 }
 
 function resolveTermKeyed(
-  s: Record<string, string | null | undefined>,
+  s: Record<string, string | null | undefined>
 ): EffectiveDating | undefined {
-  const termStart = s['termStartIso'];
+  const termStart = s["termStartIso"];
   if (!termStart) return undefined;
   const out: EffectiveDating = {
-    pattern: 'term-keyed',
+    pattern: "term-keyed",
     currentFrom: termStart,
   };
-  const nextTerm = s['nextTermStartIso'];
+  const nextTerm = s["nextTermStartIso"];
   if (nextTerm) out.currentTo = nextTerm;
   // If no next term is supplied, treat as currently in-effect.
   if (!nextTerm) out.isCurrent = true;
@@ -77,13 +77,13 @@ function resolveTermKeyed(
 }
 
 function resolveFromToDated(
-  s: Record<string, string | null | undefined>,
+  s: Record<string, string | null | undefined>
 ): EffectiveDating | undefined {
-  const from = s['fromDate'];
+  const from = s["fromDate"];
   if (!from) return undefined;
-  const to = s['toDate'];
+  const to = s["toDate"];
   const out: EffectiveDating = {
-    pattern: 'from-to-dated',
+    pattern: "from-to-dated",
     currentFrom: from,
   };
   if (to) out.currentTo = to;
@@ -93,40 +93,40 @@ function resolveFromToDated(
 }
 
 function resolveChangeIndicator(
-  s: Record<string, string | null | undefined>,
+  s: Record<string, string | null | undefined>
 ): EffectiveDating | undefined {
-  const ind = s['changeIndicator'];
+  const ind = s["changeIndicator"];
   // Banner convention: SPRIDEN_CHANGE_IND IS NULL means current.
-  const isCurrent = ind === null || ind === undefined || ind === '';
+  const isCurrent = ind === null || ind === undefined || ind === "";
   return {
-    pattern: 'change-indicator',
+    pattern: "change-indicator",
     isCurrent,
   };
 }
 
 function resolveStatusDriven(
-  s: Record<string, string | null | undefined>,
+  s: Record<string, string | null | undefined>
 ): EffectiveDating | undefined {
-  const stac = s['stac'];
-  const ayrc = s['ayrc'];
-  const currentAyrc = s['currentAyrc'];
+  const stac = s["stac"];
+  const ayrc = s["ayrc"];
+  const currentAyrc = s["currentAyrc"];
   if (!stac || !ayrc) return undefined;
   // SITS "active + current ayr" semantics from crosswalk §15.9.
-  const activeStatuses = ['R', 'A', 'U', 'C'];
+  const activeStatuses = ["R", "A", "U", "C"];
   const isCurrent = activeStatuses.includes(stac.toUpperCase()) && ayrc === currentAyrc;
   return {
-    pattern: 'status-driven',
+    pattern: "status-driven",
     isCurrent,
   };
 }
 
 function resolveSnapshot(
-  s: Record<string, string | null | undefined>,
+  s: Record<string, string | null | undefined>
 ): EffectiveDating | undefined {
-  const observed = s['observedAt'];
+  const observed = s["observedAt"];
   if (!observed) return undefined;
   return {
-    pattern: 'snapshot',
+    pattern: "snapshot",
     currentFrom: observed,
     isCurrent: true,
   };

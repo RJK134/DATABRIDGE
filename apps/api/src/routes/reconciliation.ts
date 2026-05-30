@@ -9,21 +9,22 @@
  */
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
-import {
-  buildReconciliationReport,
-} from "@databridge/reconciliation-report";
-import type {
-  MatchPolicy,
-  PersonRecord,
-  SourceSystemTag,
-} from "@databridge/identity-reconciler";
+import { buildReconciliationReport } from "@databridge/reconciliation-report";
+import type { MatchPolicy, PersonRecord, SourceSystemTag } from "@databridge/identity-reconciler";
 
 type PersonRecordInput = {
   [K in keyof PersonRecord]: PersonRecord[K] | undefined;
 };
 
 const SourceSystemTagZ = z.enum([
-  "sits", "banner", "workday", "techone", "sjms5", "hesa", "ucas", "other",
+  "sits",
+  "banner",
+  "workday",
+  "techone",
+  "sjms5",
+  "hesa",
+  "ucas",
+  "other",
 ]);
 
 const AltIdZ = z.object({

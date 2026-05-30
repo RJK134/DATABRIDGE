@@ -17,7 +17,7 @@ export const F03_codelist_conformance: AuditRule[] = [
     enabledByDefault: true,
     fieldPath: "Student.sexId",
     codelistId: "HESA.SEXID",
-    flagNulls: true
+    flagNulls: true,
   },
   {
     id: "F03-02",
@@ -31,7 +31,7 @@ export const F03_codelist_conformance: AuditRule[] = [
     enabledByDefault: true,
     fieldPath: "Enrolment.modeOfStudy",
     codelistId: "HESA.MODE",
-    flagNulls: true
+    flagNulls: true,
   },
   {
     id: "F03-03",
@@ -45,7 +45,7 @@ export const F03_codelist_conformance: AuditRule[] = [
     enabledByDefault: true,
     fieldPath: "Programme.courseAim",
     codelistId: "HESA.COURSEAIM",
-    flagNulls: true
+    flagNulls: true,
   },
   {
     id: "F03-04",
@@ -59,7 +59,7 @@ export const F03_codelist_conformance: AuditRule[] = [
     enabledByDefault: true,
     fieldPath: "Enrolment.reasonForEnding",
     codelistId: "HESA.RSNEND",
-    flagNulls: false
+    flagNulls: false,
   },
   {
     id: "F03-05",
@@ -73,6 +73,6 @@ export const F03_codelist_conformance: AuditRule[] = [
     enabledByDefault: true,
     fieldPath: "Award.qualificationAim",
     codelistId: "HESA.QUALENT3",
-    flagNulls: true
-  }
+    flagNulls: true,
+  },
 ];

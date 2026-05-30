@@ -48,7 +48,7 @@ describe("apps/api /rule-packs (Phase H)", () => {
     const body = res.json() as { id: string; rules: Array<{ id: string }> };
     expect(body.id).toBe("banner-native");
     expect(body.rules.map((r) => r.id)).toEqual(
-      expect.arrayContaining(["BANNER-NAT-01", "BANNER-NAT-10"]),
+      expect.arrayContaining(["BANNER-NAT-01", "BANNER-NAT-10"])
     );
   });
 

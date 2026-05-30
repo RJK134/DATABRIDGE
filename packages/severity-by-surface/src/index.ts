@@ -37,12 +37,7 @@ export const SURFACES = [
 ] as const;
 export type Surface = (typeof SURFACES)[number];
 
-export const SEVERITIES: readonly RuleSeverity[] = [
-  "CRITICAL",
-  "ERROR",
-  "WARN",
-  "INFO",
-];
+export const SEVERITIES: readonly RuleSeverity[] = ["CRITICAL", "ERROR", "WARN", "INFO"];
 
 /**
  * Default canonical-entity → surface mapping. Based on the SITS/Banner
@@ -160,10 +155,7 @@ export interface AggregateOptions {
  *   2. Pattern match on ruleId then ruleName.
  *   3. Fallback to "other".
  */
-export function classifySurface(
-  finding: AuditFinding,
-  options: AggregateOptions = {},
-): Surface {
+export function classifySurface(finding: AuditFinding, options: AggregateOptions = {}): Surface {
   const map = options.surfaceMap ?? DEFAULT_SURFACE_MAP;
   const direct = map[finding.entityType];
   if (direct) return direct;
@@ -178,7 +170,7 @@ export function classifySurface(
 
 export function aggregateSeverityBySurface(
   findings: readonly AuditFinding[],
-  options: AggregateOptions = {},
+  options: AggregateOptions = {}
 ): SeverityBySurfaceReport {
   const clock = options.clock ?? (() => new Date().toISOString());
 

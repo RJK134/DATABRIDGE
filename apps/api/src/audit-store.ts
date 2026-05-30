@@ -13,12 +13,7 @@
 
 import type { AuditReport } from "@databridge/rule-core";
 
-export type AuditStatus =
-  | "queued"
-  | "running"
-  | "succeeded"
-  | "failed"
-  | "cancelled";
+export type AuditStatus = "queued" | "running" | "succeeded" | "failed" | "cancelled";
 
 export interface AuditRecord {
   auditId: string;
@@ -38,12 +33,10 @@ export interface AuditRecord {
  * can satisfy it; in-memory implementations resolve synchronously.
  */
 export interface AuditStoreLike {
-  create(
-    record: Omit<AuditRecord, "createdAt" | "updatedAt">,
-  ): Promise<AuditRecord>;
+  create(record: Omit<AuditRecord, "createdAt" | "updatedAt">): Promise<AuditRecord>;
   update(
     auditId: string,
-    patch: Partial<Omit<AuditRecord, "auditId" | "createdAt">>,
+    patch: Partial<Omit<AuditRecord, "auditId" | "createdAt">>
   ): Promise<AuditRecord | undefined>;
   get(auditId: string): Promise<AuditRecord | undefined>;
   list(filter?: { tenantId?: string }): Promise<AuditRecord[]>;
@@ -55,9 +48,7 @@ export interface AuditStoreLike {
 export class InMemoryAuditStore implements AuditStoreLike {
   private readonly byId = new Map<string, AuditRecord>();
 
-  async create(
-    record: Omit<AuditRecord, "createdAt" | "updatedAt">,
-  ): Promise<AuditRecord> {
+  async create(record: Omit<AuditRecord, "createdAt" | "updatedAt">): Promise<AuditRecord> {
     const now = new Date().toISOString();
     const full: AuditRecord = { ...record, createdAt: now, updatedAt: now };
     this.byId.set(full.auditId, full);
@@ -66,7 +57,7 @@ export class InMemoryAuditStore implements AuditStoreLike {
 
   async update(
     auditId: string,
-    patch: Partial<Omit<AuditRecord, "auditId" | "createdAt">>,
+    patch: Partial<Omit<AuditRecord, "auditId" | "createdAt">>
   ): Promise<AuditRecord | undefined> {
     const existing = this.byId.get(auditId);
     if (!existing) return undefined;
@@ -85,9 +76,7 @@ export class InMemoryAuditStore implements AuditStoreLike {
 
   async list(filter?: { tenantId?: string }): Promise<AuditRecord[]> {
     const all = Array.from(this.byId.values());
-    const filtered = filter?.tenantId
-      ? all.filter((r) => r.tenantId === filter.tenantId)
-      : all;
+    const filtered = filter?.tenantId ? all.filter((r) => r.tenantId === filter.tenantId) : all;
     return filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   }
 

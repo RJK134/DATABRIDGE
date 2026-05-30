@@ -20,20 +20,14 @@ describe("profile-sits rules", () => {
 
   it("all rules have ucisa_benchmark_ref", () => {
     for (const rule of rules) {
-      expect(
-        rule.ucisa_benchmark_ref,
-        `${rule.id} missing ucisa_benchmark_ref`
-      ).toBeTruthy();
+      expect(rule.ucisa_benchmark_ref, `${rule.id} missing ucisa_benchmark_ref`).toBeTruthy();
     }
   });
 
   it("all SQL rules have messageTemplate", () => {
     for (const rule of rules) {
       if (rule.type === "sql") {
-        expect(
-          rule.messageTemplate,
-          `${rule.id} missing messageTemplate`
-        ).toBeTruthy();
+        expect(rule.messageTemplate, `${rule.id} missing messageTemplate`).toBeTruthy();
       }
     }
   });
@@ -45,14 +39,17 @@ describe("profile-sits rules", () => {
   });
 
   it("legacy scar rules LS-01 to LS-08 all present", () => {
-    const legacyScarIds = ["LS-01","LS-02","LS-03","LS-04","LS-05","LS-06","LS-07","LS-08"];
+    const legacyScarIds = ["LS-01", "LS-02", "LS-03", "LS-04", "LS-05", "LS-06", "LS-07", "LS-08"];
     for (const id of legacyScarIds) {
-      expect(rules.find(r => r.id === id), `Missing legacy scar rule ${id}`).toBeTruthy();
+      expect(
+        rules.find((r) => r.id === id),
+        `Missing legacy scar rule ${id}`
+      ).toBeTruthy();
     }
   });
 
   it("all legacy scar rules are in family F13", () => {
-    const legacyScars = rules.filter(r => r.id.startsWith("LS-"));
+    const legacyScars = rules.filter((r) => r.id.startsWith("LS-"));
     for (const rule of legacyScars) {
       expect(rule.family).toBe("F13");
     }

@@ -30,12 +30,7 @@ export function damerauLevenshtein(aRaw: string, bRaw: string): number {
       const ins = (curr[j - 1] ?? 0) + 1;
       const sub = (prev[j - 1] ?? 0) + cost;
       let val = Math.min(del, ins, sub);
-      if (
-        i > 1 &&
-        j > 1 &&
-        a[i - 1] === b[j - 2] &&
-        a[i - 2] === b[j - 1]
-      ) {
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
         val = Math.min(val, (prevPrev[j - 2] ?? 0) + 1);
       }
       curr[j] = val;

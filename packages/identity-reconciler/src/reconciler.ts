@@ -75,7 +75,10 @@ function altIdMatches(a: PersonRecord, b: PersonRecord): MatchReason[] {
 }
 
 /** Compare two records under the exact policy. */
-function scoreExact(a: PersonRecord, b: PersonRecord): {
+function scoreExact(
+  a: PersonRecord,
+  b: PersonRecord
+): {
   score: number;
   reasons: MatchReason[];
 } {
@@ -99,7 +102,7 @@ function scoreExact(a: PersonRecord, b: PersonRecord): {
 function scoreFuzzy(
   a: PersonRecord,
   b: PersonRecord,
-  maxNameDistance: number,
+  maxNameDistance: number
 ): { score: number; reasons: MatchReason[] } {
   const reasons: MatchReason[] = [];
   let total = 0;
@@ -110,7 +113,11 @@ function scoreFuzzy(
   if (aLast && bLast) {
     const dist = damerauLevenshtein(aLast, bLast);
     if (dist === 0) {
-      reasons.push({ code: "lastname-equal", message: `lastName matches exactly (${aLast})`, weight: 0.35 });
+      reasons.push({
+        code: "lastname-equal",
+        message: `lastName matches exactly (${aLast})`,
+        weight: 0.35,
+      });
       total += 0.35;
     } else if (dist <= maxNameDistance) {
       const sim = nameSimilarity(aLast, bLast);
@@ -129,7 +136,11 @@ function scoreFuzzy(
   if (aFirst && bFirst) {
     const dist = damerauLevenshtein(aFirst, bFirst);
     if (dist === 0) {
-      reasons.push({ code: "firstname-equal", message: `firstName matches exactly (${aFirst})`, weight: 0.2 });
+      reasons.push({
+        code: "firstname-equal",
+        message: `firstName matches exactly (${aFirst})`,
+        weight: 0.2,
+      });
       total += 0.2;
     } else if (dist <= maxNameDistance) {
       const sim = nameSimilarity(aFirst, bFirst);
@@ -146,7 +157,11 @@ function scoreFuzzy(
   const aDob = norm(a.dateOfBirth);
   const bDob = norm(b.dateOfBirth);
   if (aDob && bDob && aDob === bDob) {
-    reasons.push({ code: "dob-equal", message: `dateOfBirth matches exactly (${aDob})`, weight: 0.3 });
+    reasons.push({
+      code: "dob-equal",
+      message: `dateOfBirth matches exactly (${aDob})`,
+      weight: 0.3,
+    });
     total += 0.3;
   }
 
@@ -172,7 +187,7 @@ function scoreFuzzy(
 function scoreInstitutional(
   a: PersonRecord,
   b: PersonRecord,
-  fields: Array<keyof PersonRecord>,
+  fields: Array<keyof PersonRecord>
 ): { score: number; reasons: MatchReason[] } {
   if (fields.length === 0) return { score: 0, reasons: [] };
   const reasons: MatchReason[] = [];
@@ -199,12 +214,12 @@ function classify(
   score: number,
   threshold: number,
   reasons: MatchReason[],
-  policy: MatchPolicy["kind"],
+  policy: MatchPolicy["kind"]
 ): MatchConfidence {
   if (score >= threshold) {
     // Boost to "confident" if a strong identifier matched OR institutional/exact policy hit
     const hasStrongId = reasons.some(
-      (r) => r.code === "husid-equal" || r.code === "ucasPid-equal" || r.code === "altid-equal",
+      (r) => r.code === "husid-equal" || r.code === "ucasPid-equal" || r.code === "altid-equal"
     );
     if (policy === "exact" || policy === "institutional" || hasStrongId) return "confident";
     if (score >= threshold + 0.1) return "confident";
@@ -215,11 +230,7 @@ function classify(
 }
 
 /** Apply the policy to one pair and produce a `MatchCandidate`. */
-export function scorePair(
-  a: PersonRecord,
-  b: PersonRecord,
-  policy: MatchPolicy,
-): MatchCandidate {
+export function scorePair(a: PersonRecord, b: PersonRecord, policy: MatchPolicy): MatchCandidate {
   const threshold = policy.threshold ?? DEFAULT_THRESHOLDS[policy.kind];
   let scored: { score: number; reasons: MatchReason[] };
   if (policy.kind === "exact") {
@@ -250,7 +261,7 @@ export function scorePair(
 export function reconcile(
   incoming: readonly PersonRecord[],
   existing: readonly PersonRecord[],
-  policy: MatchPolicy,
+  policy: MatchPolicy
 ): MatchCandidate[] {
   const candidates: MatchCandidate[] = [];
   for (const a of incoming) {

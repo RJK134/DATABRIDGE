@@ -16,16 +16,7 @@ export const BannerToSitsConfigSchema = z.object({
   dryRun: z.boolean().default(true),
   /** Canonical entities to include in this run. Empty = all. */
   entities: z
-    .array(
-      z.enum([
-        "Student",
-        "Programme",
-        "Enrolment",
-        "TermGpa",
-        "CourseRegistration",
-        "Award",
-      ]),
-    )
+    .array(z.enum(["Student", "Programme", "Enrolment", "TermGpa", "CourseRegistration", "Award"]))
     .default([]),
   /** Target collection year in SITS-style YYYY/YY. */
   collectionYear: z.string().regex(/^\d{4}\/\d{2}$/),

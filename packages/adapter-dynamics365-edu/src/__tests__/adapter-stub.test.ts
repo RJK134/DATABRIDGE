@@ -43,7 +43,7 @@ describe("Dynamics365EduAdapter — stub-fallback path", () => {
   it("rejects unsupported resources", async () => {
     const ad = new Dynamics365EduAdapter(config);
     await expect(
-      ad.sampleTable(makeCtx(undefined), { resource: "noSuchEntity", limit: 1 }),
+      ad.sampleTable(makeCtx(undefined), { resource: "noSuchEntity", limit: 1 })
     ).rejects.toThrow(/not supported/);
   });
 

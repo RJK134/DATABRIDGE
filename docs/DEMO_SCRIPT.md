@@ -13,14 +13,14 @@ let you ask the questions in plain English."
 
 **Total budget:** 55 minutes.
 
-| Block | Time  | Topic                                                              |
-| ----- | ----- | ------------------------------------------------------------------ |
-| 1     | 5 min | Setup + stack bring-up                                             |
-| 2     | 10 min | Audit walkthrough across all four fixtures                        |
-| 2B    | 10 min | LLM data review (NL → rule → findings + narrative)                |
-| 3     | 10 min | CRM integration-prep (SITS → Salesforce, SITS → Dynamics)         |
-| 4     | 15 min | Bidirectional Banner↔SITS migration + parallel-run verification   |
-| 5     | 5 min | Q&A buffer / "what would Phase C / D add"                          |
+| Block | Time   | Topic                                                           |
+| ----- | ------ | --------------------------------------------------------------- |
+| 1     | 5 min  | Setup + stack bring-up                                          |
+| 2     | 10 min | Audit walkthrough across all four fixtures                      |
+| 2B    | 10 min | LLM data review (NL → rule → findings + narrative)              |
+| 3     | 10 min | CRM integration-prep (SITS → Salesforce, SITS → Dynamics)       |
+| 4     | 15 min | Bidirectional Banner↔SITS migration + parallel-run verification |
+| 5     | 5 min  | Q&A buffer / "what would Phase C / D add"                       |
 
 ---
 
@@ -42,6 +42,7 @@ curl -s http://localhost:3000/health | jq
 Stay on the terminal; the dashboard URL goes up at `http://localhost:5173`.
 
 **Talking points** (≤ 60 seconds each):
+
 - "DataBridge is the data-quality + migration layer that sits between
   your operational systems and your warehouse / collections."
 - "Four sources today: Banner, SITS, Salesforce Education Cloud,
@@ -141,46 +142,54 @@ is documented per prompt — these are the scripted prompts the
 DeterministicMockProvider knows how to answer, so the demo works
 without paid LLM access.
 
-1. **Salesforce — shared placeholder email** *(fixture: salesforce-edu-westmidlands)*
+1. **Salesforce — shared placeholder email** _(fixture: salesforce-edu-westmidlands)_
+
    ```
    contacts with the placeholder shared email
    ```
+
    Expected: rule `contacts-shared-email`, severity `ERROR`, 2 of 5 sample
    contacts flagged (the two test rows with the shared placeholder
    address). Point at the **prompt sha256** and **response sha256** in the
    provenance pane: "That's what we hand to auditors. The raw prompt is
    never stored."
 
-2. **Salesforce — FERPA withheld but not opted out** *(same fixture)*
+2. **Salesforce — FERPA withheld but not opted out** _(same fixture)_
+
    ```
    contacts with FERPA withheld but not opted out of email
    ```
+
    Expected: rule `contacts-ferpa-mismatch`, severity `ERROR`, 2 of 5
    sample contacts flagged. Highlight that this is a compound predicate
    (`and` of two `eq` clauses) — the grammar supports `and / or / not`
    nesting but never free SQL.
 
-3. **Banner — legacy XX_LEGACY major code** *(fixture: banner-r2t-2024)*
+3. **Banner — legacy XX_LEGACY major code** _(fixture: banner-r2t-2024)_
+
    ```
    banner students whose major code is XX_LEGACY
    ```
+
    Expected: rule `banner-major-legacy`, severity `WARN`, 2 of 5 sample
    students flagged (the codeset-drift rows from Phase A). Point at the
    `fieldsRead` row: "We validated every field reference against the
    dictionary. If the LLM hallucinated `SGBSTDN_NONEXISTENT_FIELD` the
    compiler returns 422 — the rule is never executed."
 
-4. **SITS — missing HUSID** *(fixture: sits-southcoast-2024)*
+4. **SITS — missing HUSID** _(fixture: sits-southcoast-2024)_
+
    ```
    sits students whose husid is null
    ```
+
    Expected: rule `sits-missing-husid`, severity `WARN`, 1 of 5 sample
    students flagged. Use this to talk about HESA submission readiness:
    "HUSID gaps block your HESA return. We've watched institutions ship
    their first sync at midnight and learn about HUSID gaps at 2 a.m.
    Now you learn at the audit step."
 
-5. **Dynamics — opt-out parity** *(fixture: dynamics365-edu-northpennines)*
+5. **Dynamics — opt-out parity** _(fixture: dynamics365-edu-northpennines)_
    ```
    dataverse contacts with donotbulkemail true
    ```
@@ -205,13 +214,13 @@ response. The full provenance record is persisted via
 
 ### Provider configuration
 
-| Provider                | Env var(s)                                                          | Cost ceiling default |
-| ----------------------- | ------------------------------------------------------------------- | -------------------- |
-| DeterministicMock       | *(none — default)*                                                  | $0.50                |
-| OpenAI                  | `OPENAI_API_KEY`, `OPENAI_MODEL` (default `gpt-4o-mini`)            | $0.50                |
-| Anthropic               | `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL` (default `claude-3-5-haiku`) | $0.50                |
-| Azure OpenAI            | `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_DEPLOYMENT` | $0.50          |
-| Force mock              | `DATABRIDGE_LLM_FORCE_MOCK=1`                                       | $0.50                |
+| Provider          | Env var(s)                                                                 | Cost ceiling default |
+| ----------------- | -------------------------------------------------------------------------- | -------------------- |
+| DeterministicMock | _(none — default)_                                                         | $0.50                |
+| OpenAI            | `OPENAI_API_KEY`, `OPENAI_MODEL` (default `gpt-4o-mini`)                   | $0.50                |
+| Anthropic         | `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL` (default `claude-3-5-haiku`)        | $0.50                |
+| Azure OpenAI      | `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_DEPLOYMENT` | $0.50                |
+| Force mock        | `DATABRIDGE_LLM_FORCE_MOCK=1`                                              | $0.50                |
 
 If no real provider is configured, the deterministic mock is selected
 automatically. The cost ceiling is per-call and configurable via the
@@ -252,7 +261,7 @@ Sample output:
 ```json
 {
   "sitsToSalesforce": { "create": 200, "update": 2000, "skip": 0, "reject": 0 },
-  "sitsToDynamics":   { "create": 100, "update": 2099, "skip": 1, "reject": 0 }
+  "sitsToDynamics": { "create": 100, "update": 2099, "skip": 1, "reject": 0 }
 }
 ```
 

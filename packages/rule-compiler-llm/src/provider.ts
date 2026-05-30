@@ -63,7 +63,7 @@ export interface LlmProvider {
     schema: OutputSchema,
     parser: (raw: unknown) => T,
     callerSurface: string,
-    options?: LlmCallOptions,
+    options?: LlmCallOptions
   ): Promise<LlmStructuredResponse<T>>;
 }
 
@@ -115,7 +115,7 @@ export class DeterministicMockProvider implements LlmProvider {
     _schema: OutputSchema,
     parser: (raw: unknown) => T,
     callerSurface: string,
-    options: LlmCallOptions = {},
+    options: LlmCallOptions = {}
   ): Promise<LlmStructuredResponse<T>> {
     const start = this.now().getTime();
     const raw = this.lookup(prompt);
@@ -126,7 +126,7 @@ export class DeterministicMockProvider implements LlmProvider {
       throw new Error(
         `DeterministicMockProvider: canned response did not parse for caller "${callerSurface}": ${
           err instanceof Error ? err.message : String(err)
-        }`,
+        }`
       );
     }
     const end = start + this.latencyMs;
@@ -137,14 +137,17 @@ export class DeterministicMockProvider implements LlmProvider {
       prompt,
       response: output,
       latencyMs: this.latencyMs,
-      tokens: { input: estimateTokens(prompt), output: estimateTokens(JSON.stringify(output)), total: 0 },
+      tokens: {
+        input: estimateTokens(prompt),
+        output: estimateTokens(JSON.stringify(output)),
+        total: 0,
+      },
       costUsd: 0,
       now: () => new Date(end),
       ...(options.tags ? { tags: options.tags } : {}),
     });
     if (provenance.tokens) {
-      provenance.tokens.total =
-        (provenance.tokens.input ?? 0) + (provenance.tokens.output ?? 0);
+      provenance.tokens.total = (provenance.tokens.input ?? 0) + (provenance.tokens.output ?? 0);
     }
     // Charge $0 against the cost ceiling for symmetry with real providers.
     options.costCeiling?.charge(0);
@@ -161,7 +164,7 @@ export class DeterministicMockProvider implements LlmProvider {
     }
     if (this.defaultResponse !== undefined) return this.defaultResponse;
     throw new Error(
-      `DeterministicMockProvider: no canned response matched prompt "${truncate(prompt)}"`,
+      `DeterministicMockProvider: no canned response matched prompt "${truncate(prompt)}"`
     );
   }
 }
@@ -229,7 +232,7 @@ function estimateCostUsd(
   model: string,
   inputTokens: number,
   outputTokens: number,
-  override?: { inputCostPer1k?: number; outputCostPer1k?: number },
+  override?: { inputCostPer1k?: number; outputCostPer1k?: number }
 ): number {
   const t = DEFAULT_COSTS[model];
   const inputPer1k = override?.inputCostPer1k ?? t?.input ?? 0;
@@ -258,24 +261,29 @@ export class OpenAiProvider implements LlmProvider {
     schema: OutputSchema,
     parser: (raw: unknown) => T,
     callerSurface: string,
-    options: LlmCallOptions = {},
+    options: LlmCallOptions = {}
   ): Promise<LlmStructuredResponse<T>> {
     const client = await this.loadClient();
     const now = this.config.now ?? (() => new Date());
     const start = now().getTime();
-    const result = await (client as {
-      chat: {
-        completions: {
-          create: (req: unknown) => Promise<{
-            choices: Array<{ message: { content: string } }>;
-            usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number };
-          }>;
+    const result = await (
+      client as {
+        chat: {
+          completions: {
+            create: (req: unknown) => Promise<{
+              choices: Array<{ message: { content: string } }>;
+              usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number };
+            }>;
+          };
         };
-      };
-    }).chat.completions.create({
+      }
+    ).chat.completions.create({
       model: this.model,
       messages: [{ role: "user", content: prompt }],
-      response_format: { type: "json_schema", json_schema: { name: schema.name, schema: schema.jsonSchema, strict: true } },
+      response_format: {
+        type: "json_schema",
+        json_schema: { name: schema.name, schema: schema.jsonSchema, strict: true },
+      },
       ...(options.maxTokens !== undefined ? { max_tokens: options.maxTokens } : {}),
       ...(options.temperature !== undefined ? { temperature: options.temperature } : {}),
     });
@@ -316,7 +324,7 @@ export class OpenAiProvider implements LlmProvider {
         };
         const Ctor = mod.default ?? mod.OpenAI;
         if (!Ctor) {
-          throw new Error('OpenAI SDK is loaded but has no default/OpenAI export');
+          throw new Error("OpenAI SDK is loaded but has no default/OpenAI export");
         }
         const opts: { apiKey: string; baseURL?: string } = { apiKey: this.config.apiKey };
         if (this.config.baseUrl !== undefined) opts.baseURL = this.config.baseUrl;
@@ -325,7 +333,7 @@ export class OpenAiProvider implements LlmProvider {
         throw new Error(
           `OpenAiProvider: the "openai" package is required. Install it in the consuming app: pnpm add openai. Underlying: ${
             err instanceof Error ? err.message : String(err)
-          }`,
+          }`
         );
       }
     })();
@@ -352,19 +360,21 @@ export class AnthropicProvider implements LlmProvider {
     schema: OutputSchema,
     parser: (raw: unknown) => T,
     callerSurface: string,
-    options: LlmCallOptions = {},
+    options: LlmCallOptions = {}
   ): Promise<LlmStructuredResponse<T>> {
     const client = await this.loadClient();
     const now = this.config.now ?? (() => new Date());
     const start = now().getTime();
-    const result = await (client as {
-      messages: {
-        create: (req: unknown) => Promise<{
-          content: Array<{ type: string; text?: string; input?: unknown }>;
-          usage?: { input_tokens?: number; output_tokens?: number };
-        }>;
-      };
-    }).messages.create({
+    const result = await (
+      client as {
+        messages: {
+          create: (req: unknown) => Promise<{
+            content: Array<{ type: string; text?: string; input?: unknown }>;
+            usage?: { input_tokens?: number; output_tokens?: number };
+          }>;
+        };
+      }
+    ).messages.create({
       model: this.model,
       max_tokens: options.maxTokens ?? 1024,
       messages: [{ role: "user", content: prompt }],
@@ -424,7 +434,7 @@ export class AnthropicProvider implements LlmProvider {
         throw new Error(
           `AnthropicProvider: the "@anthropic-ai/sdk" package is required. Install it in the consuming app: pnpm add @anthropic-ai/sdk. Underlying: ${
             err instanceof Error ? err.message : String(err)
-          }`,
+          }`
         );
       }
     })();
@@ -451,32 +461,30 @@ export class AzureOpenAiProvider implements LlmProvider {
     schema: OutputSchema,
     parser: (raw: unknown) => T,
     callerSurface: string,
-    options: LlmCallOptions = {},
+    options: LlmCallOptions = {}
   ): Promise<LlmStructuredResponse<T>> {
     const client = await this.loadClient();
     const now = this.config.now ?? (() => new Date());
     const start = now().getTime();
-    const result = await (client as {
-      getChatCompletions: (
-        deployment: string,
-        messages: Array<{ role: string; content: string }>,
-        opts: unknown,
-      ) => Promise<{
-        choices: Array<{ message?: { content?: string } }>;
-        usage?: { promptTokens?: number; completionTokens?: number; totalTokens?: number };
-      }>;
-    }).getChatCompletions(
-      this.config.deployment,
-      [{ role: "user", content: prompt }],
-      {
-        responseFormat: {
-          type: "json_schema",
-          jsonSchema: { name: schema.name, schema: schema.jsonSchema, strict: true },
-        },
-        ...(options.maxTokens !== undefined ? { maxTokens: options.maxTokens } : {}),
-        ...(options.temperature !== undefined ? { temperature: options.temperature } : {}),
+    const result = await (
+      client as {
+        getChatCompletions: (
+          deployment: string,
+          messages: Array<{ role: string; content: string }>,
+          opts: unknown
+        ) => Promise<{
+          choices: Array<{ message?: { content?: string } }>;
+          usage?: { promptTokens?: number; completionTokens?: number; totalTokens?: number };
+        }>;
+      }
+    ).getChatCompletions(this.config.deployment, [{ role: "user", content: prompt }], {
+      responseFormat: {
+        type: "json_schema",
+        jsonSchema: { name: schema.name, schema: schema.jsonSchema, strict: true },
       },
-    );
+      ...(options.maxTokens !== undefined ? { maxTokens: options.maxTokens } : {}),
+      ...(options.temperature !== undefined ? { temperature: options.temperature } : {}),
+    });
     const content = result.choices?.[0]?.message?.content ?? "";
     const raw = safeParseJson(content);
     const output = parser(raw);
@@ -509,7 +517,11 @@ export class AzureOpenAiProvider implements LlmProvider {
     this.clientPromise = (async () => {
       try {
         const mod = (await import("@azure/openai")) as {
-          OpenAIClient?: new (endpoint: string, credential: unknown, opts?: { apiVersion?: string }) => unknown;
+          OpenAIClient?: new (
+            endpoint: string,
+            credential: unknown,
+            opts?: { apiVersion?: string }
+          ) => unknown;
           AzureKeyCredential?: new (key: string) => unknown;
         };
         if (!mod.OpenAIClient || !mod.AzureKeyCredential) {
@@ -523,7 +535,7 @@ export class AzureOpenAiProvider implements LlmProvider {
         throw new Error(
           `AzureOpenAiProvider: the "@azure/openai" package is required. Install it in the consuming app: pnpm add @azure/openai. Underlying: ${
             err instanceof Error ? err.message : String(err)
-          }`,
+          }`
         );
       }
     })();
@@ -563,7 +575,7 @@ export interface ProviderSelectionEnv {
  */
 export function selectProviderFromEnv(
   env: ProviderSelectionEnv = process.env as ProviderSelectionEnv,
-  mockOptions: DeterministicMockProviderOptions = {},
+  mockOptions: DeterministicMockProviderOptions = {}
 ): LlmProvider {
   if (env.DATABRIDGE_LLM_FORCE_MOCK === "1" || env.DATABRIDGE_LLM_FORCE_MOCK === "true") {
     return new DeterministicMockProvider(mockOptions);

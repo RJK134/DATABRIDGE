@@ -22,7 +22,7 @@ const sit = (id: string, overrides: Partial<PersonRecord> = {}): PersonRecord =>
 describe("buildReconciliationReport — exact policy", () => {
   it("matches on shared husid, separates lonely records, exposes counts", () => {
     const a1 = ban("B-1", { husid: "1234567890123", firstName: "Alice", lastName: "Smith" });
-    const a2 = ban("B-2", { husid: "9999999999999", firstName: "Bob",   lastName: "Jones" });
+    const a2 = ban("B-2", { husid: "9999999999999", firstName: "Bob", lastName: "Jones" });
     const b1 = sit("S-1", { husid: "1234567890123", firstName: "Alice", lastName: "Smith" });
     const b2 = sit("S-2", { husid: "8888888888888", firstName: "Carla", lastName: "Doe" });
 

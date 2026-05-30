@@ -6,10 +6,14 @@
   "version": "1.0.0",
   "description": "Banner residency code to HESA fee-status code. UK-centric default mapping; US deployments must register a tenant override (cross-walk §15.6).",
   "entries": [
-    { "sourceCode": "H",  "targetCode": "01", "notes": "Home (UK)" },
-    { "sourceCode": "E",  "targetCode": "02", "notes": "EU (pre-Brexit cohorts; new cohorts use 03 — register tenant override)" },
-    { "sourceCode": "O",  "targetCode": "03", "notes": "Overseas (rest of world)" },
-    { "sourceCode": "I",  "targetCode": "03", "notes": "International (rest of world)" },
-    { "sourceCode": "U",  "targetCode": "99", "notes": "Unknown / not yet determined" }
+    { "sourceCode": "H", "targetCode": "01", "notes": "Home (UK)" },
+    {
+      "sourceCode": "E",
+      "targetCode": "02",
+      "notes": "EU (pre-Brexit cohorts; new cohorts use 03 — register tenant override)"
+    },
+    { "sourceCode": "O", "targetCode": "03", "notes": "Overseas (rest of world)" },
+    { "sourceCode": "I", "targetCode": "03", "notes": "International (rest of world)" },
+    { "sourceCode": "U", "targetCode": "99", "notes": "Unknown / not yet determined" }
   ]
 }

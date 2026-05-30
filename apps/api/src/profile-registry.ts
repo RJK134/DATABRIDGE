@@ -37,7 +37,10 @@ function summarize(p: Profile | Record<string, unknown>, fallbackId: string): Pr
   return summary;
 }
 
-export const PROFILE_REGISTRY: ReadonlyArray<{ id: string; profile: Profile | Record<string, unknown> }> = [
+export const PROFILE_REGISTRY: ReadonlyArray<{
+  id: string;
+  profile: Profile | Record<string, unknown>;
+}> = [
   { id: "hesa-tdp", profile: HESA_TDP_PROFILE },
   // profile-sits export name is best-effort; fall back to the namespace itself.
   {
@@ -53,7 +56,9 @@ export function listProfileSummaries(): ProfileSummary[] {
   return PROFILE_REGISTRY.map((p) => summarize(p.profile, p.id));
 }
 
-export function findProfile(id: string): { id: string; profile: Profile | Record<string, unknown> } | undefined {
+export function findProfile(
+  id: string
+): { id: string; profile: Profile | Record<string, unknown> } | undefined {
   return PROFILE_REGISTRY.find((p) => p.id === id);
 }
 

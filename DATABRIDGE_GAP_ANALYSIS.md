@@ -26,28 +26,28 @@ Everything else (interrogation, audit, error logging/fixing, provenance, identit
 
 ### 2.1 Source-system adapters — 9 packages
 
-| Adapter | Mode | Surface | Status |
-|---|---|---|---|
-| `adapter-sits-oracle` | Oracle SQL | Direct OS warehouse | Live |
-| `adapter-sits-api` | REST | SITS REST gateway | Live |
-| `adapter-sits-file` | File | XML/CSV extract drops | Live |
-| `adapter-banner-oracle` | Oracle SQL | Ellucian Banner warehouse | Live |
-| `adapter-banner-ethos` | REST | Banner Ethos API | Live |
-| `adapter-workday-raas` | REST | Workday RaaS reports | **v1.2: live HTTP** with stub fallback |
-| `adapter-techone-financeone` | REST | F1 REST + CIA cube | **v1.2: CIA fallback** controller |
-| `adapter-sjms5` | REST | Freddie's own SJMS 2.5 | Live |
-| `adapter-spec` | n/a | Shared adapter contract | — |
+| Adapter                      | Mode       | Surface                   | Status                                 |
+| ---------------------------- | ---------- | ------------------------- | -------------------------------------- |
+| `adapter-sits-oracle`        | Oracle SQL | Direct OS warehouse       | Live                                   |
+| `adapter-sits-api`           | REST       | SITS REST gateway         | Live                                   |
+| `adapter-sits-file`          | File       | XML/CSV extract drops     | Live                                   |
+| `adapter-banner-oracle`      | Oracle SQL | Ellucian Banner warehouse | Live                                   |
+| `adapter-banner-ethos`       | REST       | Banner Ethos API          | Live                                   |
+| `adapter-workday-raas`       | REST       | Workday RaaS reports      | **v1.2: live HTTP** with stub fallback |
+| `adapter-techone-financeone` | REST       | F1 REST + CIA cube        | **v1.2: CIA fallback** controller      |
+| `adapter-sjms5`              | REST       | Freddie's own SJMS 2.5    | Live                                   |
+| `adapter-spec`               | n/a        | Shared adapter contract   | —                                      |
 
 All adapters implement the same `AdapterSpec` contract: `sampleRows`, `streamRows`, `getDictionary`, `getCodelists` — so the engine treats every source uniformly. This is the foundation of "interrogate any university's data the same way regardless of vendor".
 
 ### 2.2 Audit packs — 4 native packs, 49 rules total
 
-| Pack | Rules | Family | Notes |
-|---|---|---|---|
-| `audit-pack-sits-native` | 10 | `SITS-NATIVE` | SRA/SCE/SMR integrity, codeset coverage |
-| `audit-pack-banner-native` | 10 | `BANNER-NATIVE` | SPRIDEN/STVCAMP/SHRTGPA integrity |
-| `audit-pack-workday-native` | 16 | `WORKDAY-INTEGRITY` | Identity, programme, registration, marks, awards, HESA, BPs, finance |
-| `audit-pack-techone-fin1-native` | 13 | `TECHONE-FIN1-INTEGRITY` | AR, GL, postings, codesets per F1 §19 |
+| Pack                             | Rules | Family                   | Notes                                                                |
+| -------------------------------- | ----- | ------------------------ | -------------------------------------------------------------------- |
+| `audit-pack-sits-native`         | 10    | `SITS-NATIVE`            | SRA/SCE/SMR integrity, codeset coverage                              |
+| `audit-pack-banner-native`       | 10    | `BANNER-NATIVE`          | SPRIDEN/STVCAMP/SHRTGPA integrity                                    |
+| `audit-pack-workday-native`      | 16    | `WORKDAY-INTEGRITY`      | Identity, programme, registration, marks, awards, HESA, BPs, finance |
+| `audit-pack-techone-fin1-native` | 13    | `TECHONE-FIN1-INTEGRITY` | AR, GL, postings, codesets per F1 §19                                |
 
 Rules are versioned, ID-stable (e.g. `WORKDAY-INTEGRITY-04`), and emit structured findings with severity, surface, and reproducible context.
 
@@ -130,13 +130,13 @@ All 5 source systems (SITS three flavours, Banner two flavours, Workday RaaS, Te
 Working: `sits → hesa-tdp` (1 profile, end-to-end).
 Missing (each is a real UK university transformation scenario):
 
-| From | To | Demand | Effort |
-|---|---|---|---|
-| Banner | SITS | High (Banner-leaving universities → SITS) | 1 sprint |
-| SITS | Workday Student | High (Workday land-grab) | 2 sprints |
-| Banner | Workday Student | High | 2 sprints |
-| Workday | HESA-TDP | High (Workday-on-UK regulatory) | 1 sprint |
-| Banner | HESA-TDP | Medium | 1 sprint |
+| From    | To              | Demand                                    | Effort    |
+| ------- | --------------- | ----------------------------------------- | --------- |
+| Banner  | SITS            | High (Banner-leaving universities → SITS) | 1 sprint  |
+| SITS    | Workday Student | High (Workday land-grab)                  | 2 sprints |
+| Banner  | Workday Student | High                                      | 2 sprints |
+| Workday | HESA-TDP        | High (Workday-on-UK regulatory)           | 1 sprint  |
+| Banner  | HESA-TDP        | Medium                                    | 1 sprint  |
 
 The runner, policy engine, identity reconciler, and parallel-run-verifier already exist — these are profile + mapping work, not engine work.
 
@@ -188,13 +188,13 @@ A UK university running **Banner today, considering SITS** (or **SITS today, con
 
 ### 4.3 Suggested pilot shape (2 weeks, fixed scope)
 
-| Week | Activity |
-|---|---|
-| 1 — Mon-Tue | Deploy DATABRIDGE on a single Azure VM (Postgres + API + CLI). Wire university's read-only Banner / SITS / Workday endpoint. |
-| 1 — Wed-Fri | Run all relevant native audit packs. Produce findings pack v0. Joint triage session — flag waivers, classify severity. |
-| 2 — Mon-Wed | Identity reconciliation across SRM ↔ finance. Schema-mapping session for any custom local extensions. |
-| 2 — Thu | Re-run; deliver `finding-delta` report showing closed/resolved items. Parallel-run-verifier dry-run if a target system is in scope. |
-| 2 — Fri | Readout: gap analysis specific to **their** estate, scoped quote for v1.3/v1.4 features they want next. |
+| Week        | Activity                                                                                                                            |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| 1 — Mon-Tue | Deploy DATABRIDGE on a single Azure VM (Postgres + API + CLI). Wire university's read-only Banner / SITS / Workday endpoint.        |
+| 1 — Wed-Fri | Run all relevant native audit packs. Produce findings pack v0. Joint triage session — flag waivers, classify severity.              |
+| 2 — Mon-Wed | Identity reconciliation across SRM ↔ finance. Schema-mapping session for any custom local extensions.                               |
+| 2 — Thu     | Re-run; deliver `finding-delta` report showing closed/resolved items. Parallel-run-verifier dry-run if a target system is in scope. |
+| 2 — Fri     | Readout: gap analysis specific to **their** estate, scoped quote for v1.3/v1.4 features they want next.                             |
 
 This is a sellable engagement **today** with the current `cc5d38b` codebase.
 
@@ -202,12 +202,12 @@ This is a sellable engagement **today** with the current `cc5d38b` codebase.
 
 ## 5. 6-month roadmap to enterprise-ready
 
-| Milestone | Scope | Outcome |
-|---|---|---|
-| **v1.3** (4-6 weeks) | LLM-backed suggester · NL→rule compiler · embedding index · banner↔sits + workday↔hesa-tdp profiles | "AI-driven" credible. 3 migration profiles. |
-| **v1.4** (6-8 weeks) | Salesforce Education Cloud adapter (read) · Dynamics 365 Education adapter (read) · `target-adapter-azure-adf` | CRM integration-prep + Azure target. |
-| **v1.5** (6-8 weeks) | `target-adapter-oracle-goldengate` · Oracle ADW target · RBAC + multi-tenancy in apps/api | Oracle target + safe multi-customer hosting. |
-| **v1.6** (4 weeks) | OpenTelemetry · Helm chart · SOC 2 evidence pack · DPIA template | Enterprise procurement-ready. |
+| Milestone            | Scope                                                                                                          | Outcome                                      |
+| -------------------- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| **v1.3** (4-6 weeks) | LLM-backed suggester · NL→rule compiler · embedding index · banner↔sits + workday↔hesa-tdp profiles            | "AI-driven" credible. 3 migration profiles.  |
+| **v1.4** (6-8 weeks) | Salesforce Education Cloud adapter (read) · Dynamics 365 Education adapter (read) · `target-adapter-azure-adf` | CRM integration-prep + Azure target.         |
+| **v1.5** (6-8 weeks) | `target-adapter-oracle-goldengate` · Oracle ADW target · RBAC + multi-tenancy in apps/api                      | Oracle target + safe multi-customer hosting. |
+| **v1.6** (4 weeks)   | OpenTelemetry · Helm chart · SOC 2 evidence pack · DPIA template                                               | Enterprise procurement-ready.                |
 
 End-state at v1.6: a defensible enterprise pitch as "the AI-driven data-interrogation, audit, integration-prep and migration tool for UK HE system transformations across Banner/SITS/Workday/SJMS, landing on Azure or Oracle".
 
@@ -215,10 +215,10 @@ End-state at v1.6: a defensible enterprise pitch as "the AI-driven data-interrog
 
 ## 6. Bottom line
 
-**You're closer than the marketing language suggests for audit + interrogation, and further than it suggests for CRM/platforming/AI.** For a Banner ↔ SITS or Workday ↔ SITS *review* engagement — which is the most common UK conversation right now — you have a sellable pilot today on `cc5d38b`. For a *transformation* engagement that lands on Azure or Oracle with CRM integration, you need v1.4 and v1.5, which is ~3-4 months of focused work on top of the existing engine.
+**You're closer than the marketing language suggests for audit + interrogation, and further than it suggests for CRM/platforming/AI.** For a Banner ↔ SITS or Workday ↔ SITS _review_ engagement — which is the most common UK conversation right now — you have a sellable pilot today on `cc5d38b`. For a _transformation_ engagement that lands on Azure or Oracle with CRM integration, you need v1.4 and v1.5, which is ~3-4 months of focused work on top of the existing engine.
 
 The engine itself (adapter contract, audit pack contract, findings ops, identity reconciliation, parallel-run verification, migration runner, learning store) is sound and would not need re-architecting to support the missing surfaces. Everything outstanding is adapter-shaped or profile-shaped work, not engine-shaped.
 
 ---
 
-*Sources: live workspace at `cc5d38b`. PR [#8](https://github.com/RJK134/DATABRIDGE/pull/8). Package inventory verified against `packages/*` on the `chore/v1.2-followups` branch.*
+_Sources: live workspace at `cc5d38b`. PR [#8](https://github.com/RJK134/DATABRIDGE/pull/8). Package inventory verified against `packages/_`on the`chore/v1.2-followups` branch.\*

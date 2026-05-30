@@ -64,17 +64,17 @@ institution; group / collegiate institutions sometimes federate via separate
 Finance One uses **3-letter module codes** prefixed on most logical tables and
 forms:
 
-| Prefix | Module                          |
-| ------ | ------------------------------- |
-| `AR`   | Accounts Receivable             |
-| `AP`   | Accounts Payable                |
-| `GL`   | General Ledger                  |
-| `PJ`   | Project Ledger                  |
-| `FA`   | Fixed Assets                    |
-| `PO`   | Purchasing                      |
-| `IN`   | Inventory                       |
+| Prefix | Module                                     |
+| ------ | ------------------------------------------ |
+| `AR`   | Accounts Receivable                        |
+| `AP`   | Accounts Payable                           |
+| `GL`   | General Ledger                             |
+| `PJ`   | Project Ledger                             |
+| `FA`   | Fixed Assets                               |
+| `PO`   | Purchasing                                 |
+| `IN`   | Inventory                                  |
 | `HR`   | (Foundation — only if HR/Payroll licensed) |
-| `WF`   | Connect workflow                |
+| `WF`   | Connect workflow                           |
 
 Physical tables on Oracle are typically `T1_<MODULE>_<ENTITY>` (e.g.
 `T1_AR_CUSTOMER`, `T1_AR_TRANSACTION`, `T1_GL_ACCOUNT`). Reporting views in CIA
@@ -120,18 +120,18 @@ canonical `studentId` mapping — never hard-code column positions.
 
 Core table: `T1_AR_CUSTOMER`.
 
-| Column                | Description                                          |
-| --------------------- | ---------------------------------------------------- |
-| `CustomerCode`        | PK, alphanumeric. Usually the SIS student number.    |
-| `CustomerName`        | Display name (LastName, FirstName).                  |
-| `CustomerTypeCode`    | FK → `T1_AR_CUSTOMER_TYPE`; e.g. `STU`, `SPONSOR`.   |
-| `StatusCode`          | `ACTIVE`, `INACTIVE`, `ON_HOLD`.                     |
-| `CreditLimitAmount`   | Numeric; often 0 for students.                       |
-| `PaymentTermsCode`    | FK → `T1_AR_PAYMENT_TERMS`.                          |
-| `TaxCode`             | FK → `T1_TX_TAX_CODE`.                               |
-| `DefaultCurrencyCode` | ISO 4217.                                            |
-| `DateCreated`         | Datetime, system-stamped.                            |
-| `DateLastModified`    | Datetime, system-stamped.                            |
+| Column                | Description                                        |
+| --------------------- | -------------------------------------------------- |
+| `CustomerCode`        | PK, alphanumeric. Usually the SIS student number.  |
+| `CustomerName`        | Display name (LastName, FirstName).                |
+| `CustomerTypeCode`    | FK → `T1_AR_CUSTOMER_TYPE`; e.g. `STU`, `SPONSOR`. |
+| `StatusCode`          | `ACTIVE`, `INACTIVE`, `ON_HOLD`.                   |
+| `CreditLimitAmount`   | Numeric; often 0 for students.                     |
+| `PaymentTermsCode`    | FK → `T1_AR_PAYMENT_TERMS`.                        |
+| `TaxCode`             | FK → `T1_TX_TAX_CODE`.                             |
+| `DefaultCurrencyCode` | ISO 4217.                                          |
+| `DateCreated`         | Datetime, system-stamped.                          |
+| `DateLastModified`    | Datetime, system-stamped.                          |
 
 Address & contact data is normalised out into `T1_AR_CUSTOMER_ADDRESS` and
 `T1_AR_CUSTOMER_CONTACT`. There is no concept of "preferred name" — adapters
@@ -222,13 +222,13 @@ row in `T1_WF_INSTANCE` referencing the credit-note's `TransactionId`.
 Each AR/AP transaction line generates one or more GL postings into
 `T1_GL_TRANSACTION` with a chartfield combination:
 
-| Segment        | Typical HE meaning                              |
-| -------------- | ----------------------------------------------- |
-| `Entity`       | Ledger entity (often `01` main, `02` subsidiary). |
-| `Account`      | Income / expense / balance-sheet code.          |
-| `CostCentre`   | School / faculty / professional service.        |
-| `Project`      | Research grant or restricted-fund code.         |
-| `Activity`     | Optional analysis code.                         |
+| Segment      | Typical HE meaning                                |
+| ------------ | ------------------------------------------------- |
+| `Entity`     | Ledger entity (often `01` main, `02` subsidiary). |
+| `Account`    | Income / expense / balance-sheet code.            |
+| `CostCentre` | School / faculty / professional service.          |
+| `Project`    | Research grant or restricted-fund code.           |
+| `Activity`   | Optional analysis code.                           |
 
 The chartfield combination MUST validate against `T1_GL_VALID_COMBINATION`
 before posting. Invalid combinations land in a suspense account
@@ -373,7 +373,7 @@ emit `AuditFinding` records with severity `CRITICAL | ERROR | WARN | INFO`.
   from the SIS-side fee-assessment value by more than 1.00 in ledger currency
   → **ERROR**.
 - `techone.financeone.fin1.duplicate_invoice` — same `(CustomerCode, Product,
-  AcademicYear, TermCode)` invoiced twice without an intervening credit-note
+AcademicYear, TermCode)` invoiced twice without an intervening credit-note
   → **ERROR**.
 
 ### 19.3 Sponsor / bursary integrity
@@ -441,7 +441,7 @@ emit `AuditFinding` records with severity `CRITICAL | ERROR | WARN | INFO`.
 ### 19.8 HESRC / TCSI / Student-Loans reporting hooks
 
 - `techone.financeone.fin1.slc_loan_variance` (UK) — `(SLC tuition loan
-  amount for student/year) - (tuition invoiced for student/year)` >
+amount for student/year) - (tuition invoiced for student/year)` >
   £100 in absolute value → **ERROR**, surface in HESA census pack.
 - `techone.financeone.fin1.help_balance_mismatch` (AU) — TCSI-reportable
   HELP balance ≠ sum of `T1_AR_TRANSACTION` HELP receipts year-to-date →

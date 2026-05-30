@@ -36,9 +36,7 @@ export interface BidirectionalIndex {
 }
 
 /** Build a bidirectional Banner↔SITS↔canonical index. */
-export function buildBidirectionalIndex(
-  records: readonly PersonRecord[],
-): BidirectionalIndex {
+export function buildBidirectionalIndex(records: readonly PersonRecord[]): BidirectionalIndex {
   const byCanonical = new Map<string, BidirectionalIndexEntry>();
   const byBanner = new Map<string, BidirectionalIndexEntry>();
   const bySits = new Map<string, BidirectionalIndexEntry>();
@@ -95,7 +93,7 @@ function attachToEntry(entry: BidirectionalIndexEntry, r: PersonRecord): void {
 function perSystemMap(
   system: SourceSystemTag,
   byBanner: ReadonlyMap<string, BidirectionalIndexEntry>,
-  bySits: ReadonlyMap<string, BidirectionalIndexEntry>,
+  bySits: ReadonlyMap<string, BidirectionalIndexEntry>
 ): ReadonlyMap<string, BidirectionalIndexEntry> | undefined {
   if (system === "banner") return byBanner;
   if (system === "sits") return bySits;
@@ -105,7 +103,7 @@ function perSystemMap(
 /** Convenience: resolve canonicalId from a Banner PIDM. */
 export function resolveCanonicalFromBanner(
   index: BidirectionalIndex,
-  pidm: string,
+  pidm: string
 ): string | undefined {
   return index.byBanner.get(pidm)?.canonicalId;
 }
@@ -113,23 +111,17 @@ export function resolveCanonicalFromBanner(
 /** Convenience: resolve canonicalId from a SITS STU_CODE. */
 export function resolveCanonicalFromSits(
   index: BidirectionalIndex,
-  stuCode: string,
+  stuCode: string
 ): string | undefined {
   return index.bySits.get(stuCode)?.canonicalId;
 }
 
 /** Convenience: lookup the SITS counterpart of a Banner PIDM (forward). */
-export function bannerToSits(
-  index: BidirectionalIndex,
-  pidm: string,
-): string | undefined {
+export function bannerToSits(index: BidirectionalIndex, pidm: string): string | undefined {
   return index.byBanner.get(pidm)?.sits;
 }
 
 /** Convenience: lookup the Banner counterpart of a SITS STU_CODE (reverse). */
-export function sitsToBanner(
-  index: BidirectionalIndex,
-  stuCode: string,
-): string | undefined {
+export function sitsToBanner(index: BidirectionalIndex, stuCode: string): string | undefined {
   return index.bySits.get(stuCode)?.banner;
 }

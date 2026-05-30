@@ -57,7 +57,7 @@ describe("TechOneConnectClient", () => {
   it("re-mints a token when the cached one is within the 60s cushion", async () => {
     let now = 1_000_000;
     const fetchImpl: FetchLike = vi.fn(async () =>
-      jsonRes({ access_token: `tok-at-${now}`, expires_in: 60 }),
+      jsonRes({ access_token: `tok-at-${now}`, expires_in: 60 })
     );
     const client = new TechOneConnectClient({
       config: CONFIG,
@@ -74,8 +74,7 @@ describe("TechOneConnectClient", () => {
   });
 
   it("throws a descriptive error when the token endpoint returns 401", async () => {
-    const fetchImpl: FetchLike = async () =>
-      jsonRes("invalid_client", { status: 401 });
+    const fetchImpl: FetchLike = async () => jsonRes("invalid_client", { status: 401 });
     const client = new TechOneConnectClient({
       config: CONFIG,
       clientSecret: "s",
@@ -109,7 +108,7 @@ describe("TechOneConnectClient", () => {
     expect(out.greeting).toBe("hello");
     expect(calls).toHaveLength(1);
     expect(calls[0]?.url).toBe(
-      "https://customer.techoneglobal.com/connect/api/v1/metadata/health?ledger=01",
+      "https://customer.techoneglobal.com/connect/api/v1/metadata/health?ledger=01"
     );
     expect(calls[0]?.auth).toBe("Bearer tok-xyz");
   });
@@ -218,8 +217,7 @@ describe("TechOneConnectClient", () => {
       const page = Number.parseInt(u.searchParams.get("pageNumber") ?? "1", 10);
       const pageSize = Number.parseInt(u.searchParams.get("pageSize") ?? "500", 10);
       // 3 records total, pageSize 2 → 2 pages.
-      const data =
-        page === 1 ? [{ id: "a" }, { id: "b" }] : page === 2 ? [{ id: "c" }] : [];
+      const data = page === 1 ? [{ id: "a" }, { id: "b" }] : page === 2 ? [{ id: "c" }] : [];
       return jsonRes({ data, pageNumber: page, pageSize, totalRecords: 3 });
     };
     const client = new TechOneConnectClient({

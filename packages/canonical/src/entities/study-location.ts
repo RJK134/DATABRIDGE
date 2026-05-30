@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * StudyLocation — physical or virtual location where the student studies for
@@ -20,8 +20,14 @@ export const StudyLocationZ = z.object({
   /** Partner-provider UKPRN, when the location is a franchise/collaborative. */
   partnerUkprn: z.string().optional(),
   /** Effective period of this location assignment. */
-  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  startDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  endDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
   attributes: z.record(z.unknown()).optional(),
 });
 

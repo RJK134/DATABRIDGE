@@ -70,11 +70,9 @@ export default async function AuditsPage() {
         >
           <p style={{ marginTop: 0 }}>No audits to show yet.</p>
           <p style={{ fontSize: 13, color: "#8b949e", marginBottom: 0 }}>
-            Either the API gateway at <code>{apiBase}</code> is not reachable,
-            or no audits have been triggered. Use{" "}
-            <code>POST {apiBase}/audits/run</code> with{" "}
-            <code>{`{ profileId, tenantId, adapterId?, resourceMap? }`}</code>{" "}
-            to create one.
+            Either the API gateway at <code>{apiBase}</code> is not reachable, or no audits have
+            been triggered. Use <code>POST {apiBase}/audits/run</code> with{" "}
+            <code>{`{ profileId, tenantId, adapterId?, resourceMap? }`}</code> to create one.
           </p>
         </div>
       ) : (
@@ -107,10 +105,7 @@ export default async function AuditsPage() {
             </thead>
             <tbody>
               {audits.map((a) => (
-                <tr
-                  key={a.auditId}
-                  style={{ borderTop: "1px solid #30363d" }}
-                >
+                <tr key={a.auditId} style={{ borderTop: "1px solid #30363d" }}>
                   <td style={td}>
                     <a
                       href={`/audits/${a.auditId}`}
@@ -124,12 +119,8 @@ export default async function AuditsPage() {
                       {a.auditId.slice(0, 8)}…
                     </a>
                   </td>
-                  <td style={{ ...td, fontFamily: "monospace", fontSize: 12 }}>
-                    {a.profileId}
-                  </td>
-                  <td style={{ ...td, fontFamily: "monospace", fontSize: 12 }}>
-                    {a.tenantId}
-                  </td>
+                  <td style={{ ...td, fontFamily: "monospace", fontSize: 12 }}>{a.profileId}</td>
+                  <td style={{ ...td, fontFamily: "monospace", fontSize: 12 }}>{a.tenantId}</td>
                   <td style={td}>
                     <span
                       style={{
@@ -140,12 +131,8 @@ export default async function AuditsPage() {
                       {a.status}
                     </span>
                   </td>
-                  <td style={td}>
-                    {a.report ? a.report.findingsTotal : "—"}
-                  </td>
-                  <td style={td}>
-                    {a.report ? a.report.rowsScanned : "—"}
-                  </td>
+                  <td style={td}>{a.report ? a.report.findingsTotal : "—"}</td>
+                  <td style={td}>{a.report ? a.report.rowsScanned : "—"}</td>
                   <td style={{ ...td, color: "#8b949e", fontSize: 12 }}>
                     {new Date(a.updatedAt).toLocaleString()}
                   </td>

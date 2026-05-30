@@ -29,7 +29,7 @@ export type FetchLike = (
     headers?: Record<string, string>;
     body?: string;
     signal?: AbortSignal;
-  },
+  }
 ) => Promise<{
   ok: boolean;
   status: number;
@@ -149,7 +149,7 @@ export class TechOneConnectClient {
     if (!res.ok) {
       const text = await res.text().catch(() => "");
       throw new Error(
-        `techone-connect: token mint failed: ${res.status} ${res.statusText} — ${text}`,
+        `techone-connect: token mint failed: ${res.status} ${res.statusText} — ${text}`
       );
     }
 
@@ -221,7 +221,7 @@ export class TechOneConnectClient {
       // Non-retryable.
       const text = await res.text().catch(() => "");
       throw new Error(
-        `techone-connect: ${res.status} ${res.statusText} on ${url} — ${text.slice(0, 500)}`,
+        `techone-connect: ${res.status} ${res.statusText} on ${url} — ${text.slice(0, 500)}`
       );
     }
 
@@ -235,7 +235,7 @@ export class TechOneConnectClient {
    * `break` to stop early. Pages use the configured `pageSize`.
    */
   async *paginate<T = Record<string, unknown>>(
-    opts: ConnectGetOptions,
+    opts: ConnectGetOptions
   ): AsyncIterable<ConnectListResponse<T>> {
     let pageNumber = 1;
     while (true) {
@@ -257,7 +257,7 @@ export class TechOneConnectClient {
 
   private buildUrl(
     path: string,
-    query: Record<string, string | number | boolean | undefined> | undefined,
+    query: Record<string, string | number | boolean | undefined> | undefined
   ): string {
     const base = `${this.stripTrailingSlash(this.config.tenantUrl)}/connect/api/v1/${this.stripLeadingSlash(path)}`;
     if (!query) return base;

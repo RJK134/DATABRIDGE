@@ -12,7 +12,7 @@ import {
 describe("sha256Hex / sha256Json / stableStringify", () => {
   it("hashes a known string deterministically", () => {
     expect(sha256Hex("hello")).toBe(
-      "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
+      "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
     );
   });
 
@@ -23,9 +23,7 @@ describe("sha256Hex / sha256Json / stableStringify", () => {
   });
 
   it("stableStringify handles nested arrays and objects", () => {
-    expect(stableStringify({ b: [1, { y: 2, x: 1 }], a: 3 })).toBe(
-      '{"a":3,"b":[1,{"x":1,"y":2}]}',
-    );
+    expect(stableStringify({ b: [1, { y: 2, x: 1 }], a: 3 })).toBe('{"a":3,"b":[1,{"x":1,"y":2}]}');
   });
 
   it("stableStringify handles null + primitive values", () => {

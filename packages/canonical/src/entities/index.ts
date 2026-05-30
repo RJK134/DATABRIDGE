@@ -11,60 +11,55 @@
  */
 
 // Provenance primitives — must export before entities that consume them.
-export * from './provenance.js';
+export * from "./provenance.js";
 
 // Original Phase F entity set.
-export * from './student.js';
-export * from './engagement.js';
-export * from './student-course-session.js';
-export * from './module.js';
-export * from './leaver.js';
-export * from './entry-profile.js';
-export * from './instance.js';
-export * from './study-location.js';
-export * from './ses.js';
-export * from './disability.js';
-export * from './qualification-awarded.js';
-export * from './supervisor-allocation.js';
-export * from './termtime-accommodation.js';
+export * from "./student.js";
+export * from "./engagement.js";
+export * from "./student-course-session.js";
+export * from "./module.js";
+export * from "./leaver.js";
+export * from "./entry-profile.js";
+export * from "./instance.js";
+export * from "./study-location.js";
+export * from "./ses.js";
+export * from "./disability.js";
+export * from "./qualification-awarded.js";
+export * from "./supervisor-allocation.js";
+export * from "./termtime-accommodation.js";
 
 // Phase G additions.
-export * from './contact.js';
-export * from './programme.js';
-export * from './enrolment.js';
-export * from './admissions.js';
-export * from './student-account.js';
-export * from './academic-record.js';
+export * from "./contact.js";
+export * from "./programme.js";
+export * from "./enrolment.js";
+export * from "./admissions.js";
+export * from "./student-account.js";
+export * from "./academic-record.js";
 
-import { StudentZ } from './student.js';
-import { EngagementZ } from './engagement.js';
-import { StudentCourseSessionZ } from './student-course-session.js';
-import { ModuleZ, ModuleInstanceZ } from './module.js';
-import { LeaverZ } from './leaver.js';
-import { EntryProfileZ } from './entry-profile.js';
-import { InstanceZ } from './instance.js';
-import { StudyLocationZ } from './study-location.js';
-import { SesZ } from './ses.js';
-import { DisabilityZ } from './disability.js';
-import { QualificationAwardedZ } from './qualification-awarded.js';
-import { SupervisorAllocationZ } from './supervisor-allocation.js';
-import { TermtimeAccommodationZ } from './termtime-accommodation.js';
-import { AddressZ, EmailAddressZ, PhoneZ } from './contact.js';
-import { ProgrammeZ, ProgrammeEnrolmentZ, AcademicYearEnrolmentZ } from './programme.js';
-import { ModuleEnrolmentZ, ModuleResultZ, AssessmentResultZ } from './enrolment.js';
+import { StudentZ } from "./student.js";
+import { EngagementZ } from "./engagement.js";
+import { StudentCourseSessionZ } from "./student-course-session.js";
+import { ModuleZ, ModuleInstanceZ } from "./module.js";
+import { LeaverZ } from "./leaver.js";
+import { EntryProfileZ } from "./entry-profile.js";
+import { InstanceZ } from "./instance.js";
+import { StudyLocationZ } from "./study-location.js";
+import { SesZ } from "./ses.js";
+import { DisabilityZ } from "./disability.js";
+import { QualificationAwardedZ } from "./qualification-awarded.js";
+import { SupervisorAllocationZ } from "./supervisor-allocation.js";
+import { TermtimeAccommodationZ } from "./termtime-accommodation.js";
+import { AddressZ, EmailAddressZ, PhoneZ } from "./contact.js";
+import { ProgrammeZ, ProgrammeEnrolmentZ, AcademicYearEnrolmentZ } from "./programme.js";
+import { ModuleEnrolmentZ, ModuleResultZ, AssessmentResultZ } from "./enrolment.js";
 import {
   ApplicationZ,
   ApplicationDecisionZ,
   VisaRecordZ,
   CasVisaZ,
   SevisVisaZ,
-} from './admissions.js';
-import {
-  StudentAccountZ,
-  ChargeZ,
-  PaymentZ,
-  SponsorZ,
-} from './student-account.js';
+} from "./admissions.js";
+import { StudentAccountZ, ChargeZ, PaymentZ, SponsorZ } from "./student-account.js";
 import {
   HoldZ,
   AdvisorZ,
@@ -73,49 +68,49 @@ import {
   TermGPAZ,
   TestScoreZ,
   StatutoryReturnZ,
-} from './academic-record.js';
+} from "./academic-record.js";
 
 /** Names of all canonical entities. */
 export const CANONICAL_ENTITY_NAMES = [
   // Phase F set
-  'Student',
-  'Engagement',
-  'StudentCourseSession',
-  'Module',
-  'ModuleInstance',
-  'Leaver',
-  'EntryProfile',
-  'Instance',
-  'StudyLocation',
-  'SES',
-  'Disability',
-  'QualificationAwarded',
-  'SupervisorAllocation',
-  'TermtimeAccommodation',
+  "Student",
+  "Engagement",
+  "StudentCourseSession",
+  "Module",
+  "ModuleInstance",
+  "Leaver",
+  "EntryProfile",
+  "Instance",
+  "StudyLocation",
+  "SES",
+  "Disability",
+  "QualificationAwarded",
+  "SupervisorAllocation",
+  "TermtimeAccommodation",
   // Phase G additions
-  'Address',
-  'EmailAddress',
-  'Phone',
-  'Programme',
-  'ProgrammeEnrolment',
-  'AcademicYearEnrolment',
-  'ModuleEnrolment',
-  'ModuleResult',
-  'AssessmentResult',
-  'Application',
-  'ApplicationDecision',
-  'VisaRecord',
-  'StudentAccount',
-  'Charge',
-  'Payment',
-  'Sponsor',
-  'Hold',
-  'Advisor',
-  'TransferCredit',
-  'RecognisedPriorLearning',
-  'TermGPA',
-  'TestScore',
-  'StatutoryReturn',
+  "Address",
+  "EmailAddress",
+  "Phone",
+  "Programme",
+  "ProgrammeEnrolment",
+  "AcademicYearEnrolment",
+  "ModuleEnrolment",
+  "ModuleResult",
+  "AssessmentResult",
+  "Application",
+  "ApplicationDecision",
+  "VisaRecord",
+  "StudentAccount",
+  "Charge",
+  "Payment",
+  "Sponsor",
+  "Hold",
+  "Advisor",
+  "TransferCredit",
+  "RecognisedPriorLearning",
+  "TermGPA",
+  "TestScore",
+  "StatutoryReturn",
 ] as const;
 
 export type CanonicalEntityName = (typeof CANONICAL_ENTITY_NAMES)[number];

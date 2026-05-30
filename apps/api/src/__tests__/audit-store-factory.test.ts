@@ -27,22 +27,17 @@ describe("createAuditStore", () => {
     expect(JSON.stringify(logs)).toMatch(/in-memory store/);
   });
 
-  it(
-    "falls back to InMemoryAuditStore when Pg init fails",
-    async () => {
-      // Point at a URL whose host won't resolve so DDL fails fast.
-      const logs: object[] = [];
-      const store = await createAuditStore({
-        databaseUrl:
-          "postgres://nobody@databridge-audit-store-nonexistent.invalid:5432/x",
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        logger: {
-          info: (o: object) => logs.push(o),
-          warn: (o: object) => logs.push(o),
-        } as any,
-      });
-      expect(store).toBeInstanceOf(InMemoryAuditStore);
-    },
-    15_000,
-  );
+  it("falls back to InMemoryAuditStore when Pg init fails", async () => {
+    // Point at a URL whose host won't resolve so DDL fails fast.
+    const logs: object[] = [];
+    const store = await createAuditStore({
+      databaseUrl: "postgres://nobody@databridge-audit-store-nonexistent.invalid:5432/x",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      logger: {
+        info: (o: object) => logs.push(o),
+        warn: (o: object) => logs.push(o),
+      } as any,
+    });
+    expect(store).toBeInstanceOf(InMemoryAuditStore);
+  }, 15_000);
 });

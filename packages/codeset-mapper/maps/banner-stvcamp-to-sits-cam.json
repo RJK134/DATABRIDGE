@@ -11,7 +11,11 @@
     { "sourceCode": "NORTH", "targetCode": "N", "notes": "Northern outpost campus" },
     { "sourceCode": "WEST", "targetCode": "W", "notes": "Western / Healthcare campus" },
     { "sourceCode": "BUSINESS", "targetCode": "B", "notes": "Business school campus" },
-    { "sourceCode": "DISTANCE", "targetCode": "D", "notes": "Distance learning / no physical campus" },
+    {
+      "sourceCode": "DISTANCE",
+      "targetCode": "D",
+      "notes": "Distance learning / no physical campus"
+    },
     { "sourceCode": "OVS", "targetCode": "O", "notes": "Overseas / TNE delivery site" }
   ]
 }

@@ -1,8 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  TECHONE_FIN1_NATIVE_RULES,
-  TECHONE_FIN1_NATIVE_AUDIT_PACK,
-} from "../rules/index.js";
+import { TECHONE_FIN1_NATIVE_RULES, TECHONE_FIN1_NATIVE_AUDIT_PACK } from "../rules/index.js";
 
 describe("TechOne Finance One native audit pack", () => {
   it("ships at least 13 rules (one per §19 hook + sub-hooks)", () => {

@@ -11,13 +11,10 @@
  *   - `provider: "mock"` + optional `cannedEntries` → DeterministicMockProvider
  *   - `provider: "auto"` (default) → selectProviderFromEnv (falls back to mock)
  */
-import type { FastifyInstance } from "fastify";
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 import type { AuditFinding } from "@databridge/rule-core";
-import {
-  narrate,
-  type NarrativeSlots,
-} from "@databridge/findings-narrative-llm";
+import { narrate, type NarrativeSlots } from "@databridge/findings-narrative-llm";
 import {
   DeterministicMockProvider,
   selectProviderFromEnv,
@@ -47,7 +44,7 @@ const NarrateBodyZ = z.object({
       z.object({
         match: z.string().min(1).max(500),
         response: z.unknown(),
-      }),
+      })
     )
     .max(50)
     .optional(),
@@ -68,70 +65,68 @@ export async function findingsNarrateRoutes(app: FastifyInstance): Promise<void>
   // `:narrate` suffix go through the wildcard form. Both routes resolve to
   // the same handler so callers can use either canonical form.
   const handler = async (
-    req: import("fastify").FastifyRequest<{ Params: { runId: string } }>,
-    reply: import("fastify").FastifyReply,
+    req: FastifyRequest<{ Params: { runId: string } }>,
+    reply: FastifyReply
   ) => {
-      const parsed = NarrateBodyZ.safeParse(req.body ?? {});
-      if (!parsed.success) {
-        return reply
-          .code(400)
-          .send({ error: "invalid_request", issues: parsed.error.issues });
+    const parsed = NarrateBodyZ.safeParse(req.body ?? {});
+    if (!parsed.success) {
+      return reply.code(400).send({ error: "invalid_request", issues: parsed.error.issues });
+    }
+    const body = parsed.data;
+
+    let findings: AuditFinding[] = [];
+    if (req.params.runId === "inline") {
+      findings = (body.findings ?? []) as unknown as AuditFinding[];
+    } else {
+      const audit = await getActiveAuditStore().get(req.params.runId);
+      if (!audit) {
+        return reply.code(404).send({ error: "audit_not_found", runId: req.params.runId });
       }
-      const body = parsed.data;
-
-      let findings: AuditFinding[] = [];
-      if (req.params.runId === "inline") {
-        findings = (body.findings ?? []) as unknown as AuditFinding[];
-      } else {
-        const audit = await getActiveAuditStore().get(req.params.runId);
-        if (!audit) {
-          return reply.code(404).send({ error: "audit_not_found", runId: req.params.runId });
-        }
-        if (audit.status !== "succeeded" || !audit.report) {
-          return reply.code(409).send({
-            error: "audit_not_ready",
-            status: audit.status,
-            runId: req.params.runId,
-          });
-        }
-        findings = audit.report.findings;
-      }
-
-      const ceiling = new CostCeiling(body.costCeilingUsd ?? DEFAULT_COST_CEILING_USD);
-      const provider = buildProvider(body);
-
-      try {
-        const result = await narrate(findings, {
-          provider,
-          llmOptions: { costCeiling: ceiling },
+      if (audit.status !== "succeeded" || !audit.report) {
+        return reply.code(409).send({
+          error: "audit_not_ready",
+          status: audit.status,
+          runId: req.params.runId,
         });
-        if (result.provenance) sink.record(result.provenance);
-        const response: NarrateResponse = {
-          slots: result.slots,
-          text: result.text,
-          markdown: result.markdown,
-          provenance: result.provenance,
-        };
-        return reply.code(200).send(response);
-      } catch (err) {
-        if (err instanceof CostCeilingExceededError) {
-          return reply.code(429).send({
-            error: "cost_ceiling_exceeded",
-            ceilingUsd: err.ceilingUsd,
-            spentUsd: err.spentUsd,
-          });
-        }
-        if (
-          err instanceof Error &&
-          /canned response did not parse|invalid|regex|grammar/i.test(err.message)
-        ) {
-          return reply.code(422).send({
-            error: "narrative_grammar_failed",
-            message: err.message,
-          });
-        }
-        throw err;
       }
+      findings = audit.report.findings;
+    }
+
+    const ceiling = new CostCeiling(body.costCeilingUsd ?? DEFAULT_COST_CEILING_USD);
+    const provider = buildProvider(body);
+
+    try {
+      const result = await narrate(findings, {
+        provider,
+        llmOptions: { costCeiling: ceiling },
+      });
+      if (result.provenance) sink.record(result.provenance);
+      const response: NarrateResponse = {
+        slots: result.slots,
+        text: result.text,
+        markdown: result.markdown,
+        provenance: result.provenance,
+      };
+      return reply.code(200).send(response);
+    } catch (err) {
+      if (err instanceof CostCeilingExceededError) {
+        return reply.code(429).send({
+          error: "cost_ceiling_exceeded",
+          ceilingUsd: err.ceilingUsd,
+          spentUsd: err.spentUsd,
+        });
+      }
+      if (
+        err instanceof Error &&
+        /canned response did not parse|invalid|regex|grammar/i.test(err.message)
+      ) {
+        return reply.code(422).send({
+          error: "narrative_grammar_failed",
+          message: err.message,
+        });
+      }
+      throw err;
+    }
   };
 
   // Slash form — primary canonical URL.
@@ -150,10 +145,11 @@ export async function findingsNarrateRoutes(app: FastifyInstance): Promise<void>
       if (!runId) {
         return reply.code(404).send({ error: "not_found" });
       }
-      const wrapped: import("fastify").FastifyRequest<{ Params: { runId: string } }> =
-        Object.assign(req, { params: { runId } });
+      const wrapped: FastifyRequest<{ Params: { runId: string } }> = Object.assign(req, {
+        params: { runId },
+      });
       return handler(wrapped, reply);
-    },
+    }
   );
 }
 

@@ -71,7 +71,7 @@ declare module "fastify" {
 export class AuthError extends Error {
   constructor(
     message: string,
-    public readonly statusCode: 401 | 403 = 401,
+    public readonly statusCode: 401 | 403 = 401
   ) {
     super(message);
     this.name = "AuthError";
@@ -86,7 +86,7 @@ interface JoseModule {
   jwtVerify: (
     token: string,
     keySet: unknown,
-    opts: { issuer: string; audience: string },
+    opts: { issuer: string; audience: string }
   ) => Promise<{ payload: Record<string, unknown> }>;
   createRemoteJWKSet: (url: URL) => unknown;
 }
@@ -118,7 +118,7 @@ export class JoseJwtValidator implements TokenValidator {
       throw new Error(
         "apps/api: the optional peer 'jose' is required for OIDC JWT validation. " +
           "Install with: pnpm add jose\n" +
-          `Underlying error: ${(err as Error).message}`,
+          `Underlying error: ${(err as Error).message}`
       );
     }
   }
@@ -127,8 +127,7 @@ export class JoseJwtValidator implements TokenValidator {
     if (this.keyset) return this.keyset;
     const jose = await this.loadJose();
     const jwksUri =
-      this.opts.jwksUri ??
-      `${this.opts.issuer.replace(/\/$/, "")}/.well-known/jwks.json`;
+      this.opts.jwksUri ?? `${this.opts.issuer.replace(/\/$/, "")}/.well-known/jwks.json`;
     this.keyset = jose.createRemoteJWKSet(new URL(jwksUri));
     return this.keyset;
   }
@@ -166,7 +165,7 @@ const ALL_ROLES: ReadonlySet<DatabridgeRole> = new Set<DatabridgeRole>([
 
 export function mapClaimsToPrincipal(
   claims: Record<string, unknown>,
-  roleMap?: Readonly<Record<string, DatabridgeRole>>,
+  roleMap?: Readonly<Record<string, DatabridgeRole>>
 ): DataBridgePrincipal {
   const sub = typeof claims["sub"] === "string" ? (claims["sub"] as string) : "";
   if (!sub) throw new AuthError("token missing 'sub' claim", 401);
@@ -222,7 +221,7 @@ export function _resetAuthActiveForTests(): void {
 
 export async function registerAuth(
   app: FastifyInstance,
-  config: AuthMiddlewareConfig,
+  config: AuthMiddlewareConfig
 ): Promise<void> {
   const publicPaths = new Set<string>(config.publicPaths ?? DEFAULT_PUBLIC_PATHS);
   if (!config.disabled) authActive = true;
@@ -301,8 +300,8 @@ export function requireRole(opts: RequireRoleOptions) {
         reply,
         new AuthError(
           `insufficient role; need one of ${opts.anyOf.join(", ")} in tenant ${tenantId}`,
-          403,
-        ),
+          403
+        )
       );
     }
   };
@@ -423,16 +422,14 @@ export function parseStaticTokensEnv(raw: string): StaticTokenEntry[] {
     const eq = part.indexOf("=");
     if (eq < 1) {
       throw new Error(
-        `DATABRIDGE_API_TOKENS: expected '<token>=<sub>,<tenant>:<role>'; got ${JSON.stringify(part)}`,
+        `DATABRIDGE_API_TOKENS: expected '<token>=<sub>,<tenant>:<role>'; got ${JSON.stringify(part)}`
       );
     }
     const token = part.slice(0, eq).trim();
     const rest = part.slice(eq + 1).trim();
     const firstComma = rest.indexOf(",");
     if (firstComma < 0) {
-      throw new Error(
-        `DATABRIDGE_API_TOKENS: entry for token ${token} missing tenant assignments`,
-      );
+      throw new Error(`DATABRIDGE_API_TOKENS: entry for token ${token} missing tenant assignments`);
     }
     const sub = rest.slice(0, firstComma).trim();
     const tenantsRaw = rest.slice(firstComma + 1).trim();
@@ -440,25 +437,29 @@ export function parseStaticTokensEnv(raw: string): StaticTokenEntry[] {
       throw new Error(`DATABRIDGE_API_TOKENS: entry for token ${token} missing sub`);
     }
     if (!tenantsRaw) {
-      throw new Error(
-        `DATABRIDGE_API_TOKENS: entry for token ${token} missing tenant assignments`,
-      );
+      throw new Error(`DATABRIDGE_API_TOKENS: entry for token ${token} missing tenant assignments`);
     }
     const tenants: Array<{ tenantId: string; roles: DatabridgeRole[] }> = [];
-    for (const t of tenantsRaw.split("|").map((s) => s.trim()).filter(Boolean)) {
+    for (const t of tenantsRaw
+      .split("|")
+      .map((s) => s.trim())
+      .filter(Boolean)) {
       const colon = t.indexOf(":");
       if (colon < 1) {
         throw new Error(
-          `DATABRIDGE_API_TOKENS: tenant entry ${JSON.stringify(t)} missing role list`,
+          `DATABRIDGE_API_TOKENS: tenant entry ${JSON.stringify(t)} missing role list`
         );
       }
       const tenantId = t.slice(0, colon).trim();
       const rolesRaw = t.slice(colon + 1).trim();
       const roles: DatabridgeRole[] = [];
-      for (const r of rolesRaw.split("+").map((s) => s.trim()).filter(Boolean)) {
+      for (const r of rolesRaw
+        .split("+")
+        .map((s) => s.trim())
+        .filter(Boolean)) {
         if (!ALL_ROLES.has(r as DatabridgeRole)) {
           throw new Error(
-            `DATABRIDGE_API_TOKENS: unknown role ${JSON.stringify(r)} for tenant ${tenantId}`,
+            `DATABRIDGE_API_TOKENS: unknown role ${JSON.stringify(r)} for tenant ${tenantId}`
           );
         }
         roles.push(r as DatabridgeRole);

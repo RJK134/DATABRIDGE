@@ -20,7 +20,7 @@ function coerce(input: string | unknown): unknown {
       return JSON.parse(input);
     } catch (err) {
       throw new Error(
-        `migration-policy loader: input is not valid JSON: ${(err as Error).message}`,
+        `migration-policy loader: input is not valid JSON: ${(err as Error).message}`
       );
     }
   }
@@ -38,7 +38,7 @@ export function parseMigrationPolicy(input: string | unknown): MigrationPolicy {
     throw new Error(
       `migration-policy: invalid bundle — ${result.error.issues
         .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
-        .join("; ")}`,
+        .join("; ")}`
     );
   }
   return result.data;
@@ -68,7 +68,7 @@ export function parsePartialPolicy(input: string | unknown): MigrationPolicy {
     throw new Error(
       `migration-policy: partial bundle missing required headers — ${head.error.issues
         .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
-        .join("; ")}`,
+        .join("; ")}`
     );
   }
   const fragment = raw as Record<string, unknown>;
@@ -82,8 +82,7 @@ export function parsePartialPolicy(input: string | unknown): MigrationPolicy {
     componentMark: fragment["componentMark"] ?? POLICY_DEFAULTS.componentMark,
     creditHour: fragment["creditHour"] ?? POLICY_DEFAULTS.creditHour,
     gradeScheme: fragment["gradeScheme"] ?? POLICY_DEFAULTS.gradeScheme,
-    termToAcademicYear:
-      fragment["termToAcademicYear"] ?? POLICY_DEFAULTS.termToAcademicYear,
+    termToAcademicYear: fragment["termToAcademicYear"] ?? POLICY_DEFAULTS.termToAcademicYear,
     feeStatus: fragment["feeStatus"] ?? POLICY_DEFAULTS.feeStatus,
     classificationGap: fragment["classificationGap"] ?? POLICY_DEFAULTS.classificationGap,
     intercalation: fragment["intercalation"] ?? POLICY_DEFAULTS.intercalation,

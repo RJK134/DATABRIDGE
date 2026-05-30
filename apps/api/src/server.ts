@@ -99,11 +99,11 @@ export async function build(options: BuildOptions = {}): Promise<FastifyInstance
     await registerAuth(app, { validator });
     app.log.info(
       { tokens: entries.length },
-      "static bearer-token auth enabled (DATABRIDGE_API_TOKENS)",
+      "static bearer-token auth enabled (DATABRIDGE_API_TOKENS)"
     );
   } else {
     app.log.warn(
-      "auth disabled (set OIDC_ISSUER+OIDC_AUDIENCE or DATABRIDGE_API_TOKENS to enable)",
+      "auth disabled (set OIDC_ISSUER+OIDC_AUDIENCE or DATABRIDGE_API_TOKENS to enable)"
     );
   }
 
@@ -183,8 +183,7 @@ export async function build(options: BuildOptions = {}): Promise<FastifyInstance
       };
     },
   };
-  const queue =
-    options.auditQueue ?? createAuditQueue({ logger: runnerLogger });
+  const queue = options.auditQueue ?? createAuditQueue({ logger: runnerLogger });
   await queue.startWorker(async (job) => {
     await runAuditJob(job, runnerLogger);
   });

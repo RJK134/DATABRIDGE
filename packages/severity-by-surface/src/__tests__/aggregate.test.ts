@@ -44,23 +44,19 @@ describe("classifySurface — direct map", () => {
 
 describe("classifySurface — pattern fallback", () => {
   it("falls back via ruleId tokens", () => {
-    expect(
-      classifySurface(f({ entityType: "Codeset", ruleId: "fee-band-missing" })),
-    ).toBe("finance");
+    expect(classifySurface(f({ entityType: "Codeset", ruleId: "fee-band-missing" }))).toBe(
+      "finance"
+    );
   });
   it("falls back via ruleName tokens", () => {
     expect(
-      classifySurface(
-        f({ entityType: "Lookup", ruleId: "x", ruleName: "VISA expired CAS" }),
-      ),
+      classifySurface(f({ entityType: "Lookup", ruleId: "x", ruleName: "VISA expired CAS" }))
     ).toBe("visa");
   });
   it("returns other when nothing matches", () => {
-    expect(
-      classifySurface(
-        f({ entityType: "MysteryEntity", ruleId: "x", ruleName: "y" }),
-      ),
-    ).toBe("other");
+    expect(classifySurface(f({ entityType: "MysteryEntity", ruleId: "x", ruleName: "y" }))).toBe(
+      "other"
+    );
   });
 });
 
@@ -93,9 +89,7 @@ describe("aggregateSeverityBySurface", () => {
   });
 
   it("cells only include non-zero counts", () => {
-    const report = aggregateSeverityBySurface([
-      f({ entityType: "Student", severity: "ERROR" }),
-    ]);
+    const report = aggregateSeverityBySurface([f({ entityType: "Student", severity: "ERROR" })]);
     expect(report.cells).toHaveLength(1);
     expect(report.cells[0]).toMatchObject({
       surface: "enrolments",
@@ -105,10 +99,9 @@ describe("aggregateSeverityBySurface", () => {
   });
 
   it("respects custom surfaceMap", () => {
-    const report = aggregateSeverityBySurface(
-      [f({ entityType: "PetCount", severity: "WARN" })],
-      { surfaceMap: { PetCount: "other" } },
-    );
+    const report = aggregateSeverityBySurface([f({ entityType: "PetCount", severity: "WARN" })], {
+      surfaceMap: { PetCount: "other" },
+    });
     expect(report.totals.bySurface.other).toBe(1);
   });
 
@@ -136,9 +129,7 @@ describe("aggregateSeverityBySurface", () => {
 
 describe("reportToMd", () => {
   it("renders all severity columns", () => {
-    const report = aggregateSeverityBySurface([
-      f({ entityType: "Student", severity: "ERROR" }),
-    ]);
+    const report = aggregateSeverityBySurface([f({ entityType: "Student", severity: "ERROR" })]);
     const md = reportToMd(report);
     for (const sev of SEVERITIES) {
       expect(md).toContain(sev);
@@ -148,9 +139,7 @@ describe("reportToMd", () => {
   });
 
   it("skips zero-total surfaces", () => {
-    const report = aggregateSeverityBySurface([
-      f({ entityType: "Student", severity: "ERROR" }),
-    ]);
+    const report = aggregateSeverityBySurface([f({ entityType: "Student", severity: "ERROR" })]);
     const md = reportToMd(report);
     // visa has zero findings, so it should NOT appear as its own row
     const lines = md.split("\n");
@@ -165,11 +154,6 @@ describe("SURFACES + SEVERITIES exports", () => {
     expect(SURFACES).toContain("other");
   });
   it("exposes the canonical severity list", () => {
-    expect(SEVERITIES).toEqual<readonly RuleSeverity[]>([
-      "CRITICAL",
-      "ERROR",
-      "WARN",
-      "INFO",
-    ]);
+    expect(SEVERITIES).toEqual<readonly RuleSeverity[]>(["CRITICAL", "ERROR", "WARN", "INFO"]);
   });
 });

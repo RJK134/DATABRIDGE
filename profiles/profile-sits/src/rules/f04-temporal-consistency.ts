@@ -21,7 +21,8 @@ export const F04_temporal_consistency: AuditRule[] = [
           WHERE SRS_ENDD IS NOT NULL
             AND SRS_ENDD < SRS_BEGD
             AND SRS_TENT = :tenantId`,
-    messageTemplate: "Enrolment {{subject_id}}: end date {{end_date}} is before start date {{start_date}}"
+    messageTemplate:
+      "Enrolment {{subject_id}}: end date {{end_date}} is before start date {{start_date}}",
   },
   {
     id: "F04-02",
@@ -37,7 +38,7 @@ export const F04_temporal_consistency: AuditRule[] = [
            FROM STU
           WHERE STU_DOB > CURRENT_DATE
             AND STU_TENT = :tenantId`,
-    messageTemplate: "Student {{subject_id}} has a future date of birth: {{dob}}"
+    messageTemplate: "Student {{subject_id}} has a future date of birth: {{dob}}",
   },
   {
     id: "F04-03",
@@ -53,7 +54,7 @@ export const F04_temporal_consistency: AuditRule[] = [
            FROM SRS
           WHERE SRS_BEGD < DATE '1900-01-01'
             AND SRS_TENT = :tenantId`,
-    messageTemplate: "Enrolment {{subject_id}} has implausibly early start date: {{start_date}}"
+    messageTemplate: "Enrolment {{subject_id}} has implausibly early start date: {{start_date}}",
   },
   {
     id: "F04-04",
@@ -72,6 +73,7 @@ export const F04_temporal_consistency: AuditRule[] = [
           WHERE saw.SAW_DAWD IS NOT NULL
             AND saw.SAW_DAWD < srs.SRS_BEGD
             AND saw.SAW_TENT = :tenantId`,
-    messageTemplate: "Award {{subject_id}}: award date {{award_date}} is before enrolment start {{enrol_start}}"
-  }
+    messageTemplate:
+      "Award {{subject_id}}: award date {{award_date}} is before enrolment start {{enrol_start}}",
+  },
 ];

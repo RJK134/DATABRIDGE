@@ -20,8 +20,8 @@ function makeCtx() {
 describe("SitsApiAdapter", () => {
   it("declares the correct identity and capabilities", () => {
     const adapter = new SitsApiAdapter({
-        baseUrl: "https://sits.example.ac.uk/urd/run/SIW_WSV",
-        bearerSecretKey: "sits-api-token"
+      baseUrl: "https://sits.example.ac.uk/urd/run/SIW_WSV",
+      bearerSecretKey: "sits-api-token",
     });
     expect(adapter.id).toBe("sits-api");
     expect(adapter.displayName).toBe("SITS Web Services (REST)");
@@ -35,8 +35,8 @@ describe("SitsApiAdapter", () => {
 
   it("healthCheck returns a stub healthy result", async () => {
     const adapter = new SitsApiAdapter({
-        baseUrl: "https://sits.example.ac.uk/urd/run/SIW_WSV",
-        bearerSecretKey: "sits-api-token"
+      baseUrl: "https://sits.example.ac.uk/urd/run/SIW_WSV",
+      bearerSecretKey: "sits-api-token",
     });
     const result = await adapter.healthCheck(makeCtx());
     expect(result.healthy).toBe(true);
@@ -45,30 +45,28 @@ describe("SitsApiAdapter", () => {
 
   it("discoverSchema includes all supported resources", async () => {
     const adapter = new SitsApiAdapter({
-        baseUrl: "https://sits.example.ac.uk/urd/run/SIW_WSV",
-        bearerSecretKey: "sits-api-token"
+      baseUrl: "https://sits.example.ac.uk/urd/run/SIW_WSV",
+      bearerSecretKey: "sits-api-token",
     });
     const schema = await adapter.discoverSchema(makeCtx());
     expect(schema.adapter).toBe("sits-api");
-    expect(schema.resources.map((r) => r.name).sort()).toEqual(
-      [...SUPPORTED_RESOURCES].sort(),
-    );
+    expect(schema.resources.map((r) => r.name).sort()).toEqual([...SUPPORTED_RESOURCES].sort());
   });
 
   it("rejects unsupported resources in sampleTable", async () => {
     const adapter = new SitsApiAdapter({
-        baseUrl: "https://sits.example.ac.uk/urd/run/SIW_WSV",
-        bearerSecretKey: "sits-api-token"
+      baseUrl: "https://sits.example.ac.uk/urd/run/SIW_WSV",
+      bearerSecretKey: "sits-api-token",
     });
     await expect(
-      adapter.sampleTable(makeCtx(), { resource: "DOES_NOT_EXIST", limit: 5 }),
+      adapter.sampleTable(makeCtx(), { resource: "DOES_NOT_EXIST", limit: 5 })
     ).rejects.toThrow(/not supported/);
   });
 
   it("streamRows yields at least one page for a supported resource", async () => {
     const adapter = new SitsApiAdapter({
-        baseUrl: "https://sits.example.ac.uk/urd/run/SIW_WSV",
-        bearerSecretKey: "sits-api-token"
+      baseUrl: "https://sits.example.ac.uk/urd/run/SIW_WSV",
+      bearerSecretKey: "sits-api-token",
     });
     const pages: unknown[] = [];
     for await (const page of adapter.streamRows(makeCtx(), { resource: SUPPORTED_RESOURCES[0] })) {

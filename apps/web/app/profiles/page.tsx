@@ -31,7 +31,13 @@ export default async function ProfilesPage() {
           <code>{process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001"}</code>.
         </p>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+            gap: 16,
+          }}
+        >
           {profiles.map((p) => (
             <div
               key={p.id}

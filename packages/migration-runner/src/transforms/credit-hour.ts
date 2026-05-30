@@ -6,7 +6,7 @@ import type { ProvenanceEntry } from "../types.js";
 
 export function convertCreditHoursToCats(
   hours: number,
-  policy: CreditHourPolicy,
+  policy: CreditHourPolicy
 ): { cats: number; provenance: ProvenanceEntry } {
   const raw = hours * policy.catsPerCreditHour;
   let cats: number;

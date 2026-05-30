@@ -9,9 +9,7 @@ const okSlots = {
   headline_sentence: "We found 3 findings — 1 critical.",
   severity_breakdown_bullets: ["CRITICAL: 1", "ERROR: 2"],
   top_cluster_root_cause: "Codeset drift in Banner STVMAJR.",
-  recommended_next_actions: [
-    { owner: "Registry", action: "Refresh the codeset.", priority: 1 },
-  ],
+  recommended_next_actions: [{ owner: "Registry", action: "Refresh the codeset.", priority: 1 }],
 };
 
 function f(over: Partial<AuditFinding> = {}): AuditFinding {

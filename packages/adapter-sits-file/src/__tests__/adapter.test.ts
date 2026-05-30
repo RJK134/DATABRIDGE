@@ -20,7 +20,7 @@ function makeCtx() {
 describe("SitsFileAdapter", () => {
   it("declares the correct identity and capabilities", () => {
     const adapter = new SitsFileAdapter({
-        rootPath: "/mnt/sits-exports"
+      rootPath: "/mnt/sits-exports",
     });
     expect(adapter.id).toBe("sits-file");
     expect(adapter.displayName).toBe("SITS file extracts (CSV/XML)");
@@ -34,7 +34,7 @@ describe("SitsFileAdapter", () => {
 
   it("healthCheck returns a stub healthy result", async () => {
     const adapter = new SitsFileAdapter({
-        rootPath: "/mnt/sits-exports"
+      rootPath: "/mnt/sits-exports",
     });
     const result = await adapter.healthCheck(makeCtx());
     expect(result.healthy).toBe(true);
@@ -43,27 +43,25 @@ describe("SitsFileAdapter", () => {
 
   it("discoverSchema includes all supported resources", async () => {
     const adapter = new SitsFileAdapter({
-        rootPath: "/mnt/sits-exports"
+      rootPath: "/mnt/sits-exports",
     });
     const schema = await adapter.discoverSchema(makeCtx());
     expect(schema.adapter).toBe("sits-file");
-    expect(schema.resources.map((r) => r.name).sort()).toEqual(
-      [...SUPPORTED_RESOURCES].sort(),
-    );
+    expect(schema.resources.map((r) => r.name).sort()).toEqual([...SUPPORTED_RESOURCES].sort());
   });
 
   it("rejects unsupported resources in sampleTable", async () => {
     const adapter = new SitsFileAdapter({
-        rootPath: "/mnt/sits-exports"
+      rootPath: "/mnt/sits-exports",
     });
     await expect(
-      adapter.sampleTable(makeCtx(), { resource: "DOES_NOT_EXIST", limit: 5 }),
+      adapter.sampleTable(makeCtx(), { resource: "DOES_NOT_EXIST", limit: 5 })
     ).rejects.toThrow(/not supported/);
   });
 
   it("streamRows yields at least one page for a supported resource", async () => {
     const adapter = new SitsFileAdapter({
-        rootPath: "/mnt/sits-exports"
+      rootPath: "/mnt/sits-exports",
     });
     const pages: unknown[] = [];
     for await (const page of adapter.streamRows(makeCtx(), { resource: SUPPORTED_RESOURCES[0] })) {

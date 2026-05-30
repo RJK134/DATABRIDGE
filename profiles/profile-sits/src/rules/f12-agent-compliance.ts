@@ -19,14 +19,16 @@ export const F12_agent_compliance: AuditRule[] = [
            FROM AGT
           WHERE AGT_STUC NOT IN (SELECT STU_CODE FROM STU WHERE STU_TENT = :tenantId)
             AND AGT_TENT = :tenantId`,
-    messageTemplate: "Agent relationship {{subject_id}} references non-existent student {{student_id}}"
+    messageTemplate:
+      "Agent relationship {{subject_id}} references non-existent student {{student_id}}",
   },
   {
     id: "F12-02",
     family: "F12",
     type: "sql",
     name: "International student missing agent or direct-apply flag",
-    description: "International student enrolment has neither an agent link nor a direct-apply marker",
+    description:
+      "International student enrolment has neither an agent link nor a direct-apply marker",
     severity: "WARN",
     ucisa_benchmark_ref: "UCISA-DM-5.1",
     tags: ["agent", "compliance", "international", "sits"],
@@ -38,6 +40,7 @@ export const F12_agent_compliance: AuditRule[] = [
             AND NOT EXISTS (SELECT 1 FROM AGT WHERE AGT_STUC = s.STU_CODE AND AGT_TENT = :tenantId)
             AND (s.STU_DAPP IS NULL OR s.STU_DAPP != 'Y')
             AND s.STU_TENT = :tenantId`,
-    messageTemplate: "International student {{subject_id}} has no agent link and no direct-apply flag"
-  }
+    messageTemplate:
+      "International student {{subject_id}} has no agent link and no direct-apply flag",
+  },
 ];

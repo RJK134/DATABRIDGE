@@ -62,12 +62,7 @@ async function fetchAudit(id: string): Promise<AuditRecord | null> {
   }
 }
 
-const SEVERITY_ORDER: AuditFinding["severity"][] = [
-  "CRITICAL",
-  "ERROR",
-  "WARN",
-  "INFO",
-];
+const SEVERITY_ORDER: AuditFinding["severity"][] = ["CRITICAL", "ERROR", "WARN", "INFO"];
 
 function severityColour(s: AuditFinding["severity"]): string {
   switch (s) {
@@ -107,10 +102,7 @@ export default async function AuditDetailPage({
 
   return (
     <div>
-      <a
-        href="/audits"
-        style={{ color: "#58a6ff", textDecoration: "none", fontSize: 13 }}
-      >
+      <a href="/audits" style={{ color: "#58a6ff", textDecoration: "none", fontSize: 13 }}>
         ← All audits
       </a>
 
@@ -132,8 +124,7 @@ export default async function AuditDetailPage({
                 color:
                   audit.status === "succeeded"
                     ? "#3fb950"
-                    : audit.status === "failed" ||
-                        audit.status === "cancelled"
+                    : audit.status === "failed" || audit.status === "cancelled"
                       ? "#f85149"
                       : "#d29922",
                 fontWeight: 600,
@@ -148,11 +139,7 @@ export default async function AuditDetailPage({
         {audit.error && (
           <KV
             k="Error"
-            v={
-              <span style={{ color: "#f85149", fontFamily: "monospace" }}>
-                {audit.error}
-              </span>
-            }
+            v={<span style={{ color: "#f85149", fontFamily: "monospace" }}>{audit.error}</span>}
           />
         )}
       </Card>
@@ -180,8 +167,7 @@ export default async function AuditDetailPage({
               label="Duration"
               value={`${Math.max(
                 0,
-                new Date(report.completedAt).getTime() -
-                  new Date(report.startedAt).getTime(),
+                new Date(report.completedAt).getTime() - new Date(report.startedAt).getTime()
               )} ms`}
             />
           </div>
@@ -204,9 +190,7 @@ export default async function AuditDetailPage({
           <h2 style={{ marginTop: 24 }}>Findings</h2>
           {report.findings.length === 0 ? (
             <Card>
-              <span style={{ color: "#3fb950" }}>
-                Clean run — no findings emitted.
-              </span>
+              <span style={{ color: "#3fb950" }}>Clean run — no findings emitted.</span>
             </Card>
           ) : (
             SEVERITY_ORDER.map((sev) => {
@@ -235,8 +219,7 @@ export default async function AuditDetailPage({
                         key={f.id}
                         style={{
                           padding: 12,
-                          borderTop:
-                            idx === 0 ? "none" : "1px solid #30363d",
+                          borderTop: idx === 0 ? "none" : "1px solid #30363d",
                         }}
                       >
                         <div
@@ -254,9 +237,7 @@ export default async function AuditDetailPage({
                           >
                             {f.ruleId} · {f.entityType}:{f.subjectId}
                           </code>
-                          <span
-                            style={{ fontSize: 12, color: "#8b949e" }}
-                          >
+                          <span style={{ fontSize: 12, color: "#8b949e" }}>
                             {new Date(f.detectedAt).toLocaleTimeString()}
                           </span>
                         </div>
@@ -333,12 +314,8 @@ function Stat({
         padding: 12,
       }}
     >
-      <div style={{ fontSize: 12, color: "#8b949e", marginBottom: 4 }}>
-        {label}
-      </div>
-      <div style={{ fontSize: 22, fontWeight: 600, color: colour ?? "#e6edf3" }}>
-        {value}
-      </div>
+      <div style={{ fontSize: 12, color: "#8b949e", marginBottom: 4 }}>{label}</div>
+      <div style={{ fontSize: 22, fontWeight: 600, color: colour ?? "#e6edf3" }}>{value}</div>
     </div>
   );
 }

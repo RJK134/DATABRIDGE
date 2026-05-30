@@ -33,7 +33,7 @@
  * `PgSqlExecutor`. Consumers install `pg` themselves; this package
  * stays installable without libpq.
  */
-import type { LearnedMapping, LearningStore, RecordCorrectionInput } from "./learning.js";
+import type { LearnedMapping, RecordCorrectionInput } from "./learning.js";
 import type { CrosswalkSystem } from "./types.js";
 
 /* ----------------------------- pg surface ---------------------------------- */
@@ -47,7 +47,7 @@ export interface PgClientLike {
   connect(): Promise<void>;
   query<T = Record<string, unknown>>(
     sql: string,
-    params?: ReadonlyArray<unknown>,
+    params?: ReadonlyArray<unknown>
   ): Promise<{ rows: T[]; rowCount?: number | null }>;
   end(): Promise<void>;
 }
@@ -72,7 +72,7 @@ async function loadPg(): Promise<{ Client: PgClientCtor }> {
     throw new Error(
       "@databridge/schema-mapper: the optional peer 'pg' is not installed. " +
         "Install it in the consuming app with: pnpm add pg @types/pg\n" +
-        `Underlying error: ${(err as Error).message}`,
+        `Underlying error: ${(err as Error).message}`
     );
   }
 }
@@ -90,9 +90,7 @@ export interface PostgresLearningStoreOptions {
    * Injectable Client factory — tests substitute a fake pg.Client here.
    * If unset, the real `pg` module is lazy-loaded.
    */
-  clientFactory?: (
-    config: Record<string, unknown>,
-  ) => PgClientLike | Promise<PgClientLike>;
+  clientFactory?: (config: Record<string, unknown>) => PgClientLike | Promise<PgClientLike>;
 
   /**
    * Table name. Defaults to `databridge_learning`. Schema-qualify if you
@@ -149,10 +147,7 @@ function qualifyTable(raw: string): { qualified: string; schema?: string; table:
  * See {@link AsyncLearningStore}.)
  */
 export interface AsyncLearningStore {
-  lookup(
-    system: CrosswalkSystem,
-    sourceColumn: string,
-  ): Promise<LearnedMapping | undefined>;
+  lookup(system: CrosswalkSystem, sourceColumn: string): Promise<LearnedMapping | undefined>;
   record(input: RecordCorrectionInput): Promise<LearnedMapping>;
   dumpAll(): Promise<readonly LearnedMapping[]>;
   loadAll(entries: readonly LearnedMapping[]): Promise<void>;
@@ -207,10 +202,7 @@ export class PostgresLearningStore implements AsyncLearningStore {
     this.migrated = true;
   }
 
-  async lookup(
-    system: CrosswalkSystem,
-    sourceColumn: string,
-  ): Promise<LearnedMapping | undefined> {
+  async lookup(system: CrosswalkSystem, sourceColumn: string): Promise<LearnedMapping | undefined> {
     await this.maybeMigrate();
     // Best = max accept_count, ties broken by most recent last_accepted_at.
     // Match key uses the normalised column (trim + lowercase) so callers
@@ -331,9 +323,7 @@ export class PostgresLearningStore implements AsyncLearningStore {
     if (this.autoMigrate && !this.migrated) await this.ensureSchema();
   }
 
-  private async withClient<T>(
-    fn: (client: PgClientLike) => Promise<T>,
-  ): Promise<T> {
+  private async withClient<T>(fn: (client: PgClientLike) => Promise<T>): Promise<T> {
     const client = await this.makeClient();
     await client.connect();
     try {

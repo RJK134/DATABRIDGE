@@ -27,9 +27,7 @@ describe("NL → LlmRule corpus", () => {
   });
 
   it("covers every demo entity at least once", () => {
-    const entities = new Set(
-      data.entries.map((e) => (e.expected["entity"] ?? "") as string),
-    );
+    const entities = new Set(data.entries.map((e) => (e.expected["entity"] ?? "") as string));
     for (const e of [
       "Student",
       "Engagement",

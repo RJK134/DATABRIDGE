@@ -158,7 +158,7 @@ export function parseAndValidate(raw: string, path: string): FsLearningStoreFile
   const obj = parsed as Record<string, unknown>;
   if (obj["version"] !== FS_LEARNING_STORE_VERSION) {
     throw new Error(
-      `FsLearningStore: ${path} version mismatch — expected ${FS_LEARNING_STORE_VERSION}, got ${String(obj["version"])}`,
+      `FsLearningStore: ${path} version mismatch — expected ${FS_LEARNING_STORE_VERSION}, got ${String(obj["version"])}`
     );
   }
   const entries = obj["entries"];
@@ -170,8 +170,7 @@ export function parseAndValidate(raw: string, path: string): FsLearningStoreFile
       throw new Error(`FsLearningStore: ${path}.entries[${i}] has an invalid shape`);
     }
   }
-  const savedAt =
-    typeof obj["savedAt"] === "string" ? obj["savedAt"] : new Date(0).toISOString();
+  const savedAt = typeof obj["savedAt"] === "string" ? obj["savedAt"] : new Date(0).toISOString();
   return {
     version: FS_LEARNING_STORE_VERSION,
     savedAt,

@@ -21,7 +21,8 @@ export const F06_husid_uniqueness: AuditRule[] = [
             AND STU_TENT = :tenantId
           GROUP BY STU_HUSID
          HAVING COUNT(*) > 1`,
-    messageTemplate: "HUSID {{subject_id}} is shared by {{record_count}} student records — must be unique"
+    messageTemplate:
+      "HUSID {{subject_id}} is shared by {{record_count}} student records — must be unique",
   },
   {
     id: "F06-02",
@@ -38,7 +39,7 @@ export const F06_husid_uniqueness: AuditRule[] = [
           WHERE STU_HUSID IS NOT NULL
             AND STU_HUSID !~ '^[0-9]{13}$'
             AND STU_TENT = :tenantId`,
-    messageTemplate: "Student {{subject_id}} has malformed HUSID '{{husid}}' — expected 13 digits"
+    messageTemplate: "Student {{subject_id}} has malformed HUSID '{{husid}}' — expected 13 digits",
   },
   {
     id: "F06-03",
@@ -51,6 +52,6 @@ export const F06_husid_uniqueness: AuditRule[] = [
     tags: ["uniqueness", "hesa-df", "statistical", "sits"],
     enabledByDefault: true,
     fieldPath: "Student.husid",
-    maxNullPct: 5
-  }
+    maxNullPct: 5,
+  },
 ];

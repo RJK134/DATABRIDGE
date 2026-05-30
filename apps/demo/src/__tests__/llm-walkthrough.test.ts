@@ -17,9 +17,24 @@ const mockProvider = (): DeterministicMockProvider =>
 
 const fixturesByName: Record<string, Array<Record<string, unknown>>> = {
   "salesforce-edu-westmidlands": [
-    { Id: "001a", Email: "shared.contact@uni.example", hed__FERPA__c: "Granted", HasOptedOutOfEmail: false },
-    { Id: "001b", Email: "shared.contact@uni.example", hed__FERPA__c: "Withheld", HasOptedOutOfEmail: false },
-    { Id: "001c", Email: "alice@uni.example", hed__FERPA__c: "Withheld", HasOptedOutOfEmail: false },
+    {
+      Id: "001a",
+      Email: "shared.contact@uni.example",
+      hed__FERPA__c: "Granted",
+      HasOptedOutOfEmail: false,
+    },
+    {
+      Id: "001b",
+      Email: "shared.contact@uni.example",
+      hed__FERPA__c: "Withheld",
+      HasOptedOutOfEmail: false,
+    },
+    {
+      Id: "001c",
+      Email: "alice@uni.example",
+      hed__FERPA__c: "Withheld",
+      HasOptedOutOfEmail: false,
+    },
     { Id: "001d", Email: "bob@uni.example", hed__FERPA__c: "Granted", HasOptedOutOfEmail: true },
   ],
   "banner-r2t-2024": [
@@ -113,7 +128,9 @@ describe("runLlmWalkthrough", () => {
   });
 
   it("does not throw when a fixture is missing — rows default to 0", async () => {
-    const partial: typeof fixturesByName = { "salesforce-edu-westmidlands": fixturesByName["salesforce-edu-westmidlands"]! };
+    const partial: typeof fixturesByName = {
+      "salesforce-edu-westmidlands": fixturesByName["salesforce-edu-westmidlands"]!,
+    };
     const out = await runLlmWalkthrough({ fixturesByName: partial, provider: mockProvider() });
     const banner = out.prompts.find((p) => p.id === "demo-03");
     expect(banner?.rowsScanned).toBe(0);

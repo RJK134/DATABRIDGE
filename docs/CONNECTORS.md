@@ -2,18 +2,18 @@
 
 ## Connector Overview
 
-| Adapter ID | System | Transport | Auth | Incremental |
-|------------|--------|-----------|------|-------------|
-| `sits-oracle` | SITS:Vision | Oracle JDBC | DB credentials | `LAST_UPD` cursor |
-| `sits-api` | SITS:Vision | SOAP/REST (e:Vision) | WS-Security / token | `LAST_UPD` cursor |
-| `sits-file` | SITS exports | SFTP / S3 / upload | File credentials | File timestamp + row hash |
-| `banner-ethos` | Ellucian Banner | Ethos REST | Bearer (JWT) | `If-Modified-Since` |
-| `banner-oracle` | Ellucian Banner | Oracle JDBC | DB credentials | `ACTIVITY_DATE` cursor |
-| `banner-file` | Banner ODS | SFTP / S3 | File credentials | File timestamp + row hash |
-| `workday-raas` | Workday Student | RaaS REST / SOAP | ISU OAuth 2.0 | `As_Of_Effective_Date` |
-| `sjms5` | SJMS-5 | Postgres direct | DB credentials | `updatedAt` cursor |
-| `generic-csv` | Any | File upload | None | File timestamp |
-| `generic-jdbc` | Any SQL | JDBC | DB credentials | Configurable cursor |
+| Adapter ID      | System          | Transport            | Auth                | Incremental               |
+| --------------- | --------------- | -------------------- | ------------------- | ------------------------- |
+| `sits-oracle`   | SITS:Vision     | Oracle JDBC          | DB credentials      | `LAST_UPD` cursor         |
+| `sits-api`      | SITS:Vision     | SOAP/REST (e:Vision) | WS-Security / token | `LAST_UPD` cursor         |
+| `sits-file`     | SITS exports    | SFTP / S3 / upload   | File credentials    | File timestamp + row hash |
+| `banner-ethos`  | Ellucian Banner | Ethos REST           | Bearer (JWT)        | `If-Modified-Since`       |
+| `banner-oracle` | Ellucian Banner | Oracle JDBC          | DB credentials      | `ACTIVITY_DATE` cursor    |
+| `banner-file`   | Banner ODS      | SFTP / S3            | File credentials    | File timestamp + row hash |
+| `workday-raas`  | Workday Student | RaaS REST / SOAP     | ISU OAuth 2.0       | `As_Of_Effective_Date`    |
+| `sjms5`         | SJMS-5          | Postgres direct      | DB credentials      | `updatedAt` cursor        |
+| `generic-csv`   | Any             | File upload          | None                | File timestamp            |
+| `generic-jdbc`  | Any SQL         | JDBC                 | DB credentials      | Configurable cursor       |
 
 ## sits-oracle Configuration
 
@@ -28,6 +28,7 @@ CONN_SITS_ORACLE_STATEMENT_TIMEOUT_S=1800
 ```
 
 Required Oracle grants:
+
 ```sql
 GRANT SELECT ON SITS.MEN_ENT TO DATABRIDGE_RO;
 GRANT SELECT ON SITS.MEN_FLD TO DATABRIDGE_RO;
@@ -60,6 +61,7 @@ CONN_WORKDAY_RATE_LIMIT_RPS=2
 ```
 
 Required RaaS reports (template provided by DataBridge):
+
 - `DB_Students`
 - `DB_AcademicRecords`
 - `DB_ProgramsOfStudy`

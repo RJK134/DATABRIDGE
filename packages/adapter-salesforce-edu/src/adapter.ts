@@ -25,15 +25,8 @@ import type {
   DictionaryEntry,
 } from "@databridge/adapter-spec";
 
-import {
-  SalesforceEduConfigSchema,
-  type SalesforceEduConfig,
-} from "./config.js";
-import {
-  SalesforceClient,
-  type SalesforceClientOptions,
-  type DescribeResponse,
-} from "./http.js";
+import { SalesforceEduConfigSchema, type SalesforceEduConfig } from "./config.js";
+import { SalesforceClient, type SalesforceClientOptions, type DescribeResponse } from "./http.js";
 import {
   RESOURCE_TO_SOBJECT,
   RESOURCE_TO_PK,
@@ -47,7 +40,7 @@ import { buildDictionary, describeToDictionary } from "./dictionary.js";
 export interface SalesforceEduAdapterOptions {
   /** Factory for the HTTP client. Tests inject a fake. */
   httpClientFactory?: (
-    args: Pick<SalesforceClientOptions, "config" | "clientSecret" | "logger" | "signal">,
+    args: Pick<SalesforceClientOptions, "config" | "clientSecret" | "logger" | "signal">
   ) => SalesforceClient;
 }
 
@@ -64,9 +57,7 @@ export class SalesforceEduAdapter implements SourceAdapter {
   };
 
   private readonly config: SalesforceEduConfig;
-  private readonly httpClientFactory: NonNullable<
-    SalesforceEduAdapterOptions["httpClientFactory"]
-  >;
+  private readonly httpClientFactory: NonNullable<SalesforceEduAdapterOptions["httpClientFactory"]>;
   private readonly describeCache = new Map<string, DescribeResponse>();
 
   constructor(rawConfig: unknown, options: SalesforceEduAdapterOptions = {}) {
@@ -202,9 +193,7 @@ export class SalesforceEduAdapter implements SourceAdapter {
     const r = args.resource as SupportedResource;
     const sObject = RESOURCE_TO_SOBJECT[r];
     const select = RESOURCE_TO_SELECT[r];
-    const where = args.sinceTimestamp
-      ? ` WHERE SystemModstamp >= ${args.sinceTimestamp}`
-      : "";
+    const where = args.sinceTimestamp ? ` WHERE SystemModstamp >= ${args.sinceTimestamp}` : "";
     const soql = `SELECT ${select} FROM ${sObject}${where}`;
     for await (const page of client.queryAll<Record<string, unknown>>(soql)) {
       yield { rows: page.records.map(toSampledRow), totalRows: page.totalSize };
@@ -256,10 +245,7 @@ export class SalesforceEduAdapter implements SourceAdapter {
     return buildDictionary(client, SUPPORTED_RESOURCES, this.describeCache);
   }
 
-  async getRecordById(
-    ctx: AdapterContext,
-    args: GetRecordByIdArgs,
-  ): Promise<SampledRow | null> {
+  async getRecordById(ctx: AdapterContext, args: GetRecordByIdArgs): Promise<SampledRow | null> {
     this.requireSupported(args.resource);
     const client = await this.tryBuildClient(ctx);
     if (!client) return null;
@@ -268,7 +254,7 @@ export class SalesforceEduAdapter implements SourceAdapter {
     const row = await client.getRecord<Record<string, unknown>>(
       RESOURCE_TO_SOBJECT[r],
       args.id,
-      fields,
+      fields
     );
     return row ? toSampledRow(row) : null;
   }

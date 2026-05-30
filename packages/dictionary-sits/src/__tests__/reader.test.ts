@@ -16,7 +16,12 @@ import type {
 
 const entities: MenEntRow[] = [
   { ent_code: "STU", ent_name: "Student", ent_desc: "Student record", ent_inus: "Y" },
-  { ent_code: "SCJ", ent_name: "Student Course Join", ent_desc: "Course attachment", ent_inus: "Y" },
+  {
+    ent_code: "SCJ",
+    ent_name: "Student Course Join",
+    ent_desc: "Course attachment",
+    ent_inus: "Y",
+  },
 ];
 
 const fields: MenFldRow[] = [
@@ -58,7 +63,14 @@ const lookups: MenLkpRow[] = [
 ];
 
 const lookupDetails: MenLkdRow[] = [
-  { lkd_lkp: "NAT", lkd_code: "GB", lkd_desc: "United Kingdom", lkd_sdesc: "UK", lkd_inus: "Y", lkd_seq: 1 },
+  {
+    lkd_lkp: "NAT",
+    lkd_code: "GB",
+    lkd_desc: "United Kingdom",
+    lkd_sdesc: "UK",
+    lkd_inus: "Y",
+    lkd_seq: 1,
+  },
   { lkd_lkp: "NAT", lkd_code: "FR", lkd_desc: "France", lkd_inus: "Y", lkd_seq: 2 },
   { lkd_lkp: "NAT", lkd_code: "ZZ", lkd_desc: "Retired", lkd_inus: "N", lkd_seq: 99 },
   { lkd_lkp: "ETHN", lkd_code: "10", lkd_desc: "White - British" },
@@ -111,12 +123,20 @@ describe("buildDictionaryEntries", () => {
 
 describe("buildCodeLists", () => {
   it("emits one CodeList per lookup with id SITS.<lkp_code>", () => {
-    const lists = buildCodeLists({ lookups, details: lookupDetails, snapshotAt: "2026-01-01T00:00:00.000Z" });
+    const lists = buildCodeLists({
+      lookups,
+      details: lookupDetails,
+      snapshotAt: "2026-01-01T00:00:00.000Z",
+    });
     expect(lists.map((l) => l.id)).toEqual(["SITS.ETHN", "SITS.NAT"]);
   });
 
   it("populates entries with isActive derived from lkd_inus", () => {
-    const lists = buildCodeLists({ lookups, details: lookupDetails, snapshotAt: "2026-01-01T00:00:00.000Z" });
+    const lists = buildCodeLists({
+      lookups,
+      details: lookupDetails,
+      snapshotAt: "2026-01-01T00:00:00.000Z",
+    });
     const nat = lists.find((l) => l.id === "SITS.NAT")!;
     expect(nat.entries).toHaveLength(3);
     const retired = nat.entries.find((e) => e.code === "ZZ");
@@ -128,7 +148,11 @@ describe("buildCodeLists", () => {
   });
 
   it("defaults isActive to true when lkd_inus is absent", () => {
-    const lists = buildCodeLists({ lookups, details: lookupDetails, snapshotAt: "2026-01-01T00:00:00.000Z" });
+    const lists = buildCodeLists({
+      lookups,
+      details: lookupDetails,
+      snapshotAt: "2026-01-01T00:00:00.000Z",
+    });
     const ethn = lists.find((l) => l.id === "SITS.ETHN")!;
     expect(ethn.entries[0]?.isActive).toBe(true);
   });

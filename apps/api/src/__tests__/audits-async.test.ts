@@ -8,9 +8,7 @@ import type { FastifyInstance } from "fastify";
 
 import { build } from "../server.js";
 import { auditStore } from "../audit-store.js";
-import {
-  _resetAuthActiveForTests,
-} from "../middleware/auth.js";
+import { _resetAuthActiveForTests } from "../middleware/auth.js";
 import { _clearInflightForTests } from "../audit-runner.js";
 
 describe("apps/api /audits async flow (F2)", () => {

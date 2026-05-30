@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * EntryProfile — qualifications held by a student on entry. HESA

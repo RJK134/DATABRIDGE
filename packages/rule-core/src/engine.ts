@@ -1,4 +1,10 @@
-import type { AuditRule, RuleEvalContext, CodelistAuditRule, StatisticalAuditRule, FnAuditRule } from "./types.js";
+import type {
+  AuditRule,
+  RuleEvalContext,
+  CodelistAuditRule,
+  StatisticalAuditRule,
+  FnAuditRule,
+} from "./types.js";
 import type { AuditFinding } from "./finding.js";
 import { findingFromSqlRow } from "./finding.js";
 
@@ -67,8 +73,7 @@ export class RuleEngine {
         for (const finding of limited) {
           await onFinding(finding);
           findingsEmitted++;
-          findingsBySeverity[finding.severity] =
-            (findingsBySeverity[finding.severity] ?? 0) + 1;
+          findingsBySeverity[finding.severity] = (findingsBySeverity[finding.severity] ?? 0) + 1;
         }
 
         findingsTotal += findingsEmitted;
@@ -100,10 +105,7 @@ export class RuleEngine {
     };
   }
 
-  private async evaluateRule(
-    rule: AuditRule,
-    ctx: RuleEvalContext
-  ): Promise<AuditFinding[]> {
+  private async evaluateRule(rule: AuditRule, ctx: RuleEvalContext): Promise<AuditFinding[]> {
     switch (rule.type) {
       case "sql":
         return this.evalSqlRule(rule, ctx);
@@ -126,10 +128,7 @@ export class RuleEngine {
     }
   }
 
-  private async evalFnRule(
-    _rule: FnAuditRule,
-    _ctx: RuleEvalContext
-  ): Promise<AuditFinding[]> {
+  private async evalFnRule(_rule: FnAuditRule, _ctx: RuleEvalContext): Promise<AuditFinding[]> {
     // Intentional no-op: profile packs (e.g. profile-hesa-tdp) execute
     // FnAuditRules in their own iteration loop over candidate records.
     return [];
@@ -188,10 +187,7 @@ export class RuleEngine {
     rule: StatisticalAuditRule,
     ctx: RuleEvalContext
   ): Promise<AuditFinding[]> {
-    const stats = await this.sqlExecutor.queryFieldStats(
-      rule.fieldPath,
-      ctx.tenantId
-    );
+    const stats = await this.sqlExecutor.queryFieldStats(rule.fieldPath, ctx.tenantId);
     const findings: AuditFinding[] = [];
 
     if (rule.maxNullPct !== undefined && stats.nullPct > rule.maxNullPct) {
@@ -225,10 +221,7 @@ export interface SqlExecutor {
     tenantId: string
   ): Promise<Record<string, unknown>[]>;
 
-  queryFieldStats(
-    fieldPath: string,
-    tenantId: string
-  ): Promise<FieldStats>;
+  queryFieldStats(fieldPath: string, tenantId: string): Promise<FieldStats>;
 }
 
 export interface FieldStats {

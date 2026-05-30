@@ -7,11 +7,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import {
-  FsLearningStore,
-  FS_LEARNING_STORE_VERSION,
-  parseFsLearningStoreFile,
-} from "../index.js";
+import { FsLearningStore, FS_LEARNING_STORE_VERSION, parseFsLearningStoreFile } from "../index.js";
 import { SchemaSuggester } from "../suggester.js";
 
 let workDir: string;
@@ -103,7 +99,7 @@ describe("FsLearningStore — basic persistence", () => {
             lastAcceptedAt: "2026-01-01T00:00:00.000Z",
           },
         ],
-      }),
+      })
     );
     const store = new FsLearningStore({ filePath: path, autoLoad: false });
     expect(store.size()).toBe(0);
@@ -150,7 +146,7 @@ describe("FsLearningStore — basic persistence", () => {
             lastAcceptedAt: "2026-01-01T00:00:00.000Z",
           },
         ],
-      }),
+      })
     );
     store.reloadFromDisk();
     expect(store.size()).toBe(1);
@@ -177,9 +173,7 @@ describe("FsLearningStore — basic persistence", () => {
 
 describe("FsLearningStore — parseAndValidate", () => {
   it("rejects non-JSON content with a descriptive error", () => {
-    expect(() => parseFsLearningStoreFile("not json", "/x")).toThrow(
-      /not valid JSON/,
-    );
+    expect(() => parseFsLearningStoreFile("not json", "/x")).toThrow(/not valid JSON/);
   });
 
   it("rejects mismatched version", () => {

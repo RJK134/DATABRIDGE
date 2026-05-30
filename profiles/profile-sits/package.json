@@ -1,7 +1,7 @@
 {
   "name": "@databridge/profile-sits",
   "version": "0.1.0",
-  "description": "DataBridge profile for Tribal SITS \u2014 entity map, field catalogue, and 69 audit rules",
+  "description": "DataBridge profile for Tribal SITS — entity map, field catalogue, and 69 audit rules",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {

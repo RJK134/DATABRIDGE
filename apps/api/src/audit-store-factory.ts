@@ -10,10 +10,7 @@
  */
 
 import type { Logger } from "pino";
-import {
-  InMemoryAuditStore,
-  type AuditStoreLike,
-} from "./audit-store.js";
+import { InMemoryAuditStore, type AuditStoreLike } from "./audit-store.js";
 import { PgAuditStore } from "./pg-audit-store.js";
 
 export interface CreateAuditStoreOptions {
@@ -24,7 +21,7 @@ export interface CreateAuditStoreOptions {
 }
 
 export async function createAuditStore(
-  opts: CreateAuditStoreOptions = {},
+  opts: CreateAuditStoreOptions = {}
 ): Promise<AuditStoreLike> {
   const url = opts.databaseUrl ?? process.env["DATABASE_URL"];
   if (!url) {

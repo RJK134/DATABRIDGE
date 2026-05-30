@@ -73,7 +73,7 @@ export interface TechOneFinanceOneAdapterOptions {
    * {@link TechOneConnectClient} backed by `globalThis.fetch`.
    */
   httpClientFactory?: (
-    args: Pick<TechOneConnectClientOptions, "config" | "clientSecret" | "logger" | "signal">,
+    args: Pick<TechOneConnectClientOptions, "config" | "clientSecret" | "logger" | "signal">
   ) => TechOneConnectClient;
 }
 
@@ -236,10 +236,7 @@ export class TechOneFinanceOneAdapter implements SourceAdapter {
     return page.data.slice(0, args.limit).map(toSampledRow);
   }
 
-  async *streamRows(
-    ctx: AdapterContext,
-    args: StreamRowsArgs,
-  ): AsyncIterable<StreamRowsPage> {
+  async *streamRows(ctx: AdapterContext, args: StreamRowsArgs): AsyncIterable<StreamRowsPage> {
     ctx.logger.debug("techone-financeone: streamRows", { resource: args.resource });
     this.requireSupported(args.resource);
 
@@ -280,10 +277,7 @@ export class TechOneFinanceOneAdapter implements SourceAdapter {
     return [];
   }
 
-  async getRecordById(
-    ctx: AdapterContext,
-    args: GetRecordByIdArgs,
-  ): Promise<SampledRow | null> {
+  async getRecordById(ctx: AdapterContext, args: GetRecordByIdArgs): Promise<SampledRow | null> {
     ctx.logger.debug("techone-financeone: getRecordById", {
       resource: args.resource,
       id: args.id,

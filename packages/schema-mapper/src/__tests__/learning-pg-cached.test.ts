@@ -27,10 +27,7 @@ class FakeAsyncStore implements AsyncLearningStore {
     return `${system}::${sourceColumn.trim().toLowerCase()}::${canonical}`;
   }
 
-  async lookup(
-    system: CrosswalkSystem,
-    sourceColumn: string,
-  ): Promise<LearnedMapping | undefined> {
+  async lookup(system: CrosswalkSystem, sourceColumn: string): Promise<LearnedMapping | undefined> {
     const norm = sourceColumn.trim().toLowerCase();
     let best: LearnedMapping | undefined;
     for (const m of this.entries.values()) {
@@ -101,7 +98,7 @@ function buildCached(remote: FakeAsyncStore, opts: { hydrateOnStart?: boolean } 
       hydrateOnStart: opts.hydrateOnStart ?? true,
       onPersistError,
     },
-    remote,
+    remote
   );
   return { cached, onPersistError };
 }

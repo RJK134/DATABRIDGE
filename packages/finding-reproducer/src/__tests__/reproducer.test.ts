@@ -68,7 +68,7 @@ describe("derivePredicate", () => {
           kind: "sql",
           predicate: "SELECT * FROM x WHERE y IS NULL",
         },
-      }),
+      })
     );
     expect(p.kind).toBe("sql");
     expect(p.text).toBe("SELECT * FROM x WHERE y IS NULL");
@@ -82,7 +82,7 @@ describe("derivePredicate", () => {
           predicate: "x = :id AND y > :threshold",
           binds: { id: "A1", threshold: 7 },
         },
-      }),
+      })
     );
     expect(p.text).toBe("x = 'A1' AND y > 7");
     expect(p.bindsResolved).toEqual({ id: "A1", threshold: 7 });
@@ -96,7 +96,7 @@ describe("derivePredicate", () => {
           predicate: "name = :n",
           binds: { n: "O'Brien" },
         },
-      }),
+      })
     );
     expect(p.text).toBe("name = 'O''Brien'");
   });
@@ -109,7 +109,7 @@ describe("derivePredicate", () => {
           predicate: "x IS :v",
           binds: { v: null },
         },
-      }),
+      })
     );
     expect(p.text).toBe("x IS NULL");
   });
@@ -121,7 +121,7 @@ describe("FindingReproducer", () => {
     const bundle = await r.reproduce(
       f({
         ruleProvenance: { kind: "fn", predicate: "students.noProgramme" },
-      }),
+      })
     );
     expect(bundle.predicate.kind).toBe("fn");
     expect(bundle.predicate.text).toBe("students.noProgramme");
@@ -136,7 +136,7 @@ describe("FindingReproducer", () => {
       f({
         sourceSystem: "banner-oracle",
         nativeKeys: { pidm: 12345 },
-      }),
+      })
     );
     expect(bundle.nativeRow.available).toBe(true);
     if (bundle.nativeRow.available) {
@@ -164,9 +164,7 @@ describe("FindingReproducer", () => {
 
   it("reports no provider for source system", async () => {
     const r = new FindingReproducer({ nativeProviders: [fakeNative] });
-    const bundle = await r.reproduce(
-      f({ sourceSystem: "mystery", nativeKeys: { x: 1 } }),
-    );
+    const bundle = await r.reproduce(f({ sourceSystem: "mystery", nativeKeys: { x: 1 } }));
     expect(bundle.nativeRow.available).toBe(false);
     if (!bundle.nativeRow.available) {
       expect(bundle.nativeRow.reason).toMatch(/no NativeRowProvider/);
@@ -181,9 +179,7 @@ describe("FindingReproducer", () => {
       },
     };
     const r = new FindingReproducer({ nativeProviders: [erroring] });
-    const bundle = await r.reproduce(
-      f({ sourceSystem: "x", nativeKeys: { y: 1 } }),
-    );
+    const bundle = await r.reproduce(f({ sourceSystem: "x", nativeKeys: { y: 1 } }));
     expect(bundle.nativeRow.available).toBe(false);
     if (!bundle.nativeRow.available) {
       expect(bundle.nativeRow.reason).toMatch(/connection refused/);
@@ -238,7 +234,7 @@ describe("bundleToMd", () => {
         sourceSystem: "banner-oracle",
         nativeKeys: { pidm: 42 },
         ruleProvenance: { kind: "sql", predicate: "x IS NULL" },
-      }),
+      })
     );
     const md = bundleToMd(bundle);
     expect(md).toContain("Predicate");

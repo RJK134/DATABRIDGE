@@ -27,9 +27,8 @@ export class BannerLoadPlanWriter {
       bucket = [];
       this.byTable.set(table, bucket);
     }
-    const entry: LoadPlanRow = sourceRowId !== undefined
-      ? { op, payload, sourceRowId }
-      : { op, payload };
+    const entry: LoadPlanRow =
+      sourceRowId !== undefined ? { op, payload, sourceRowId } : { op, payload };
     bucket.push(entry);
     this.rowsTotal += 1;
   }

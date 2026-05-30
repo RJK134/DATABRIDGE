@@ -1,9 +1,6 @@
 import { describe, it, expect } from "vitest";
 import type { FnAuditRule } from "@databridge/rule-core";
-import {
-  DYNAMICS365_EDU_NATIVE_RULES,
-  DYNAMICS365_EDU_NATIVE_AUDIT_PACK,
-} from "../index.js";
+import { DYNAMICS365_EDU_NATIVE_RULES, DYNAMICS365_EDU_NATIVE_AUDIT_PACK } from "../index.js";
 
 function asFn(id: string): FnAuditRule {
   const r = DYNAMICS365_EDU_NATIVE_RULES.find((x) => x.id === id);
@@ -75,7 +72,9 @@ describe("DYNAMICS365_EDU_NATIVE pack", () => {
   it("StudentProgram against inactive Program triggers when status != 1", () => {
     const r = asFn("DYNAMICS365-EDU-08");
     const ctx = { programStatus: { p1: 2, p2: 1 } };
-    expect(r.evaluate({ msdyn_studentprogramid: "sp1", msdyn_program: "p1" }, ctx).pass).toBe(false);
+    expect(r.evaluate({ msdyn_studentprogramid: "sp1", msdyn_program: "p1" }, ctx).pass).toBe(
+      false
+    );
     expect(r.evaluate({ msdyn_studentprogramid: "sp2", msdyn_program: "p2" }, ctx).pass).toBe(true);
     expect(r.evaluate({ msdyn_studentprogramid: "sp3" }, ctx).pass).toBe(true);
   });

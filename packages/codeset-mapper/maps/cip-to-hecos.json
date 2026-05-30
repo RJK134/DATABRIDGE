@@ -6,15 +6,31 @@
   "version": "1.0.0",
   "description": "Reverse direction of hesa-hecos-to-us-cip — used for US Banner installs reporting against UK HESA.",
   "entries": [
-    { "sourceCode": "11.0701", "targetCode": "100100", "notes": "computer science → computer science" },
-    { "sourceCode": "14.0901", "targetCode": "100358", "notes": "computer engineering → software engineering" },
+    {
+      "sourceCode": "11.0701",
+      "targetCode": "100100",
+      "notes": "computer science → computer science"
+    },
+    {
+      "sourceCode": "14.0901",
+      "targetCode": "100358",
+      "notes": "computer engineering → software engineering"
+    },
     { "sourceCode": "27.0101", "targetCode": "100343", "notes": "mathematics → mathematics" },
     { "sourceCode": "26.0101", "targetCode": "100390", "notes": "biology → biology" },
     { "sourceCode": "40.0501", "targetCode": "100417", "notes": "chemistry → chemistry" },
     { "sourceCode": "40.0801", "targetCode": "100425", "notes": "physics → physics" },
-    { "sourceCode": "51.0701", "targetCode": "100078", "notes": "health admin → health management" },
+    {
+      "sourceCode": "51.0701",
+      "targetCode": "100078",
+      "notes": "health admin → health management"
+    },
     { "sourceCode": "51.3801", "targetCode": "100476", "notes": "registered nursing → nursing" },
-    { "sourceCode": "52.0201", "targetCode": "100079", "notes": "business admin → business management" },
+    {
+      "sourceCode": "52.0201",
+      "targetCode": "100079",
+      "notes": "business admin → business management"
+    },
     { "sourceCode": "13.0101", "targetCode": "100107", "notes": "education → education" }
   ]
 }

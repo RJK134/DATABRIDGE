@@ -3,19 +3,89 @@
   "section": "§7",
   "summary": "Programme record. Banner term-keyed SGBSTDN vs SITS SCJ/SPR/SCE triplet — most fraught mapping.",
   "fields": [
-    { "canonical": "id", "banner": "new", "sits": "new", "notes": "Original keys retained in altIds" },
-    { "canonical": "personId", "banner": "PIDM resolution", "sits": "mst_code resolution", "notes": "" },
-    { "canonical": "programmeId", "banner": "SGBSTDN.PROGRAM_1", "sits": "INS_SCJ.scj_crsc + scj_rouc", "notes": "" },
-    { "canonical": "routeId", "banner": null, "sits": "INS_SCJ.scj_rouc", "notes": "Banner: derive from major+conc" },
-    { "canonical": "startDate", "banner": "first SGBSTDN.TERM_CODE_EFF for programme", "sits": "INS_SCJ.scj_stad", "notes": "Banner term → date via STVTERM" },
-    { "canonical": "expectedEndDate", "banner": "SGBSTDN.SGBSTDN_EXP_GRAD_DATE", "sits": "INS_SCJ.scj_eend", "notes": "" },
-    { "canonical": "actualEndDate", "banner": "latest SGBSTDN with terminal STST_CODE + activity_date", "sits": "INS_SCJ.scj_aend", "notes": "" },
-    { "canonical": "status", "banner": "SGBSTDN_STST_CODE → see §12", "sits": "INS_SCJ.scj_stac", "notes": "Mapped via §12 codes" },
-    { "canonical": "mode", "banner": "SGBSTDN.SGBSTDN_FULL_PART_IND", "sits": "derived from related SCE row", "notes": "" },
-    { "canonical": "entryQualification", "banner": "derived from SORHSCH/SORPCOL", "sits": "INS_SCJ.scj_hiqp", "notes": "HESA-critical, often blank" },
-    { "canonical": "entryYear", "banner": "derived from earliest SGBSTDN.TERM_CODE_EFF", "sits": "INS_SCJ.scj_aydc", "notes": "" },
-    { "canonical": "intake", "banner": "term code", "sits": "INS_CBO lookup", "notes": "Banner doesn't separately model cohort intake" },
-    { "canonical": "award", "banner": "SGBSTDN.DEGC_CODE_1", "sits": "INS_SPR.spr_awdr", "notes": "" },
-    { "canonical": "awardClassification", "banner": "set on SHRDGMR after award", "sits": "INS_SPR.spr_clsg", "notes": "" }
+    {
+      "canonical": "id",
+      "banner": "new",
+      "sits": "new",
+      "notes": "Original keys retained in altIds"
+    },
+    {
+      "canonical": "personId",
+      "banner": "PIDM resolution",
+      "sits": "mst_code resolution",
+      "notes": ""
+    },
+    {
+      "canonical": "programmeId",
+      "banner": "SGBSTDN.PROGRAM_1",
+      "sits": "INS_SCJ.scj_crsc + scj_rouc",
+      "notes": ""
+    },
+    {
+      "canonical": "routeId",
+      "banner": null,
+      "sits": "INS_SCJ.scj_rouc",
+      "notes": "Banner: derive from major+conc"
+    },
+    {
+      "canonical": "startDate",
+      "banner": "first SGBSTDN.TERM_CODE_EFF for programme",
+      "sits": "INS_SCJ.scj_stad",
+      "notes": "Banner term → date via STVTERM"
+    },
+    {
+      "canonical": "expectedEndDate",
+      "banner": "SGBSTDN.SGBSTDN_EXP_GRAD_DATE",
+      "sits": "INS_SCJ.scj_eend",
+      "notes": ""
+    },
+    {
+      "canonical": "actualEndDate",
+      "banner": "latest SGBSTDN with terminal STST_CODE + activity_date",
+      "sits": "INS_SCJ.scj_aend",
+      "notes": ""
+    },
+    {
+      "canonical": "status",
+      "banner": "SGBSTDN_STST_CODE → see §12",
+      "sits": "INS_SCJ.scj_stac",
+      "notes": "Mapped via §12 codes"
+    },
+    {
+      "canonical": "mode",
+      "banner": "SGBSTDN.SGBSTDN_FULL_PART_IND",
+      "sits": "derived from related SCE row",
+      "notes": ""
+    },
+    {
+      "canonical": "entryQualification",
+      "banner": "derived from SORHSCH/SORPCOL",
+      "sits": "INS_SCJ.scj_hiqp",
+      "notes": "HESA-critical, often blank"
+    },
+    {
+      "canonical": "entryYear",
+      "banner": "derived from earliest SGBSTDN.TERM_CODE_EFF",
+      "sits": "INS_SCJ.scj_aydc",
+      "notes": ""
+    },
+    {
+      "canonical": "intake",
+      "banner": "term code",
+      "sits": "INS_CBO lookup",
+      "notes": "Banner doesn't separately model cohort intake"
+    },
+    {
+      "canonical": "award",
+      "banner": "SGBSTDN.DEGC_CODE_1",
+      "sits": "INS_SPR.spr_awdr",
+      "notes": ""
+    },
+    {
+      "canonical": "awardClassification",
+      "banner": "set on SHRDGMR after award",
+      "sits": "INS_SPR.spr_clsg",
+      "notes": ""
+    }
   ]
 }

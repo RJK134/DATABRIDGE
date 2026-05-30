@@ -1,8 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  WORKDAY_NATIVE_RULES,
-  WORKDAY_NATIVE_AUDIT_PACK,
-} from "../rules/index.js";
+import { WORKDAY_NATIVE_RULES, WORKDAY_NATIVE_AUDIT_PACK } from "../rules/index.js";
 
 describe("Workday Student native audit pack", () => {
   it("ships 16 rules (one per §19 hook)", () => {
@@ -49,14 +46,14 @@ describe("Workday Student native audit pack", () => {
 
   it("covers each §19 surface (identity, programme, registration, marks, awards, hesa, bp, finance)", () => {
     const tagBlob = WORKDAY_NATIVE_RULES.flatMap((r) => r.tags ?? []).join("|");
-    expect(tagBlob).toMatch(/wd\.person\./);                  // 19.1
-    expect(tagBlob).toMatch(/wd\.programme\./);               // 19.2
-    expect(tagBlob).toMatch(/wd\.registration\./);            // 19.3
-    expect(tagBlob).toMatch(/wd\.grade\./);                   // 19.4
-    expect(tagBlob).toMatch(/wd\.award\./);                   // 19.5
-    expect(tagBlob).toMatch(/wd\.hesa\./);                    // 19.6
-    expect(tagBlob).toMatch(/wd\.bp\./);                      // 19.7
-    expect(tagBlob).toMatch(/wd\.fee\./);                     // 19.8
+    expect(tagBlob).toMatch(/wd\.person\./); // 19.1
+    expect(tagBlob).toMatch(/wd\.programme\./); // 19.2
+    expect(tagBlob).toMatch(/wd\.registration\./); // 19.3
+    expect(tagBlob).toMatch(/wd\.grade\./); // 19.4
+    expect(tagBlob).toMatch(/wd\.award\./); // 19.5
+    expect(tagBlob).toMatch(/wd\.hesa\./); // 19.6
+    expect(tagBlob).toMatch(/wd\.bp\./); // 19.7
+    expect(tagBlob).toMatch(/wd\.fee\./); // 19.8
   });
 
   it("pack metadata aggregates correctly", () => {

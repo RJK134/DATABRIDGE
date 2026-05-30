@@ -9,15 +9,8 @@
  * Designed to mirror SitsToHesaTdpOrchestrator so the two are interchangeable
  * from the demo harness perspective.
  */
-import type {
-  AdapterContext,
-  SampledRow,
-  SourceAdapter,
-} from "@databridge/adapter-spec";
-import {
-  BannerToSitsConfigSchema,
-  type BannerToSitsConfig,
-} from "./config.js";
+import type { AdapterContext, SampledRow, SourceAdapter } from "@databridge/adapter-spec";
+import { BannerToSitsConfigSchema, type BannerToSitsConfig } from "./config.js";
 import { SitsLoadPlanWriter } from "./sits-load-plan-writer.js";
 import { translateCode, type CodesetMapRegistry } from "@databridge/codeset-mapper";
 
@@ -64,12 +57,12 @@ export class BannerToSitsOrchestrator {
   constructor(
     rawConfig: unknown,
     private readonly sourceAdapter: SourceAdapter,
-    private readonly codesetRegistry?: CodesetMapRegistry,
+    private readonly codesetRegistry?: CodesetMapRegistry
   ) {
     this.config = BannerToSitsConfigSchema.parse(rawConfig);
     if (!this.sourceAdapter.id.startsWith("banner-")) {
       throw new Error(
-        `BannerToSitsOrchestrator: expected a Banner source adapter, got "${this.sourceAdapter.id}"`,
+        `BannerToSitsOrchestrator: expected a Banner source adapter, got "${this.sourceAdapter.id}"`
       );
     }
   }
@@ -130,9 +123,7 @@ export class BannerToSitsOrchestrator {
         ctx.logger.warn("banner-to-sits: skipping entity without mapping", { entity });
         continue;
       }
-      outcomes.push(
-        await this.runEntity(ctx, entity, resource, table, writer),
-      );
+      outcomes.push(await this.runEntity(ctx, entity, resource, table, writer));
     }
 
     const completedAt = new Date().toISOString();
@@ -143,13 +134,14 @@ export class BannerToSitsOrchestrator {
         acc.invalid += o.rowsInvalid;
         return acc;
       },
-      { read: 0, valid: 0, invalid: 0 },
+      { read: 0, valid: 0, invalid: 0 }
     );
 
     const plan = writer.build();
-    const loadPlan: LoadPlanEntry[] = [...plan.byTable.entries()].map(
-      ([t, rows]) => ({ table: t, rows: rows.length }),
-    );
+    const loadPlan: LoadPlanEntry[] = [...plan.byTable.entries()].map(([t, rows]) => ({
+      table: t,
+      rows: rows.length,
+    }));
 
     return {
       runId,
@@ -170,7 +162,7 @@ export class BannerToSitsOrchestrator {
     entity: string,
     bannerResource: string,
     sitsTable: string,
-    writer: SitsLoadPlanWriter,
+    writer: SitsLoadPlanWriter
   ): Promise<EntityOutcome> {
     let rowsRead = 0;
     let rowsValid = 0;
@@ -222,7 +214,7 @@ export class BannerToSitsOrchestrator {
         "BANNER.STVRESD",
         "FEESTATUS",
         this.codesetRegistry,
-        this.config.tenantId,
+        this.config.tenantId
       );
       tryTranslate(
         out,
@@ -231,7 +223,7 @@ export class BannerToSitsOrchestrator {
         "BANNER.STVCAMP",
         "SITS.CAM",
         this.codesetRegistry,
-        this.config.tenantId,
+        this.config.tenantId
       );
       tryTranslate(
         out,
@@ -240,7 +232,7 @@ export class BannerToSitsOrchestrator {
         "BANNER.STVSTYP",
         "SITS.STYP",
         this.codesetRegistry,
-        this.config.tenantId,
+        this.config.tenantId
       );
     }
     return out;
@@ -248,11 +240,7 @@ export class BannerToSitsOrchestrator {
 }
 
 /** Lightweight per-entity row validation. */
-function validateRow(
-  entity: string,
-  row: SampledRow,
-  rowIndex: number,
-): ValidationError[] {
+function validateRow(entity: string, row: SampledRow, rowIndex: number): ValidationError[] {
   const errors: ValidationError[] = [];
   const requireField = (field: string, ruleId: string): void => {
     const v = row[field];
@@ -300,13 +288,14 @@ function tryTranslate(
   sourceCodelist: string,
   targetCodelist: string,
   registry: CodesetMapRegistry,
-  tenantId: string | undefined,
+  tenantId: string | undefined
 ): void {
   const v = row[sourceField];
   if (typeof v !== "string" || v.length === 0) return;
-  const args = tenantId !== undefined
-    ? { sourceCodelist, targetCodelist, sourceCode: v, tenantId }
-    : { sourceCodelist, targetCodelist, sourceCode: v };
+  const args =
+    tenantId !== undefined
+      ? { sourceCodelist, targetCodelist, sourceCode: v, tenantId }
+      : { sourceCodelist, targetCodelist, sourceCode: v };
   const r = translateCode(registry, args);
   if (r.ok && r.targetCode !== undefined) {
     row[targetField] = r.targetCode;

@@ -5,16 +5,7 @@ export const SitsToBannerConfigSchema = z.object({
   batchSize: z.number().int().min(1).max(10_000).default(500),
   dryRun: z.boolean().default(true),
   entities: z
-    .array(
-      z.enum([
-        "Student",
-        "Programme",
-        "Enrolment",
-        "TermGpa",
-        "CourseRegistration",
-        "Award",
-      ]),
-    )
+    .array(z.enum(["Student", "Programme", "Enrolment", "TermGpa", "CourseRegistration", "Award"]))
     .default([]),
   collectionYear: z.string().regex(/^\d{4}\/\d{2}$/),
   tenantId: z.string().optional(),

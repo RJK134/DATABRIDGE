@@ -8,11 +8,7 @@ export interface QueueAdapter {
   enqueue<T extends object>(queue: string, data: T, opts?: EnqueueOptions): Promise<string>;
 
   /** Register a worker for a queue. */
-  work<T extends object>(
-    queue: string,
-    handler: JobHandler<T>,
-    opts?: WorkOptions
-  ): Promise<void>;
+  work<T extends object>(queue: string, handler: JobHandler<T>, opts?: WorkOptions): Promise<void>;
 
   /** Cancel a pending job by ID. */
   cancel(jobId: string): Promise<void>;
@@ -54,4 +50,11 @@ export interface Job<T> {
   startedOn: Date;
 }
 
-export type JobStatus = "created" | "retry" | "active" | "completed" | "expired" | "cancelled" | "failed";
+export type JobStatus =
+  | "created"
+  | "retry"
+  | "active"
+  | "completed"
+  | "expired"
+  | "cancelled"
+  | "failed";

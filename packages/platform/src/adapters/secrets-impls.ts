@@ -49,16 +49,15 @@ export class EnvSecretsAdapter implements SecretsAdapter {
     if (this.allowlist && !this.allowlist.has(key)) {
       throw new Error(
         `EnvSecretsAdapter: key '${key}' is not in the allowlist. ` +
-          `Add it to allowlist or remove the allowlist option.`,
+          `Add it to allowlist or remove the allowlist option.`
       );
     }
     const prefixed = `${this.prefix}${key}`;
-    const value =
-      this.env[prefixed] !== undefined ? this.env[prefixed] : this.env[key];
+    const value = this.env[prefixed] !== undefined ? this.env[prefixed] : this.env[key];
     if (value === undefined || value === "") {
       throw new Error(
         `EnvSecretsAdapter: secret '${key}' not found in environment` +
-          (this.prefix ? ` (tried '${prefixed}' and '${key}')` : ""),
+          (this.prefix ? ` (tried '${prefixed}' and '${key}')` : "")
       );
     }
     return value;

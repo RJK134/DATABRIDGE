@@ -33,18 +33,14 @@ describe("BANNER_FIELD_CATALOGUE", () => {
   });
 
   it("has SITS counterparts for the identity surface", () => {
-    const pidm = BANNER_FIELD_CATALOGUE.find(
-      (f) => f.bannerColumn === "SPRIDEN_PIDM",
-    );
+    const pidm = BANNER_FIELD_CATALOGUE.find((f) => f.bannerColumn === "SPRIDEN_PIDM");
     expect(pidm?.sitsColumn).toBe("STU_INTID");
   });
 });
 
 describe("BANNER_PROGRAMME_REGISTRATION_MAP", () => {
   it("maps SGBSTDN_MAJR_CODE_1 to canonical programmeCode", () => {
-    expect(bannerEntityToCanonical("SGBSTDN", "SGBSTDN_MAJR_CODE_1")).toBe(
-      "programmeCode",
-    );
+    expect(bannerEntityToCanonical("SGBSTDN", "SGBSTDN_MAJR_CODE_1")).toBe("programmeCode");
   });
 
   it("maps personId back to the SPRIDEN entity", () => {
@@ -57,22 +53,14 @@ describe("BANNER_PROGRAMME_REGISTRATION_MAP", () => {
 
   it("declares a CASE rule for programmeCode covering the SORLFOS fallback", () => {
     const programme = BANNER_PROGRAMME_REGISTRATION_MAP.find(
-      (m) => m.canonicalField === "programmeCode",
+      (m) => m.canonicalField === "programmeCode"
     );
     expect(programme?.caseRule).toMatch(/SORLFOS_MAJR_CODE/);
   });
 
   it("flags codeset-mapped fields for residency/programme/term/campus", () => {
-    for (const f of [
-      "programmeCode",
-      "termCode",
-      "campusCode",
-      "studentType",
-      "feeStatus",
-    ]) {
-      const m = BANNER_PROGRAMME_REGISTRATION_MAP.find(
-        (e) => e.canonicalField === f,
-      );
+    for (const f of ["programmeCode", "termCode", "campusCode", "studentType", "feeStatus"]) {
+      const m = BANNER_PROGRAMME_REGISTRATION_MAP.find((e) => e.canonicalField === f);
       expect(m?.needsCodesetMap).toBe(true);
     }
   });

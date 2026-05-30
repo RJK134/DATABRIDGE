@@ -11,11 +11,7 @@
  *   - Banner NATN_CODE → ISO 3166-1 numeric
  */
 export * from "./types.js";
-export {
-  CodesetMapRegistry,
-  translateCode,
-  computeCoverage,
-} from "./mapper.js";
+export { CodesetMapRegistry, translateCode, computeCoverage } from "./mapper.js";
 export {
   BUNDLED_MAP_FILES,
   loadBundledMap,

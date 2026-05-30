@@ -20,7 +20,7 @@ function makeCtx() {
 describe("BannerEthosAdapter", () => {
   it("declares the correct identity and capabilities", () => {
     const adapter = new BannerEthosAdapter({
-        apiKeySecretKey: "ethos-api-key"
+      apiKeySecretKey: "ethos-api-key",
     });
     expect(adapter.id).toBe("banner-ethos");
     expect(adapter.displayName).toBe("Banner Ellucian Ethos (REST)");
@@ -34,7 +34,7 @@ describe("BannerEthosAdapter", () => {
 
   it("healthCheck returns a stub healthy result", async () => {
     const adapter = new BannerEthosAdapter({
-        apiKeySecretKey: "ethos-api-key"
+      apiKeySecretKey: "ethos-api-key",
     });
     const result = await adapter.healthCheck(makeCtx());
     expect(result.healthy).toBe(true);
@@ -43,27 +43,25 @@ describe("BannerEthosAdapter", () => {
 
   it("discoverSchema includes all supported resources", async () => {
     const adapter = new BannerEthosAdapter({
-        apiKeySecretKey: "ethos-api-key"
+      apiKeySecretKey: "ethos-api-key",
     });
     const schema = await adapter.discoverSchema(makeCtx());
     expect(schema.adapter).toBe("banner-ethos");
-    expect(schema.resources.map((r) => r.name).sort()).toEqual(
-      [...SUPPORTED_RESOURCES].sort(),
-    );
+    expect(schema.resources.map((r) => r.name).sort()).toEqual([...SUPPORTED_RESOURCES].sort());
   });
 
   it("rejects unsupported resources in sampleTable", async () => {
     const adapter = new BannerEthosAdapter({
-        apiKeySecretKey: "ethos-api-key"
+      apiKeySecretKey: "ethos-api-key",
     });
     await expect(
-      adapter.sampleTable(makeCtx(), { resource: "DOES_NOT_EXIST", limit: 5 }),
+      adapter.sampleTable(makeCtx(), { resource: "DOES_NOT_EXIST", limit: 5 })
     ).rejects.toThrow(/not supported/);
   });
 
   it("streamRows yields at least one page for a supported resource", async () => {
     const adapter = new BannerEthosAdapter({
-        apiKeySecretKey: "ethos-api-key"
+      apiKeySecretKey: "ethos-api-key",
     });
     const pages: unknown[] = [];
     for await (const page of adapter.streamRows(makeCtx(), { resource: SUPPORTED_RESOURCES[0] })) {

@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { ProvenanceFieldsZ } from './provenance.js';
+import { z } from "zod";
+import { ProvenanceFieldsZ } from "./provenance.js";
 
 /**
  * StudentAccount — the AR ledger header for a student.
@@ -10,11 +10,14 @@ export const StudentAccountZ = z
     id: z.string().uuid(),
     personId: z.string().uuid(),
     /** Currency code, ISO 4217. */
-    currency: z.string().length(3).default('GBP'),
+    currency: z.string().length(3).default("GBP"),
     /** Outstanding balance, positive = owed by student. */
     balance: z.number(),
     /** Date balance was last computed (YYYY-MM-DD). */
-    balanceAsOf: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    balanceAsOf: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
     attributes: z.record(z.unknown()).optional(),
   })
   .merge(ProvenanceFieldsZ);
@@ -29,9 +32,15 @@ export const ChargeZ = z
     description: z.string().optional(),
     amount: z.number(),
     /** Academic year the charge is associated with. */
-    academicYear: z.string().regex(/^\d{4}\/\d{2}$/).optional(),
+    academicYear: z
+      .string()
+      .regex(/^\d{4}\/\d{2}$/)
+      .optional(),
     /** Effective / charge date (YYYY-MM-DD). */
-    effectiveDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    effectiveDate: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
     attributes: z.record(z.unknown()).optional(),
   })
   .merge(ProvenanceFieldsZ);
@@ -46,7 +55,10 @@ export const PaymentZ = z
     description: z.string().optional(),
     /** Positive number; direction is implied by Payment vs Charge. */
     amount: z.number().min(0),
-    receivedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    receivedAt: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
     method: z.string().optional(),
     sponsorId: z.string().uuid().optional(),
     attributes: z.record(z.unknown()).optional(),

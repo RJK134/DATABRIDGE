@@ -25,11 +25,9 @@ describe("ExplanationZ", () => {
 
   it("rejects rationale sentences with HTML / markdown", () => {
     expect(() =>
-      ExplanationZ.parse({ ...okExplanation, rationale: ["<script>alert(1)</script>"] }),
+      ExplanationZ.parse({ ...okExplanation, rationale: ["<script>alert(1)</script>"] })
     ).toThrow();
-    expect(() =>
-      ExplanationZ.parse({ ...okExplanation, rationale: ["**bold**"] }),
-    ).toThrow();
+    expect(() => ExplanationZ.parse({ ...okExplanation, rationale: ["**bold**"] })).toThrow();
   });
 
   it("rejects confidence outside [0, 1]", () => {
@@ -42,7 +40,7 @@ describe("ExplanationZ", () => {
       ExplanationZ.parse({
         ...okExplanation,
         rationale: ["x".repeat(200)],
-      }),
+      })
     ).toThrow();
   });
 });
@@ -79,11 +77,9 @@ describe("explainSuggestion", () => {
     const result = await explainSuggestion(
       {
         sourceColumn: "SPRIDEN_LAST_NAME",
-        candidates: [
-          { canonical: "lastName", entity: "Student", score: 0.5, rationale: "r" },
-        ],
+        candidates: [{ canonical: "lastName", entity: "Student", score: 0.5, rationale: "r" }],
       },
-      provider,
+      provider
     );
     expect(result.explanation.chosen).toBe("lastName");
     expect(result.provenance.caller).toBe("schema-mapper-llm/explainer");
@@ -98,7 +94,7 @@ describe("explanationToText", () => {
         chosen: "x",
         rationale: ["one.", "two."],
         confidence: 0.5,
-      }),
+      })
     ).toBe("one. two.");
   });
 });

@@ -10,7 +10,7 @@ import { SitsToBannerConfigSchema } from "../config.js";
 import { createDefaultRegistry } from "@databridge/codeset-mapper";
 
 function fakeSitsAdapter(
-  rowsByResource: Record<string, Array<Record<string, unknown>>>,
+  rowsByResource: Record<string, Array<Record<string, unknown>>>
 ): SourceAdapter {
   return {
     id: "sits-api",
@@ -31,17 +31,15 @@ function fakeSitsAdapter(
     async sampleTable() {
       return [];
     },
-    async *streamRows(
-      _ctx: AdapterContext,
-      args: StreamRowsArgs,
-    ): AsyncIterable<StreamRowsPage> {
+    async *streamRows(_ctx: AdapterContext, args: StreamRowsArgs): AsyncIterable<StreamRowsPage> {
       const rows = rowsByResource[args.resource] ?? [];
       yield {
         rows: rows.map((r) => {
           const out: Record<string, string | number | boolean | null> = {};
           for (const [k, v] of Object.entries(r)) {
             if (v === null || v === undefined) out[k] = null;
-            else if (typeof v === "string" || typeof v === "number" || typeof v === "boolean") out[k] = v;
+            else if (typeof v === "string" || typeof v === "number" || typeof v === "boolean")
+              out[k] = v;
             else out[k] = JSON.stringify(v);
           }
           return out;
@@ -88,7 +86,7 @@ describe("SitsToBannerConfigSchema", () => {
 
   it("rejects an invalid collection year format", () => {
     expect(() =>
-      SitsToBannerConfigSchema.parse({ source: "sits-api", collectionYear: "2024" }),
+      SitsToBannerConfigSchema.parse({ source: "sits-api", collectionYear: "2024" })
     ).toThrow();
   });
 });
@@ -100,11 +98,7 @@ describe("SitsToBannerOrchestrator", () => {
       id: "banner-oracle",
     };
     expect(
-      () =>
-        new SitsToBannerOrchestrator(
-          { source: "sits-api", collectionYear: "2024/25" },
-          ad,
-        ),
+      () => new SitsToBannerOrchestrator({ source: "sits-api", collectionYear: "2024/25" }, ad)
     ).toThrow(/SITS source adapter/);
   });
 
@@ -118,7 +112,7 @@ describe("SitsToBannerOrchestrator", () => {
         STA: [{ STA_STUC: "S1", STA_AYR: "2024/25", STA_GPA: 3.0 }],
         SMR: [{ SMR_STUC: "S1", SMR_MOD: "M1" }],
         AWD: [{ AWD_STUC: "S1" }],
-      }),
+      })
     );
     const result = await orch.run(makeCtx());
     expect(result.totalRowsRead).toBe(6);
@@ -129,7 +123,7 @@ describe("SitsToBannerOrchestrator", () => {
   it("flags rows missing STU_CODE as invalid", async () => {
     const orch = new SitsToBannerOrchestrator(
       { source: "sits-api", collectionYear: "2024/25", entities: ["Student"] },
-      fakeSitsAdapter({ STU: [{ STU_SURN: "no-code" }] }),
+      fakeSitsAdapter({ STU: [{ STU_SURN: "no-code" }] })
     );
     const result = await orch.run(makeCtx());
     expect(result.outcomes[0]?.rowsInvalid).toBe(1);
@@ -149,7 +143,7 @@ describe("SitsToBannerOrchestrator", () => {
           { STU_CODE: "S1", STU_SURN: "X", STU_FORE: "Y" },
           { STU_CODE: "S2", STU_SURN: "Z", STU_FORE: "W" },
         ],
-      }),
+      })
     );
     const result = await orch.run(makeCtx());
     expect(result.loadPlan).toHaveLength(1);
@@ -169,7 +163,7 @@ describe("SitsToBannerOrchestrator", () => {
       fakeSitsAdapter({
         SCE: [{ SCE_STUC: "S1", SCE_AYR: "2024/25", SCE_CAM: "M" }],
       }),
-      reg,
+      reg
     );
     const result = await orch.run(makeCtx());
     expect(result.outcomes[0]?.rowsStaged).toBe(1);

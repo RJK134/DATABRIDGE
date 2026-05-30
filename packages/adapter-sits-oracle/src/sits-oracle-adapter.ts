@@ -1,6 +1,7 @@
-import type { SitsOracleConfig } from './config';
-import { SitsOracleConfigSchema } from './config';
-import { SITS_ENTITY_QUERIES } from './entity-queries';
+import type { SitsOracleConfig } from "./config";
+import { SitsOracleConfigSchema } from "./config";
+import { SITS_ENTITY_QUERIES } from "./entity-queries";
+import type * as OracleDb from "oracledb";
 
 export interface SourceAdapter {
   connect(): Promise<void>;
@@ -26,17 +27,17 @@ export interface FetchOptions {
  * install the workspace. Anyone actually instantiating this adapter at runtime
  * must `pnpm add oracledb` in their app.
  */
-async function loadOracleDb(): Promise<typeof import('oracledb')> {
+async function loadOracleDb(): Promise<typeof OracleDb> {
   try {
-    const mod = (await import('oracledb')) as unknown as typeof import('oracledb') & {
-      default?: typeof import('oracledb');
+    const mod = (await import("oracledb")) as unknown as typeof OracleDb & {
+      default?: typeof OracleDb;
     };
     return mod.default ?? mod;
   } catch (err) {
     throw new Error(
       '@databridge/adapter-sits-oracle: the optional peer "oracledb" is not installed. ' +
-        'Add it to the consuming app with: pnpm add oracledb. ' +
-        `Underlying error: ${(err as Error).message}`,
+        "Add it to the consuming app with: pnpm add oracledb. " +
+        `Underlying error: ${(err as Error).message}`
     );
   }
 }
@@ -82,9 +83,9 @@ export class SitsOracleAdapter implements SourceAdapter {
 
   async fetchEntity(
     entity: string,
-    options: FetchOptions = {},
+    options: FetchOptions = {}
   ): Promise<Record<string, unknown>[]> {
-    if (!this.pool) throw new Error('SitsOracleAdapter: call connect() before fetchEntity()');
+    if (!this.pool) throw new Error("SitsOracleAdapter: call connect() before fetchEntity()");
 
     const baseSql = SITS_ENTITY_QUERIES[entity];
     if (!baseSql) {
@@ -126,7 +127,7 @@ export class SitsOracleAdapter implements SourceAdapter {
       .catch(() => null);
     if (!conn) return { ok: false, latencyMs: Date.now() - start };
     try {
-      await conn.execute('SELECT 1 FROM DUAL', {}, {});
+      await conn.execute("SELECT 1 FROM DUAL", {}, {});
       return { ok: true, latencyMs: Date.now() - start };
     } catch {
       return { ok: false, latencyMs: Date.now() - start };
@@ -150,7 +151,7 @@ interface OracleConn {
   execute(
     sql: string,
     binds?: Record<string, unknown>,
-    opts?: Record<string, unknown>,
+    opts?: Record<string, unknown>
   ): Promise<{ rows?: unknown[] }>;
   close(): Promise<void>;
 }

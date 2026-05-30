@@ -1,6 +1,6 @@
-import type { DhpComputeInput, DhpMetrics, DhpSnapshot } from './types';
-import { computeDhp } from './compute';
-import { randomUUID } from 'crypto';
+import type { DhpComputeInput, DhpMetrics, DhpSnapshot } from "./types";
+import { computeDhp } from "./compute";
+import { randomUUID } from "crypto";
 
 export interface SnapshotStore {
   save(snapshot: DhpSnapshot): Promise<void>;

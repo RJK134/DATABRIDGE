@@ -23,7 +23,7 @@ export type FetchLike = (
     headers?: Record<string, string>;
     body?: string;
     signal?: AbortSignal;
-  },
+  }
 ) => Promise<{
   ok: boolean;
   status: number;
@@ -81,9 +81,7 @@ export class SalesforceClient {
   private readonly now: () => number;
 
   constructor(private readonly opts: SalesforceClientOptions) {
-    this.fetchImpl =
-      opts.fetchImpl ??
-      ((globalThis as { fetch?: FetchLike }).fetch as FetchLike);
+    this.fetchImpl = opts.fetchImpl ?? ((globalThis as { fetch?: FetchLike }).fetch as FetchLike);
     if (!this.fetchImpl) {
       throw new Error("SalesforceClient: no fetch implementation available");
     }
@@ -114,7 +112,7 @@ export class SalesforceClient {
     if (!resp.ok) {
       const text = await resp.text();
       throw new Error(
-        `salesforce: OAuth2 token request failed: ${resp.status} ${resp.statusText} — ${text}`,
+        `salesforce: OAuth2 token request failed: ${resp.status} ${resp.statusText} — ${text}`
       );
     }
     const json = (await resp.json()) as {
@@ -149,7 +147,7 @@ export class SalesforceClient {
 
   private async doWithRetry<T>(url: string, accessToken: string): Promise<T> {
     let attempt = 0;
-    while (true) {
+    for (;;) {
       const resp = await this.fetchImpl(url, {
         method: "GET",
         headers: {
@@ -165,13 +163,11 @@ export class SalesforceClient {
       if (!retryable || attempt >= this.maxRetries) {
         const text = await safeText(resp);
         throw new Error(
-          `salesforce: GET ${url} failed: ${resp.status} ${resp.statusText} — ${text}`,
+          `salesforce: GET ${url} failed: ${resp.status} ${resp.statusText} — ${text}`
         );
       }
       const retryAfter = parseRetryAfter(resp.headers.get("retry-after"));
-      const wait =
-        retryAfter ??
-        this.baseBackoffMs * Math.pow(2, attempt) * (0.5 + Math.random());
+      const wait = retryAfter ?? this.baseBackoffMs * Math.pow(2, attempt) * (0.5 + Math.random());
       this.opts.logger.warn("salesforce: retrying request", {
         attempt: attempt + 1,
         status: resp.status,
@@ -185,15 +181,13 @@ export class SalesforceClient {
   /** Issue a SOQL query and return the first page. */
   async query<T = Record<string, unknown>>(soql: string): Promise<SoqlResponse<T>> {
     const path = `/services/data/${this.opts.config.apiVersion}/query/?q=${encodeURIComponent(
-      soql,
+      soql
     )}`;
     return this.get<SoqlResponse<T>>(path);
   }
 
   /** Iterate all pages of a SOQL query. */
-  async *queryAll<T = Record<string, unknown>>(
-    soql: string,
-  ): AsyncIterable<SoqlResponse<T>> {
+  async *queryAll<T = Record<string, unknown>>(soql: string): AsyncIterable<SoqlResponse<T>> {
     let page = await this.query<T>(soql);
     yield page;
     while (!page.done && page.nextRecordsUrl) {
@@ -212,7 +206,7 @@ export class SalesforceClient {
   async getRecord<T = Record<string, unknown>>(
     sObject: string,
     id: string,
-    fields?: readonly string[],
+    fields?: readonly string[]
   ): Promise<T | null> {
     const fieldClause = fields && fields.length > 0 ? `?fields=${fields.join(",")}` : "";
     const path = `/services/data/${this.opts.config.apiVersion}/sobjects/${sObject}/${id}${fieldClause}`;

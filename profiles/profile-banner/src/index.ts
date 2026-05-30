@@ -11,15 +11,8 @@
  * SGBSTDN/SORLCUR programme registration tables that anchor the
  * Banner→SITS programme/student/registration mapping case study.
  */
-export {
-  BANNER_ENTITIES,
-  type BannerEntityKey,
-  type BannerEntity,
-} from "./entities/index.js";
-export {
-  BANNER_FIELD_CATALOGUE,
-  type FieldCatalogueEntry,
-} from "./fields/catalogue.js";
+export { BANNER_ENTITIES, type BannerEntityKey, type BannerEntity } from "./entities/index.js";
+export { BANNER_FIELD_CATALOGUE, type FieldCatalogueEntry } from "./fields/catalogue.js";
 export {
   BANNER_PROGRAMME_REGISTRATION_MAP,
   bannerEntityToCanonical,

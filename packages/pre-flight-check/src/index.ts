@@ -31,17 +31,11 @@ export const BUNDLED_REQUIREMENTS: Record<string, FieldRequirement[]> = {
     },
   ],
   /** Fee-status write requires SGBSTDN.RESD_CODE. */
-  "banner-fee-status": [
-    { table: "SGBSTDN", field: "RESD_CODE", gates: "fee-status write" },
-  ],
+  "banner-fee-status": [{ table: "SGBSTDN", field: "RESD_CODE", gates: "fee-status write" }],
   /** SITS fee-status write requires STU.STU_FESC. */
-  "sits-fee-status": [
-    { table: "STU", field: "STU_FESC", gates: "SITS fee-status write" },
-  ],
+  "sits-fee-status": [{ table: "STU", field: "STU_FESC", gates: "SITS fee-status write" }],
   /** Banner component-mark write requires SHRTCKG.GRADE. */
-  "banner-component-mark": [
-    { table: "SHRTCKG", field: "GRADE", gates: "component-mark write" },
-  ],
+  "banner-component-mark": [{ table: "SHRTCKG", field: "GRADE", gates: "component-mark write" }],
 };
 
 export type CheckVerdict = "ok" | "missing" | "unknown";
@@ -124,7 +118,7 @@ export async function runPreFlightCheck(args: PreFlightArgs): Promise<PreFlightR
 }
 
 function resolveRequirements(
-  input: string | readonly FieldRequirement[],
+  input: string | readonly FieldRequirement[]
 ): readonly FieldRequirement[] {
   if (typeof input === "string") {
     const bundle = BUNDLED_REQUIREMENTS[input];

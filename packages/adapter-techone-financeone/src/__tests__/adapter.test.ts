@@ -57,7 +57,7 @@ describe("TechOneFinanceOneAdapter — contract & stub path", () => {
 
   it("config schema rejects pageSize > 1000 (Connect API limit)", () => {
     expect(() =>
-      TechOneFinanceOneConfigSchema.parse({ ...VALID_CONFIG, pageSize: 2000 }),
+      TechOneFinanceOneConfigSchema.parse({ ...VALID_CONFIG, pageSize: 2000 })
     ).toThrow();
   });
 
@@ -78,9 +78,7 @@ describe("TechOneFinanceOneAdapter — contract & stub path", () => {
     const adapter = new TechOneFinanceOneAdapter(VALID_CONFIG);
     const schema = await adapter.discoverSchema(makeStubCtx());
     expect(schema.adapter).toBe("techone-financeone");
-    expect(schema.resources.map((r) => r.name).sort()).toEqual(
-      [...SUPPORTED_RESOURCES].sort(),
-    );
+    expect(schema.resources.map((r) => r.name).sort()).toEqual([...SUPPORTED_RESOURCES].sort());
   });
 
   it("discoverSchema field set is non-trivial for the financial resources", async () => {
@@ -98,7 +96,7 @@ describe("TechOneFinanceOneAdapter — contract & stub path", () => {
   it("rejects unsupported resources in sampleTable", async () => {
     const adapter = new TechOneFinanceOneAdapter(VALID_CONFIG);
     await expect(
-      adapter.sampleTable(makeStubCtx(), { resource: "DOES_NOT_EXIST", limit: 5 }),
+      adapter.sampleTable(makeStubCtx(), { resource: "DOES_NOT_EXIST", limit: 5 })
     ).rejects.toThrow(/not supported/);
   });
 
@@ -115,7 +113,9 @@ describe("TechOneFinanceOneAdapter — contract & stub path", () => {
   it("streamRows yields at least one page for a supported resource (stub path)", async () => {
     const adapter = new TechOneFinanceOneAdapter(VALID_CONFIG);
     const pages: unknown[] = [];
-    for await (const page of adapter.streamRows(makeStubCtx(), { resource: SUPPORTED_RESOURCES[0] })) {
+    for await (const page of adapter.streamRows(makeStubCtx(), {
+      resource: SUPPORTED_RESOURCES[0],
+    })) {
       pages.push(page);
     }
     expect(pages.length).toBeGreaterThanOrEqual(1);
@@ -129,7 +129,7 @@ describe("TechOneFinanceOneAdapter — contract & stub path", () => {
     });
     expect(result).toBeNull();
     await expect(
-      adapter.getRecordById(makeStubCtx(), { resource: "NOPE", id: "x" }),
+      adapter.getRecordById(makeStubCtx(), { resource: "NOPE", id: "x" })
     ).rejects.toThrow(/not supported/);
   });
 

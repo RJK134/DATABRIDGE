@@ -43,10 +43,22 @@ describe("apps/api Phase I — integration-engine routes", () => {
         url: "/identity/reconcile",
         payload: {
           incoming: [
-            { system: "banner", sourceId: "B-1", husid: "1234567890123", firstName: "A", lastName: "B" },
+            {
+              system: "banner",
+              sourceId: "B-1",
+              husid: "1234567890123",
+              firstName: "A",
+              lastName: "B",
+            },
           ],
           existing: [
-            { system: "sits", sourceId: "S-1", husid: "1234567890123", firstName: "A", lastName: "B" },
+            {
+              system: "sits",
+              sourceId: "S-1",
+              husid: "1234567890123",
+              firstName: "A",
+              lastName: "B",
+            },
           ],
           policy: { kind: "exact" },
         },
@@ -188,19 +200,49 @@ describe("apps/api Phase I — integration-engine routes", () => {
           systemA: "banner",
           systemB: "sits",
           sourceA: [
-            { system: "banner", sourceId: "B-1", husid: "1234567890123", firstName: "A", lastName: "B" },
-            { system: "banner", sourceId: "B-2", husid: "9999999999999", firstName: "C", lastName: "D" },
+            {
+              system: "banner",
+              sourceId: "B-1",
+              husid: "1234567890123",
+              firstName: "A",
+              lastName: "B",
+            },
+            {
+              system: "banner",
+              sourceId: "B-2",
+              husid: "9999999999999",
+              firstName: "C",
+              lastName: "D",
+            },
           ],
           sourceB: [
-            { system: "sits", sourceId: "S-1", husid: "1234567890123", firstName: "A", lastName: "B" },
-            { system: "sits", sourceId: "S-2", husid: "8888888888888", firstName: "X", lastName: "Y" },
+            {
+              system: "sits",
+              sourceId: "S-1",
+              husid: "1234567890123",
+              firstName: "A",
+              lastName: "B",
+            },
+            {
+              system: "sits",
+              sourceId: "S-2",
+              husid: "8888888888888",
+              firstName: "X",
+              lastName: "Y",
+            },
           ],
           policy: { kind: "exact" },
         },
       });
       expect(res.statusCode).toBe(200);
       const body = res.json() as {
-        counts: { matched: number; sourceAOnly: number; sourceBOnly: number; totalA: number; totalB: number };
+        counts: {
+          matched: number;
+          sourceAOnly: number;
+          sourceBOnly: number;
+          totalA: number;
+          totalB: number;
+        };
       };
       expect(body.counts.matched).toBe(1);
       expect(body.counts.sourceAOnly).toBe(1);

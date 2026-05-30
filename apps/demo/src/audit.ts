@@ -6,11 +6,7 @@
  * scan of the rows (so duplicate-email / orphan / etc. rules can share
  * their side-channel state).
  */
-import type {
-  AuditRule,
-  FnAuditRule,
-  RuleSeverity,
-} from "@databridge/rule-core";
+import type { AuditRule, FnAuditRule, RuleSeverity } from "@databridge/rule-core";
 
 export interface FixtureAuditFinding {
   ruleId: string;
@@ -94,7 +90,7 @@ function buildSharedContext(rows: readonly DemoFixtureRow[]): SharedContext {
 
 export function runFixtureAudit(
   fixture: DemoFixtureLike,
-  rules: readonly AuditRule[],
+  rules: readonly AuditRule[]
 ): FixtureAuditReport {
   const ctx = buildSharedContext(fixture.rows);
   const findings: FixtureAuditFinding[] = [];

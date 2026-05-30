@@ -22,20 +22,14 @@ export interface SourceAdapter {
   discoverSchema(ctx: AdapterContext): Promise<SchemaDescriptor>;
 
   /** Pull N rows for profiling or UI preview. */
-  sampleTable(
-    ctx: AdapterContext,
-    args: SampleTableArgs
-  ): Promise<SampledRow[]>;
+  sampleTable(ctx: AdapterContext, args: SampleTableArgs): Promise<SampledRow[]>;
 
   /**
    * Stream rows for full ingestion.
    * Pagination handled via cursor; incremental sync supported where
    * capabilities.supportsIncremental === true.
    */
-  streamRows(
-    ctx: AdapterContext,
-    args: StreamRowsArgs
-  ): AsyncIterable<StreamRowsPage>;
+  streamRows(ctx: AdapterContext, args: StreamRowsArgs): AsyncIterable<StreamRowsPage>;
 
   /** Code-list / lookup table snapshots (e.g. STVMAJR, HESA ETHNIC codes). */
   getCodeLists(ctx: AdapterContext): Promise<CodeList[]>;
@@ -44,10 +38,7 @@ export interface SourceAdapter {
   getDictionary(ctx: AdapterContext): Promise<DictionaryEntry[]>;
 
   /** Fetch a single record by source-system id (for drill-down in UI). */
-  getRecordById(
-    ctx: AdapterContext,
-    args: GetRecordByIdArgs
-  ): Promise<SampledRow | null>;
+  getRecordById(ctx: AdapterContext, args: GetRecordByIdArgs): Promise<SampledRow | null>;
 }
 
 export interface AdapterCapabilities {

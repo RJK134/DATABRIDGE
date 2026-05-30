@@ -23,9 +23,7 @@ function client(queue: Parameters<typeof buildFetch>[0]): DataverseClient {
 
 describe("DataverseClient — token acquisition", () => {
   it("acquires and caches an access token", async () => {
-    const c = client([
-      jsonResp(200, { access_token: "tkn", expires_in: 3600 }),
-    ]);
+    const c = client([jsonResp(200, { access_token: "tkn", expires_in: 3600 })]);
     const t = await c.getAccessToken();
     expect(t.accessToken).toBe("tkn");
     const t2 = await c.getAccessToken();
@@ -33,9 +31,7 @@ describe("DataverseClient — token acquisition", () => {
   });
 
   it("throws when OAuth returns a non-2xx response", async () => {
-    const c = client([
-      { ok: false, status: 401, statusText: "Unauthorized", body: "bad" },
-    ]);
+    const c = client([{ ok: false, status: 401, statusText: "Unauthorized", body: "bad" }]);
     await expect(c.getAccessToken()).rejects.toThrow(/OAuth2 token request failed/);
   });
 });

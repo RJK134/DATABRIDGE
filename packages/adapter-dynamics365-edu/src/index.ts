@@ -1,8 +1,5 @@
 export { Dynamics365EduAdapter, SUPPORTED_RESOURCES } from "./adapter.js";
-export type {
-  SupportedResource,
-  Dynamics365EduAdapterOptions,
-} from "./adapter.js";
+export type { SupportedResource, Dynamics365EduAdapterOptions } from "./adapter.js";
 export { DataverseClient } from "./http.js";
 export type {
   DataverseClientOptions,
@@ -11,10 +8,7 @@ export type {
   EntityDefinition,
   AttributeMetadata,
 } from "./http.js";
-export {
-  Dynamics365EduConfigSchema,
-  type Dynamics365EduConfig,
-} from "./config.js";
+export { Dynamics365EduConfigSchema, type Dynamics365EduConfig } from "./config.js";
 export {
   RESOURCE_TO_SET,
   RESOURCE_TO_LOGICAL,
@@ -22,8 +16,4 @@ export {
   RESOURCE_TO_SELECT,
   isSupportedResource,
 } from "./resource-map.js";
-export {
-  describeToDictionary,
-  buildDictionary,
-  mapAttributeType,
-} from "./dictionary.js";
+export { describeToDictionary, buildDictionary, mapAttributeType } from "./dictionary.js";

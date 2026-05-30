@@ -8,11 +8,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import {
-  PgSqlExecutor,
-  translateNamedBinds,
-  type PgClientLike,
-} from "../sql-executor-pg.js";
+import { PgSqlExecutor, translateNamedBinds, type PgClientLike } from "../sql-executor-pg.js";
 
 /* ----------------------------- fake client --------------------------------- */
 
@@ -29,7 +25,7 @@ interface FakeClientHandle {
 }
 
 function makeFakeClient(
-  responder: (call: QueryCall) => { rows: Record<string, unknown>[] },
+  responder: (call: QueryCall) => { rows: Record<string, unknown>[] }
 ): FakeClientHandle {
   const calls: QueryCall[] = [];
   let connectCount = 0;
@@ -39,10 +35,7 @@ function makeFakeClient(
     async connect() {
       connectCount++;
     },
-    async query<T = Record<string, unknown>>(
-      sql: string,
-      params?: ReadonlyArray<unknown>,
-    ) {
+    async query<T = Record<string, unknown>>(sql: string, params?: ReadonlyArray<unknown>) {
       const call: QueryCall = { sql, params };
       calls.push(call);
       const res = responder(call);
@@ -69,10 +62,10 @@ function makeFakeClient(
 
 describe("translateNamedBinds", () => {
   it("replaces :name with $N in declaration order", () => {
-    const { sql, values } = translateNamedBinds(
-      "SELECT * FROM t WHERE a = :foo AND b = :bar",
-      { foo: 1, bar: "x" },
-    );
+    const { sql, values } = translateNamedBinds("SELECT * FROM t WHERE a = :foo AND b = :bar", {
+      foo: 1,
+      bar: "x",
+    });
     expect(sql).toBe("SELECT * FROM t WHERE a = $1 AND b = $2");
     expect(values).toEqual([1, "x"]);
   });
@@ -80,41 +73,36 @@ describe("translateNamedBinds", () => {
   it("de-duplicates repeated names to the same $N", () => {
     const { sql, values } = translateNamedBinds(
       "SELECT 1 FROM t WHERE a = :tenantId OR b = :tenantId",
-      { tenantId: "t1" },
+      { tenantId: "t1" }
     );
     expect(sql).toBe("SELECT 1 FROM t WHERE a = $1 OR b = $1");
     expect(values).toEqual(["t1"]);
   });
 
   it("ignores colons inside single-quoted strings", () => {
-    const { sql, values } = translateNamedBinds(
-      "SELECT ':notabind' AS lit, :foo AS bind",
-      { foo: 7 },
-    );
+    const { sql, values } = translateNamedBinds("SELECT ':notabind' AS lit, :foo AS bind", {
+      foo: 7,
+    });
     expect(sql).toBe("SELECT ':notabind' AS lit, $1 AS bind");
     expect(values).toEqual([7]);
   });
 
   it("preserves :: casts", () => {
-    const { sql, values } = translateNamedBinds(
-      "SELECT :x::text AS y",
-      { x: 1 },
-    );
+    const { sql, values } = translateNamedBinds("SELECT :x::text AS y", { x: 1 });
     expect(sql).toBe("SELECT $1::text AS y");
     expect(values).toEqual([1]);
   });
 
   it("throws on missing param", () => {
-    expect(() =>
-      translateNamedBinds("WHERE a = :missing", {}),
-    ).toThrow(/missing parameter ':missing'/);
+    expect(() => translateNamedBinds("WHERE a = :missing", {})).toThrow(
+      /missing parameter ':missing'/
+    );
   });
 
   it("handles escaped '' inside strings", () => {
-    const { sql, values } = translateNamedBinds(
-      "SELECT 'it''s :fine' AS s, :name AS n",
-      { name: "real" },
-    );
+    const { sql, values } = translateNamedBinds("SELECT 'it''s :fine' AS s, :name AS n", {
+      name: "real",
+    });
     expect(sql).toBe("SELECT 'it''s :fine' AS s, $1 AS n");
     expect(values).toEqual(["real"]);
   });
@@ -133,13 +121,13 @@ describe("PgSqlExecutor.query", () => {
 
     const rows = await exec.query(
       "SELECT subject_id, value FROM students WHERE tenant = :tenantId AND code = :codeId",
-      { tenantId: "t1", codeId: "C1" },
+      { tenantId: "t1", codeId: "C1" }
     );
 
     expect(rows).toEqual([{ subject_id: "s1", value: "X" }]);
     expect(handle.calls).toHaveLength(1);
     expect(handle.calls[0]?.sql).toBe(
-      "SELECT subject_id, value FROM students WHERE tenant = $1 AND code = $2",
+      "SELECT subject_id, value FROM students WHERE tenant = $1 AND code = $2"
     );
     expect(handle.calls[0]?.params).toEqual(["t1", "C1"]);
     expect(handle.connectCount).toBe(1);
@@ -151,9 +139,9 @@ describe("PgSqlExecutor.query", () => {
       throw new Error("boom");
     });
     const exec = new PgSqlExecutor({ clientFactory: () => handle.client });
-    await expect(
-      exec.query("SELECT 1 WHERE t = :tenantId", { tenantId: "t1" }),
-    ).rejects.toThrow("boom");
+    await expect(exec.query("SELECT 1 WHERE t = :tenantId", { tenantId: "t1" })).rejects.toThrow(
+      "boom"
+    );
     expect(handle.endCount).toBe(1);
   });
 });
@@ -171,12 +159,10 @@ describe("PgSqlExecutor.queryCodelistViolations", () => {
       "STU.code",
       new Set(["A", "B"]),
       false,
-      "tenant-1",
+      "tenant-1"
     );
 
-    expect(rows).toEqual([
-      { subject_id: "s9", field: "STU.code", value: "BAD" },
-    ]);
+    expect(rows).toEqual([{ subject_id: "s9", field: "STU.code", value: "BAD" }]);
     const call = handle.calls[0]!;
     expect(call.sql).toContain('FROM "STU"');
     expect(call.sql).toContain('"code"');
@@ -189,13 +175,8 @@ describe("PgSqlExecutor.queryCodelistViolations", () => {
     const handle = makeFakeClient(() => ({ rows: [] }));
     const exec = new PgSqlExecutor({ clientFactory: () => handle.client });
 
-    await exec.queryCodelistViolations(
-      "STU.code",
-      new Set(["A"]),
-      true,
-      "t1",
-    );
-    expect(handle.calls[0]?.sql).toContain("OR \"code\" IS NULL");
+    await exec.queryCodelistViolations("STU.code", new Set(["A"]), true, "t1");
+    expect(handle.calls[0]?.sql).toContain('OR "code" IS NULL');
   });
 
   it("when no codes, scans all values; with flagNulls=false adds IS NOT NULL filter", async () => {
@@ -212,12 +193,7 @@ describe("PgSqlExecutor.queryCodelistViolations", () => {
     const handle = makeFakeClient(() => ({ rows: [] }));
     const exec = new PgSqlExecutor({ clientFactory: () => handle.client });
 
-    await exec.queryCodelistViolations(
-      "audit.STU.code",
-      new Set(["X"]),
-      false,
-      "t1",
-    );
+    await exec.queryCodelistViolations("audit.STU.code", new Set(["X"]), false, "t1");
     expect(handle.calls[0]?.sql).toContain('FROM "audit"."STU"');
   });
 
@@ -225,7 +201,7 @@ describe("PgSqlExecutor.queryCodelistViolations", () => {
     const handle = makeFakeClient(() => ({ rows: [] }));
     const exec = new PgSqlExecutor({ clientFactory: () => handle.client });
     await expect(
-      exec.queryCodelistViolations("STU.col;DROP", new Set(["A"]), false, "t1"),
+      exec.queryCodelistViolations("STU.col;DROP", new Set(["A"]), false, "t1")
     ).rejects.toThrow(/unsafe identifier/);
   });
 });
@@ -304,8 +280,6 @@ describe("PgSqlExecutor without clientFactory", () => {
     // clear 'optional peer' message) or succeeds and pg tries to connect
     // to the bogus host. Either way the call must reject.
     const exec = new PgSqlExecutor({ connectionString: "postgres://nope.invalid:1/x" });
-    await expect(
-      exec.query("SELECT 1 WHERE t = :tenantId", { tenantId: "t1" }),
-    ).rejects.toThrow();
+    await expect(exec.query("SELECT 1 WHERE t = :tenantId", { tenantId: "t1" })).rejects.toThrow();
   });
 });

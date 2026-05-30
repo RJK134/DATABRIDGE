@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { ProvenanceFieldsZ } from './provenance.js';
+import { z } from "zod";
+import { ProvenanceFieldsZ } from "./provenance.js";
 
 /**
  * Application — a person's application to a programme.
@@ -16,7 +16,10 @@ export const ApplicationZ = z
     /** Targeted entry term / academic year. */
     entryAcademicYear: z.string().regex(/^\d{4}\/\d{2}$/),
     /** Submission date (YYYY-MM-DD). */
-    submittedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    submittedAt: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
     /** Banner APST_CODE / SITS cap_apst — application processing status. */
     status: z.string().optional(),
     /** Source channel (UCAS, direct, agent). */
@@ -40,7 +43,10 @@ export const ApplicationDecisionZ = z
     /** Conditions text if conditional. */
     conditions: z.string().optional(),
     /** Date offer accepted by applicant, if any. */
-    acceptedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    acceptedAt: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
     attributes: z.record(z.unknown()).optional(),
   })
   .merge(ProvenanceFieldsZ);
@@ -55,9 +61,15 @@ const VisaBaseZ = z.object({
   id: z.string().uuid(),
   personId: z.string().uuid(),
   /** Visa issue date (YYYY-MM-DD). */
-  issuedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  issuedAt: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
   /** Visa expiry date (YYYY-MM-DD). */
-  expiresAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  expiresAt: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
   /** Issuing-country code. */
   issuingCountry: z.string().optional(),
   status: z.string().optional(),
@@ -65,7 +77,7 @@ const VisaBaseZ = z.object({
 });
 
 export const CasVisaZ = VisaBaseZ.extend({
-  kind: z.literal('CAS'),
+  kind: z.literal("CAS"),
   /** UK Confirmation of Acceptance for Studies number. */
   casNumber: z.string(),
   /** CAS reference for the sponsoring institution. */
@@ -74,7 +86,7 @@ export const CasVisaZ = VisaBaseZ.extend({
 export type CasVisa = z.infer<typeof CasVisaZ>;
 
 export const SevisVisaZ = VisaBaseZ.extend({
-  kind: z.literal('SEVIS'),
+  kind: z.literal("SEVIS"),
   /** US SEVIS number from Banner GORVISA.SEVIS_NUMBER. */
   sevisNumber: z.string(),
   /** US visa type code (F-1, J-1, M-1). */
@@ -83,5 +95,5 @@ export const SevisVisaZ = VisaBaseZ.extend({
 export type SevisVisa = z.infer<typeof SevisVisaZ>;
 
 /** Discriminated union — every VisaRecord is either a CAS or a SEVIS row. */
-export const VisaRecordZ = z.discriminatedUnion('kind', [CasVisaZ, SevisVisaZ]);
+export const VisaRecordZ = z.discriminatedUnion("kind", [CasVisaZ, SevisVisaZ]);
 export type VisaRecord = z.infer<typeof VisaRecordZ>;

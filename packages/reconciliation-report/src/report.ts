@@ -19,11 +19,7 @@ import {
   type PersonRecord,
   type SourceSystemTag,
 } from "@databridge/identity-reconciler";
-import type {
-  FieldConflict,
-  MatchedPair,
-  ReconciliationReport,
-} from "./types.js";
+import type { FieldConflict, MatchedPair, ReconciliationReport } from "./types.js";
 
 /** Identity-critical fields checked for conflicts on matched pairs. */
 const CONFLICT_FIELDS: Array<keyof PersonRecord> = [
